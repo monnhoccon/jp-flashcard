@@ -14,12 +14,14 @@ class DBManager {
   final String repos = 'repos';
   final String tags = 'tags';
   final String tagList = 'tagList';
+  final String wordTypeList = 'wordTypeList';
 
   Future<Database> initDB() async {
     return await openDatabase(join(await getDatabasesPath(), 'test.db'),
         version: 1);
   }
 
+  //ANCHOR General
   createTable(String name, Database db) async {
     if (name == tags) {
       db.execute('''
@@ -39,7 +41,13 @@ class DBManager {
         tag TEXT PRIMARY KEY
       )
       ''');
-    } else {}
+    } else if (name == wordTypeList) {
+      db.execute('''
+      CREATE TABLE IF NOT EXISTS wordTypeList (
+        wordType NTEXT PRIMARY KEY
+      )
+      ''');
+    }else {}
   }
 
   //repos
@@ -178,6 +186,32 @@ class DBManager {
     final db = await database;
     createTable(tagList, db);
     var data = await db.query(tags);
+    return data;
+  }
+  //--------------------------------------------
+  
+  
+  //ANCHOR  WordTypleList
+  //--------------------------------------------
+  Future<void> insertWordTypeIntoList(String wordType) async {
+    final db = await database;
+    createTable(wordTypeList, db);
+    var duplicated = await db.rawQuery('''
+      SELECT * FROM wordTypeList where wordType = ?
+    ''', [wordType]);
+    if (duplicated.isEmpty) {
+      await db.rawInsert('''
+      INSERT INTO wordTypeList(
+        wordType
+      ) VALUES (?)
+    ''', [wordType]);
+    }
+  }
+
+  Future<dynamic> getWordTypeList() async {
+    final db = await database;
+    createTable(wordTypeList, db);
+    var data = await db.query(wordTypeList);
     return data;
   }
   //--------------------------------------------

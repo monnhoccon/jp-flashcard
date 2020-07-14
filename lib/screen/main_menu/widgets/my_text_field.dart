@@ -23,6 +23,9 @@ class MyTextField extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: BoxConstraints(),
                 child: TextFormField(
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(15, 0, 10, 0),
                     border: OutlineInputBorder(

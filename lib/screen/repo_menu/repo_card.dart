@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
+import 'package:jp_flashcard/screen/repo/repo.dart';
 import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
 import 'package:jp_flashcard/utils/database.dart';
 
+// ignore: must_be_immutable
 class RepoCard extends StatefulWidget {
   RepoInfo info;
   final bool displayTag;
@@ -29,24 +31,6 @@ class _RepoCardState extends State<RepoCard> {
     'duplicated': '已有此標籤',
     'title error': '請輸入標題',
   };
-
-  void settingDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text(_displayedStringZHTW['settings']),
-          actions: <Widget>[
-            FlatButton(
-                onPressed: () {
-                  DBManager.db.deleteRepo(widget.info.repoId);
-                  DBManager.db
-                      .deleteTagFromRepo(widget.info.repoId, null, true);
-                  Navigator.of(context).pop();
-                },
-                child: Icon(Icons.delete))
-          ],
-        ));
-  }
 
   void deleteAlertDialog(BuildContext context) {
     showDialog(
@@ -158,7 +142,13 @@ class _RepoCardState extends State<RepoCard> {
       child: Card(
         child: InkWell(
           splashColor: Colors.blue.withAlpha(5),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return Repo(
+                repoInfo: widget.info,
+              );
+            }));
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -341,7 +331,7 @@ class _RepoCardState extends State<RepoCard> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                      padding: EdgeInsets.fromLTRB(24, 10, 24, 0),
                       child: Wrap(
                         direction: Axis.horizontal,
                         spacing: 5,

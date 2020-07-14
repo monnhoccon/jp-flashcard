@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TagBox extends StatefulWidget {
   final String displayedString;
   bool canSelect;
@@ -24,8 +25,7 @@ class _TagBoxState extends State<TagBox> {
       textColor = Colors.white;
     }
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 9, 0, 0),
-      height: 35,
+      height: 25,
       child: ButtonTheme(
         minWidth: 0.0,
         height: 28,

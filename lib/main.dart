@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/screen/home/home.dart';
+import 'package:jp_flashcard/screen/repo/add_flashcard.dart';
+import 'package:jp_flashcard/screen/repo_menu/repo_menu.dart';
 import 'package:jp_flashcard/screen/profile/profile.dart';
 import 'dart:async';
 import 'package:jp_flashcard/utils/database.dart';
@@ -20,7 +21,7 @@ class _MyAppState extends State<MyApp> {
   int _selectedIndex = 0;
 
   List<Widget> _bodySelected() => <Widget>[
-        Home(),
+        RepoMenu(),
         Profile(),
       ];
 
@@ -85,7 +86,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                      padding: EdgeInsets.fromLTRB(24, 10, 24, 0),
                       child: Wrap(
                         direction: Axis.horizontal,
                         spacing: 5,
@@ -325,6 +326,7 @@ class _MyAppState extends State<MyApp> {
               content: NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (OverscrollIndicatorNotification overscroll) {
                   overscroll.disallowGlow();
+                  return false;
                 },
                 child: SingleChildScrollView(
                   child: Column(
@@ -337,7 +339,7 @@ class _MyAppState extends State<MyApp> {
                           formKey: formKey,
                           errorMessage: displayedStringZHTW['title error']),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
                         child: Text(displayedStringZHTW['tags'],
                             style: Theme.of(context).textTheme.overline),
                       ),

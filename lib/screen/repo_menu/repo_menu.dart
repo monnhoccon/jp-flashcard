@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/home/repo_card.dart';
-import 'package:jp_flashcard/screen/home/sort_filter.dart';
-import 'package:jp_flashcard/screen/home/tag_filter.dart';
+import 'package:jp_flashcard/screen/repo_menu/repo_card.dart';
+import 'package:jp_flashcard/screen/repo_menu/sort_filter.dart';
+import 'package:jp_flashcard/screen/repo_menu/tag_filter.dart';
 import 'package:jp_flashcard/utils/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Home extends StatefulWidget {
+class RepoMenu extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _RepoMenuState createState() => _RepoMenuState();
 }
 
-class _HomeState extends State<Home> {
+class _RepoMenuState extends State<RepoMenu> {
   final Map _displayedStringZHTW = {
     'repository': '學習集',
     'sort by': '排序依據',
@@ -202,15 +202,13 @@ class _HomeState extends State<Home> {
             child: NotificationListener<OverscrollIndicatorNotification>(
                 onNotification: (OverscrollIndicatorNotification overscroll) {
                   overscroll.disallowGlow();
+                  return false;
                 },
                 child: ListView.builder(
                     itemCount: repoList.length,
                     itemBuilder: (context, index) {
                       return repoList[index];
                     }))),
-        FloatingActionButton(onPressed: () {
-          DBManager.db.deleteTable('tagList');
-        }),
       ],
     ));
   }
