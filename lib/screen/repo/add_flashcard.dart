@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
 import 'package:jp_flashcard/screen/repo/widget/add_word_type_dialog.dart';
 import 'package:jp_flashcard/screen/repo/widget/definition_input.dart';
 import 'package:jp_flashcard/screen/repo/widget/kanji_input.dart';
 import 'package:jp_flashcard/screen/repo/widget/word_input.dart';
+import 'package:jp_flashcard/utils/database.dart';
 import 'package:jp_flashcard/utils/jp_letter.dart';
 
 // ignore: must_be_immutable
 class AddFlashcard extends StatefulWidget {
   @override
+  final int repoId;
+  AddFlashcard({this.repoId});
   _AddFlashcardState createState() => _AddFlashcardState();
 }
 
@@ -23,7 +27,8 @@ class _AddFlashcardState extends State<AddFlashcard> {
     'word error': '請輸入單字',
     'definition error': '請輸入定義',
     'add definition': '新增定義',
-    'delete definition': '刪除定義'
+    'delete definition': '刪除定義',
+    'add word type': '新增詞性'
   };
 
   //ANCHOR Word
@@ -43,6 +48,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
   List<TextEditingController> kanjiValue = [];
   List<GlobalKey<FormState>> kanjiFormKey = [];
   List<Widget> kanjiInputList = [];
+  List<KanjiInfo> kanjiInfoList = [];
 
   void parseKanji(String text) {
     setState(() {
@@ -64,6 +70,11 @@ class _AddFlashcardState extends State<AddFlashcard> {
             value: kanjiValue[numKanji],
             validationKey: kanjiFormKey[numKanji],
           ));
+          kanjiInfoList.add(KanjiInfo(
+            furigana: '',
+            index: i,
+            length: 1,
+          ));
           numKanji++;
         }
       }
@@ -73,6 +84,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
 
   //ANCHOR Word type
   List<TagBox> selectedWordTypeBoxList = [];
+  List<Widget> wordTypeBoxList = [];
   void applySelection(List<TagBox> newSelectedWordTypeBoxList) {
     setState(() {
       selectedWordTypeBoxList = newSelectedWordTypeBoxList;
@@ -87,8 +99,9 @@ class _AddFlashcardState extends State<AddFlashcard> {
   }
 
   void updateSelectedWordTypeList() {
-    List<Widget> newWordTypeBoxList = List.from(selectedWordTypeBoxList);
-    newWordTypeBoxList.add((Container(
+    wordTypeBoxList.clear();
+    wordTypeBoxList = List.from(selectedWordTypeBoxList);
+    wordTypeBoxList.add((Container(
         height: 25,
         child: ButtonTheme(
           minWidth: 5.0,
@@ -119,16 +132,36 @@ class _AddFlashcardState extends State<AddFlashcard> {
             color: Theme.of(context).primaryColor,
           ),
         ))));
-    setState(() {
-      selectedWordTypeBoxList = newWordTypeBoxList;
-    });
   }
   //================================
 
+  //ANCHOR Add the flashcard to database
+  int flashcardId;
+  Future<void> addFlashcard() async {
+    flashcardId = await DBManager.db
+        .insertFlashcard(widget.repoId, wordValue.text.toString());
+
+    for (final definition in definitionValue) {
+      DBManager.db.insertDefinition(
+          widget.repoId, flashcardId, definition.text.toString());
+    }
+    for (final kanjiInfo in kanjiInfoList) {
+      kanjiInfo.furigana = kanjiValue[kanjiInfo.index].text.toString();
+      DBManager.db.insertKanji(widget.repoId, flashcardId, kanjiInfo);
+    }
+
+    for (final wordType in selectedWordTypeBoxList) {
+      DBManager.db
+          .insertWordType(widget.repoId, flashcardId, wordType.displayedString);
+    }
+
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
+    updateSelectedWordTypeList();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(_displayedStringZHTW['add flashcard'] ?? ''),
       ),
@@ -168,9 +201,17 @@ class _AddFlashcardState extends State<AddFlashcard> {
                                       ((numDefinition > 1) ? '1' : ''),
                             ),
                             ...definitionInputList,
+                            //ANCHOR Word types list
+                            Wrap(
+                              spacing: 5,
+                              runSpacing: 5,
+                              children: wordTypeBoxList,
+                            ),
+                            //ANCHOR Action buttons
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
+                                //ANCHOR Delete definition button
                                 numDefinition != 1
                                     ? FlatButton(
                                         padding: EdgeInsets.all(0),
@@ -194,6 +235,8 @@ class _AddFlashcardState extends State<AddFlashcard> {
                                           ],
                                         ))
                                     : Container(),
+
+                                //ANCHOR Add definition button
                                 FlatButton(
                                     padding: EdgeInsets.all(0),
                                     materialTapTargetSize:
@@ -255,7 +298,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           backgroundColor: Theme.of(context).primaryColor,
-          onPressed: () {
+          onPressed: () async {
             bool validation = true;
             if (!wordFormKey.currentState.validate()) {
               validation = false;
@@ -271,6 +314,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
               }
             }
             if (validation) {
+              await addFlashcard();
               Navigator.of(context).pop();
             }
           }),

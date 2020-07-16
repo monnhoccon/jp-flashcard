@@ -10,7 +10,7 @@ import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
 import 'package:jp_flashcard/utils/theme.dart';
 
 void main() {
-  runApp(MaterialApp(home: Flashcard(), theme: MyTheme.theme));
+  runApp(MaterialApp(home: MyApp(), theme: MyTheme.theme));
 }
 
 class MyApp extends StatefulWidget {

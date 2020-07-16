@@ -1,9 +1,10 @@
 import 'package:jp_flashcard/models/kanj_info.dart';
 
 class FlashcardInfo {
+  int flashcardId;
   String word;
-  List<String> wordType;
   List<String> definition;
   List<KanjiInfo> kanji;
-  FlashcardInfo({this.word, this.definition, this.kanji, this.wordType});
+  List<String> wordType;
+  FlashcardInfo({this.flashcardId, this.word, this.definition, this.kanji, this.wordType});
 }

@@ -7,21 +7,13 @@ import 'package:jp_flashcard/widget/displayed_letter.dart';
 // ignore: must_be_immutable
 class Flashcard extends StatefulWidget {
   @override
+  FlashcardInfo info;
+  Flashcard({this.info});
   _FlashcardState createState() => _FlashcardState();
 }
 
 class _FlashcardState extends State<Flashcard> {
   //ANCHOR Variables
-  FlashcardInfo info = FlashcardInfo(word: '東京', definition: [
-    'testing',
-    '定義23'
-  ], wordType: [
-    '名詞',
-    '形容詞',
-  ], kanji: [
-    KanjiInfo(index: 0, furigana: 'とう', length: 1),
-    KanjiInfo(index: 1, furigana: 'きょう', length: 1)
-  ]);
 
   List<Widget> displayedLetterList = [];
   List<Widget> displayedDefinitionList = [];
@@ -29,14 +21,14 @@ class _FlashcardState extends State<Flashcard> {
 
   void updateDisplayedLetterList() {
     displayedLetterList.clear();
-    for (int i = 0; i < info.word.length; i++) {
+    for (int i = 0; i < widget.info.word.length; i++) {
       bool isKanji = false;
-      for (final kanji in info.kanji) {
+      for (final kanji in widget.info.kanji) {
         if (kanji.index == i) {
           isKanji = true;
           displayedLetterList.add(DisplayedLetter(
             hasFurigana: true,
-            letter: info.word[i],
+            letter: widget.info.word[i],
             furigana: kanji.furigana,
           ));
         }
@@ -44,7 +36,7 @@ class _FlashcardState extends State<Flashcard> {
       if (!isKanji) {
         displayedLetterList.add(DisplayedLetter(
           hasFurigana: false,
-          letter: info.word[i],
+          letter: widget.info.word[i],
           furigana: null,
         ));
       }
@@ -59,18 +51,18 @@ class _FlashcardState extends State<Flashcard> {
     ));
     displayedDefinitionList.add(SizedBox(height: 10));
     int index = 1;
-    for (final definition in info.definition) {
+    for (final definition in widget.info.definition) {
       displayedDefinitionList.add(Flexible(
         child: RichText(
           text: TextSpan(
             style: TextStyle(fontSize: 23, height: 1.5, color: Colors.black),
             children: <TextSpan>[
               TextSpan(
-                text: (info.definition.length != 1) ? '$index. ' : '',
+                text: (widget.info.definition.length != 1) ? '$index. ' : '',
                 style: TextStyle(
                     fontSize: 23, color: Colors.grey[500], height: 1.5),
               ),
-              TextSpan(text: definition),
+              TextSpan(text: definition ?? ''),
             ],
           ),
         ),
@@ -82,9 +74,9 @@ class _FlashcardState extends State<Flashcard> {
 
   void updateDisplayedWordTypeList() {
     displayedWordTypeList.clear();
-    for (final wordType in info.wordType) {
+    for (final wordType in widget.info.wordType) {
       displayedWordTypeList.add(Text(
-          (wordType != info.wordType.last) ? (wordType + ' · ') : (wordType)));
+          (wordType != widget.info.wordType.last) ? (wordType + ' · ') : (wordType)));
     }
   }
 

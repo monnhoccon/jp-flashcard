@@ -1,3 +1,5 @@
+import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -15,6 +17,7 @@ class DBManager {
   final String tags = 'tags';
   final String tagList = 'tagList';
   final String wordTypeList = 'wordTypeList';
+  final String flashcardList = 'flashcardList';
 
   Future<Database> initDB() async {
     return await openDatabase(join(await getDatabasesPath(), 'test.db'),
@@ -190,15 +193,14 @@ class DBManager {
   }
   //--------------------------------------------
 
-  //ANCHOR  WordTypleList
-  //--------------------------------------------
+  //ANCHOR WordTypeList
   Future<void> initWordTypeList() async {
-    List<String> wordTypes = ['名詞', '形容詞', '副詞', '自動詞', '他動詞'];
+    List<String> wordTypes = ['名詞', '形容詞', '副詞', '自動詞', '他動詞', '代名詞'];
     final db = await database;
     createTable(wordTypeList, db);
     for (final wordType in wordTypes) {
       var duplicated = await db.rawQuery('''
-        SELECT * FROM wordTypeList where wordType = ?
+        SELECT * FROM wordTypeList WHERE wordType = ?
       ''', [wordType]);
       if (duplicated.isEmpty) {
         await db.rawInsert('''
@@ -214,7 +216,7 @@ class DBManager {
     final db = await database;
     await initWordTypeList();
     var duplicated = await db.rawQuery('''
-      SELECT * FROM wordTypeList where wordType = ?
+      SELECT * FROM wordTypeList WHERE wordType = ?
     ''', [wordType]);
     if (duplicated.isEmpty) {
       await db.rawInsert('''
@@ -230,6 +232,123 @@ class DBManager {
     await initWordTypeList();
     var data = await db.query(wordTypeList);
     return data;
+  }
+  //--------------------------------------------
+
+  //ANCHOR FlashCardList
+  Future<void> initFlashcardList(int repoId, Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS flashcardList$repoId (
+        flashcardId INTEGER PRIMARY KEY, word NTEXT
+      )
+      ''');
+    return;
+  }
+
+  Future<int> insertFlashcard(int repoId, String word) async {
+    final db = await database;
+    await initFlashcardList(repoId, db);
+    int flashcardId = await db.rawInsert('''
+      INSERT INTO flashcardList$repoId (
+        word
+      ) VALUES (?)
+    ''', [word]);
+    return flashcardId;
+  }
+
+  Future<dynamic> getFlashcard(int repoId) async {
+    final db = await database;
+    await initFlashcardList(repoId, db);
+    await initDefinitionList(repoId, db);
+    await initKanjiList(repoId, db);
+    await initWordTypeListOfFlashcard(repoId, db);
+    var word = await db.rawQuery('''
+      SELECT * FROM flashcardList$repoId
+    ''');
+    var definition = await db.rawQuery('''
+      SELECT * FROM definitionList$repoId
+    ''');
+    var kanji = await db.rawQuery('''
+      SELECT * FROM kanjiList$repoId
+    ''');
+    var wordType = await db.rawQuery('''
+      SELECT * FROM wordTypeList$repoId
+    ''');
+    Map data = {
+      'word': word,
+      'definition': definition,
+      'kanji': kanji,
+      'wordType': wordType
+    };
+    return data;
+  }
+  //--------------------------------------------
+
+  //ANCHOR DefinitionList
+  Future<void> initDefinitionList(int repoId, Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS definitionList$repoId (
+        definitionId INTEGER PRIMARY KEY, flashcardId INTEGER, definition NTEXT
+      )
+      ''');
+    return;
+  }
+
+  Future<void> insertDefinition(
+      int repoId, int flashcardId, String definition) async {
+    final db = await database;
+    await initDefinitionList(repoId, db);
+    await db.rawInsert('''
+      INSERT INTO definitionList$repoId (
+        flashcardId, definition
+      ) VALUES (?, ?)
+    ''', [flashcardId, definition]);
+    return;
+  }
+  //--------------------------------------------
+
+  //ANCHOR KanjiList
+  Future<void> initKanjiList(int repoId, Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS kanjiList$repoId (
+        kanjiId INTEGER PRIMARY KEY, flashcardId INTEGER, furigana NTEXT, ind INTEGER, length INTEGER 
+      )
+      ''');
+    return;
+  }
+
+  Future<void> insertKanji(int repoId, int flashcardId, KanjiInfo info) async {
+    final db = await database;
+    await initKanjiList(repoId, db);
+    await db.rawInsert('''
+      INSERT INTO kanjiList$repoId (
+        flashcardId, furigana, ind, length
+      ) VALUES (?, ?, ?, ?)
+    ''', [flashcardId, info.furigana, info.index, info.length]);
+    return;
+  }
+  //--------------------------------------------
+
+  //ANCHOR WordTypeListOfFlashcard
+  Future<void> initWordTypeListOfFlashcard(int repoId, Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS wordTypeList$repoId (
+        wordTypeId INTEGER PRIMARY KEY, flashcardId INTEGER, wordType NTEXT
+      )
+      ''');
+    return;
+  }
+
+  Future<void> insertWordType(
+      int repoId, int flashcardId, String wordType) async {
+    final db = await database;
+    await initWordTypeListOfFlashcard(repoId, db);
+    await db.rawInsert('''
+      INSERT INTO wordTypeList$repoId (
+        flashcardId, wordType
+      ) VALUES (?, ?)
+    ''', [flashcardId, wordType]);
+    return;
   }
   //--------------------------------------------
 

@@ -110,6 +110,7 @@ class _RepoMenuState extends State<RepoMenu> {
   @override
   void initState() {
     super.initState();
+    updateRepoList();
     getPersistData();
   }
 
