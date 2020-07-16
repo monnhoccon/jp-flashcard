@@ -117,7 +117,7 @@ class TagFilter {
                       child: Wrap(
                         direction: Axis.horizontal,
                         spacing: 5,
-                        runSpacing: 0,
+                        runSpacing: 5,
                         children: _tagBoxList,
                       ),
                     ),

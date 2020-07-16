@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/screen/repo/add_flashcard.dart';
+import 'package:jp_flashcard/screen/repo/flashcard.dart';
 import 'package:jp_flashcard/screen/repo_menu/repo_menu.dart';
 import 'package:jp_flashcard/screen/profile/profile.dart';
 import 'dart:async';
@@ -9,7 +10,7 @@ import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
 import 'package:jp_flashcard/utils/theme.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyApp(), theme: MyTheme.theme));
+  runApp(MaterialApp(home: Flashcard(), theme: MyTheme.theme));
 }
 
 class MyApp extends StatefulWidget {
@@ -90,7 +91,7 @@ class _MyAppState extends State<MyApp> {
                       child: Wrap(
                         direction: Axis.horizontal,
                         spacing: 5,
-                        runSpacing: 0,
+                        runSpacing: 5,
                         children: tagBoxList,
                       ),
                     ),
@@ -346,7 +347,7 @@ class _MyAppState extends State<MyApp> {
                       Wrap(
                         direction: Axis.horizontal,
                         spacing: 5,
-                        runSpacing: 0,
+                        runSpacing: 5,
                         children: newTagBoxList,
                       ),
                     ],

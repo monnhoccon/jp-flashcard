@@ -47,7 +47,7 @@ class DBManager {
         wordType NTEXT PRIMARY KEY
       )
       ''');
-    }else {}
+    } else {}
   }
 
   //repos
@@ -189,13 +189,30 @@ class DBManager {
     return data;
   }
   //--------------------------------------------
-  
-  
+
   //ANCHOR  WordTypleList
   //--------------------------------------------
-  Future<void> insertWordTypeIntoList(String wordType) async {
+  Future<void> initWordTypeList() async {
+    List<String> wordTypes = ['名詞', '形容詞', '副詞', '自動詞', '他動詞'];
     final db = await database;
     createTable(wordTypeList, db);
+    for (final wordType in wordTypes) {
+      var duplicated = await db.rawQuery('''
+        SELECT * FROM wordTypeList where wordType = ?
+      ''', [wordType]);
+      if (duplicated.isEmpty) {
+        await db.rawInsert('''
+        INSERT INTO wordTypeList(
+          wordType
+        ) VALUES (?)
+      ''', [wordType]);
+      }
+    }
+  }
+
+  Future<void> insertWordTypeIntoList(String wordType) async {
+    final db = await database;
+    await initWordTypeList();
     var duplicated = await db.rawQuery('''
       SELECT * FROM wordTypeList where wordType = ?
     ''', [wordType]);
@@ -210,7 +227,7 @@ class DBManager {
 
   Future<dynamic> getWordTypeList() async {
     final db = await database;
-    createTable(wordTypeList, db);
+    await initWordTypeList();
     var data = await db.query(wordTypeList);
     return data;
   }

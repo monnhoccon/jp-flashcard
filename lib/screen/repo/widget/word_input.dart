@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
-class InputField extends StatelessWidget {
+// ignore: must_be_immutable
+class WordInput extends StatelessWidget {
   final validationKey;
   final String displayedString;
   final TextEditingController value;
-  InputField({this.value, this.validationKey, this.displayedString});
+  WordInput({this.value, this.validationKey, this.displayedString, this.parseKanji});
+
+  Function parseKanji;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,9 @@ class InputField extends StatelessWidget {
               return displayedString ?? '';
             }
             return null;
+          },
+          onChanged: (String text) {
+            parseKanji(text);
           },
         ),
       ),

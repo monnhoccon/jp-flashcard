@@ -50,7 +50,7 @@ class AddWordTypeDialog {
         ));
     }
   }
-
+  //TODO Clear button
   dialog(BuildContext context) async {
     await updateWordTypeBoxList();
     return showDialog(
@@ -86,7 +86,7 @@ class AddWordTypeDialog {
                       child: Wrap(
                         direction: Axis.horizontal,
                         spacing: 5,
-                        runSpacing: 0,
+                        runSpacing: 5,
                         children: wordTypeBoxList,
                       ),
                     ),

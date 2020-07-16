@@ -5,9 +5,14 @@ import 'package:jp_flashcard/screen/repo/widget/input_field.dart';
 
 class DefinitionInput extends StatefulWidget {
   final validationKey;
+  final displayedString;
 
   final TextEditingController value;
-  DefinitionInput({this.value, this.validationKey});
+  DefinitionInput({
+    this.value,
+    this.validationKey,
+    this.displayedString
+  });
 
   @override
   _DefinitionInputState createState() => _DefinitionInputState();
@@ -68,10 +73,11 @@ class _DefinitionInputState extends State<DefinitionInput> {
       children: <Widget>[
         InputField(
             validationKey: widget.validationKey,
-            errorMessage: null,
+            displayedString: widget.displayedString,
             value: widget.value),
         Wrap(
           spacing: 5,
+          runSpacing: 5,
           children: wordTypeBoxList,
         )
       ],
