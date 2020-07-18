@@ -10,17 +10,19 @@ import 'package:jp_flashcard/utils/database.dart';
 import 'package:jp_flashcard/utils/jp_letter.dart';
 
 // ignore: must_be_immutable
-class AddFlashcard extends StatefulWidget {
-  @override
+class EditFlashcardPage extends StatefulWidget {
   final int repoId;
-  AddFlashcard({this.repoId});
-  _AddFlashcardState createState() => _AddFlashcardState();
+  final FlashcardInfo flashcardInfo;
+  @override
+  EditFlashcardPage({this.repoId, this.flashcardInfo});
+  _EditFlashcardPageState createState() => _EditFlashcardPageState();
 }
 
-class _AddFlashcardState extends State<AddFlashcard> {
+class _EditFlashcardPageState extends State<EditFlashcardPage> {
   //ANCHOR Variables
+  FlashcardInfo flashcardInfo;
   Map _displayedStringZHTW = {
-    'add flashcard': '新增單字卡',
+    'edit flashcard': '編輯單字卡',
     'word': '單字',
     'definition': '定義',
     'type': '詞性',
@@ -144,11 +146,8 @@ class _AddFlashcardState extends State<AddFlashcard> {
   //================================
 
   //ANCHOR Add the flashcard to database
-  int flashcardId;
-  Future<void> addFlashcard() async {
-    flashcardId =
-        await DBManager.db.insertWord(widget.repoId, wordValue.text.toString());
-
+  FlashcardInfo newFlashcardInfo;
+  Future<void> updateFlashcard() async {
     List<String> definitionList = [];
     for (final definition in definitionValue) {
       definitionList.add(definition.text.toString());
@@ -166,15 +165,75 @@ class _AddFlashcardState extends State<AddFlashcard> {
     for (final wordType in selectedWordTypeBoxList) {
       wordTypeList.add(wordType.displayedString);
     }
-    FlashcardInfo flashcardInfo = FlashcardInfo(
-      flashcardId: flashcardId,
+    newFlashcardInfo = FlashcardInfo(
+      flashcardId: flashcardInfo.flashcardId,
       word: wordValue.text.toString(),
       definition: definitionList,
       kanji: kanjiList,
       wordType: wordTypeList,
     );
-    await DBManager.db.insertFlashcard(widget.repoId, flashcardInfo);
+    await DBManager.db.updateFlashcard(widget.repoId, newFlashcardInfo);
     return;
+  }
+
+  void initSelectedWordTypeBoxList() {
+    for (final wordType in flashcardInfo.wordType) {
+      selectedWordTypeBoxList.add(TagBox(
+        displayedString: wordType,
+        canSelect: false,
+        selected: true,
+      ));
+    }
+  }
+
+  void initDefinitionInputList() {
+    definitionValue[0].text = flashcardInfo.definition[0];
+    bool firstDefinition = true;
+    for (final definition in flashcardInfo.definition) {
+      if (firstDefinition) {
+        firstDefinition = false;
+        continue;
+      }
+      numDefinition++;
+      definitionFormKey.add(GlobalKey<FormState>());
+      definitionValue.add(TextEditingController()..text = definition);
+      definitionInputList.add(Padding(
+        padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+        child: DefinitionInput(
+          validationKey: definitionFormKey[numDefinition - 1],
+          value: definitionValue[numDefinition - 1],
+          displayedString: (_displayedStringZHTW['definition'] ?? '') +
+              numDefinition.toString(),
+        ),
+      ));
+    }
+  }
+
+  void initKanjiInputList() {
+    for (final kanji in flashcardInfo.kanji) {
+      kanjiFormKey.add(GlobalKey<FormState>());
+
+      kanjiValue.add(TextEditingController()..text = kanji.furigana);
+
+      kanjiInputList.add(KanjiInput(
+        displayedString: flashcardInfo.word[kanji.index],
+        value: kanjiValue[numKanji],
+        validationKey: kanjiFormKey[numKanji],
+      ));
+
+      kanjiInfoList.add(kanji);
+      numKanji++;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    flashcardInfo = widget.flashcardInfo;
+    wordValue.text = flashcardInfo.word;
+    initDefinitionInputList();
+    initKanjiInputList();
+    initSelectedWordTypeBoxList();
   }
 
   @override
@@ -182,7 +241,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
     updateSelectedWordTypeList();
     return Scaffold(
       appBar: AppBar(
-        title: Text(_displayedStringZHTW['add flashcard'] ?? ''),
+        title: Text(_displayedStringZHTW['edit flashcard'] ?? ''),
       ),
       body: Center(
         child: NotificationListener<OverscrollIndicatorNotification>(
@@ -334,8 +393,8 @@ class _AddFlashcardState extends State<AddFlashcard> {
             }
 
             if (validation) {
-              await addFlashcard();
-              Navigator.of(context).pop();
+              await updateFlashcard();
+              Navigator.of(context).pop(newFlashcardInfo);
             }
           }),
     );

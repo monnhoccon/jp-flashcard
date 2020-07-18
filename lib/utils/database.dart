@@ -245,7 +245,7 @@ class DBManager {
     return;
   }
 
-  Future<int> insertFlashcard(int repoId, String word) async {
+  Future<int> insertWord(int repoId, String word) async {
     final db = await database;
     await initFlashcardList(repoId, db);
     int flashcardId = await db.rawInsert('''
@@ -256,7 +256,27 @@ class DBManager {
     return flashcardId;
   }
 
-  Future<dynamic> getFlashcard(int repoId) async {
+  Future<void> insertFlashcard(int repoId, FlashcardInfo flashcardInfo) async {
+    final db = await database;
+    await initDefinitionList(repoId, db);
+    await initKanjiList(repoId, db);
+    await initWordTypeListOfFlashcard(repoId, db);
+
+    for (final definition in flashcardInfo.definition) {
+      await insertDefinition(repoId, flashcardInfo.flashcardId, definition);
+    }
+
+    for (final kanjiInfo in flashcardInfo.kanji) {
+      await insertKanji(repoId, flashcardInfo.flashcardId, kanjiInfo);
+    }
+
+    for (final wordType in flashcardInfo.wordType) {
+      await insertWordType(repoId, flashcardInfo.flashcardId, wordType);
+    }
+    return;
+  }
+
+  Future<dynamic> getFlashcardList(int repoId) async {
     final db = await database;
     await initFlashcardList(repoId, db);
     await initDefinitionList(repoId, db);
@@ -282,6 +302,36 @@ class DBManager {
     };
     return data;
   }
+
+  Future<void> deleteFlashcard(int repoId, int flashcardId) async {
+    final db = await database;
+    await initFlashcardList(repoId, db);
+    await db.rawDelete('''
+      DELETE FROM flashcardList$repoId WHERE flashcardId = ?
+    ''', [flashcardId]);
+
+    await deleteDefinition(repoId, flashcardId);
+    await deleteKanji(repoId, flashcardId);
+    await deleteWordType(repoId, flashcardId);
+    return;
+  }
+
+  Future<void> updateFlashcard(int repoId, FlashcardInfo flashcardInfo) async {
+    final db = await database;
+    await initFlashcardList(repoId, db);
+    await db.rawUpdate('''
+      UPDATE flashcardList$repoId
+      SET word = ?
+      WHERE flashcardId = ?;
+    ''', [flashcardInfo.word, flashcardInfo.flashcardId]);
+    await deleteDefinition(repoId, flashcardInfo.flashcardId);
+    await deleteKanji(repoId, flashcardInfo.flashcardId);
+    await deleteWordType(repoId, flashcardInfo.flashcardId);
+    await insertFlashcard(repoId, flashcardInfo);
+
+    return;
+  }
+
   //--------------------------------------------
 
   //ANCHOR DefinitionList
@@ -314,6 +364,15 @@ class DBManager {
     ''', [flashcardId]);
     return data;
   }
+
+  Future<void> deleteDefinition(int repoId, int flashcardId) async {
+    final db = await database;
+    await initDefinitionList(repoId, db);
+    await db.rawDelete('''
+      DELETE FROM definitionList$repoId WHERE flashcardId = ?
+    ''', [flashcardId]);
+    return;
+  }
   //--------------------------------------------
 
   //ANCHOR KanjiList
@@ -334,6 +393,15 @@ class DBManager {
         flashcardId, furigana, ind, length
       ) VALUES (?, ?, ?, ?)
     ''', [flashcardId, info.furigana, info.index, info.length]);
+    return;
+  }
+
+  Future<void> deleteKanji(int repoId, int flashcardId) async {
+    final db = await database;
+    await initKanjiList(repoId, db);
+    await db.rawDelete('''
+      DELETE FROM kanjiList$repoId WHERE flashcardId = ?
+    ''', [flashcardId]);
     return;
   }
   //--------------------------------------------
@@ -357,6 +425,15 @@ class DBManager {
         flashcardId, wordType
       ) VALUES (?, ?)
     ''', [flashcardId, wordType]);
+    return;
+  }
+
+  Future<void> deleteWordType(int repoId, int flashcardId) async {
+    final db = await database;
+    await initWordTypeListOfFlashcard(repoId, db);
+    await db.rawDelete('''
+      DELETE FROM wordTypeList$repoId WHERE flashcardId = ?
+    ''', [flashcardId]);
     return;
   }
   //--------------------------------------------

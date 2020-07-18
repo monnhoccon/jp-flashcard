@@ -1,13 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/models/kanj_info.dart';
-import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/learning/learning_page.dart';
-import 'package:jp_flashcard/screen/repo/add_flashcard.dart';
 import 'package:jp_flashcard/screen/repo/flashcard.dart';
-import 'package:jp_flashcard/screen/repo/widget/flashcard_card.dart';
-import 'package:jp_flashcard/utils/database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class FlashcardPage extends StatefulWidget {
@@ -58,9 +52,19 @@ class _FlashcardPageState extends State<FlashcardPage> {
     }
   }
 
+  bool hasFurigana;
+  var persistData;
+  void getPersistData() async {
+    persistData = await SharedPreferences.getInstance();
+    hasFurigana = persistData.getBool('hasFurigana') ?? true;
+  }
+
+  Icon displayTagButtonIcon = Icon(Icons.label_outline);
+
   @override
   void initState() {
     super.initState();
+    getPersistData();
     inFlashcardPage = true;
     playFlashcards = false;
     _pageController = PageController(initialPage: widget.flashcardIndex);
@@ -88,6 +92,24 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 } else {
                   playFlashcards = false;
                 }
+              });
+            },
+          ),
+          IconButton(
+            icon: displayTagButtonIcon,
+            onPressed: () {
+              setState(() {
+                if (!hasFurigana) {
+                  displayTagButtonIcon = Icon(Icons.label);
+
+                  hasFurigana = true;
+                } else {
+                  displayTagButtonIcon = Icon(Icons.label_outline);
+                  hasFurigana = false;
+                }
+                Flashcard flashcard = widget.flashcardList[_currentPage];
+                flashcard.toggleFurigana();
+                persistData.setBool('hasFurigana', hasFurigana);
               });
             },
           )

@@ -5,7 +5,8 @@ import 'package:jp_flashcard/widget/displayed_letter.dart';
 // ignore: must_be_immutable
 class DisplayedWord extends StatelessWidget {
   FlashcardInfo flashcardInfo;
-  DisplayedWord({this.flashcardInfo});
+  bool hasFurigana;
+  DisplayedWord({this.flashcardInfo, this.hasFurigana});
 
   List<Widget> displayedLetterList = [];
   void updateDisplayedLetterList() {
@@ -16,7 +17,7 @@ class DisplayedWord extends StatelessWidget {
         if (kanji.index == i) {
           isKanji = true;
           displayedLetterList.add(DisplayedLetter(
-            hasFurigana: true,
+            hasFurigana: hasFurigana,
             letter: flashcardInfo.word[i],
             furigana: kanji.furigana,
           ));
@@ -24,9 +25,9 @@ class DisplayedWord extends StatelessWidget {
       }
       if (!isKanji) {
         displayedLetterList.add(DisplayedLetter(
-          hasFurigana: false,
+          hasFurigana: hasFurigana,
           letter: flashcardInfo.word[i],
-          furigana: null,
+          furigana: '',
         ));
       }
     }

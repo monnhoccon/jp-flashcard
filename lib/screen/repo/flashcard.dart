@@ -1,12 +1,16 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/screen/repo/edit_flashcard_page.dart';
+import 'package:jp_flashcard/utils/database.dart';
 import 'package:jp_flashcard/utils/text_to_speech.dart';
 import 'package:jp_flashcard/widget/displayed_word.dart';
 
 // ignore: must_be_immutable
 class Flashcard extends StatefulWidget {
+  int repoId;
   FlashcardInfo info;
+  bool hasFurigana;
   Future<void> speakWord() async {
     await TextToSpeech.tts.speak('ja-JP', info.word);
     return;
@@ -32,13 +36,54 @@ class Flashcard extends StatefulWidget {
     }
   }
 
+  void toggleFurigana() {
+    hasFurigana = !hasFurigana;
+    print(hasFurigana);
+    
+  }
+
   @override
-  Flashcard({this.info});
+  Flashcard({this.repoId, this.info, this.hasFurigana});
   _FlashcardState createState() => _FlashcardState();
 }
 
 class _FlashcardState extends State<Flashcard> {
   //ANCHOR Variables
+  final Map _displayedStringZHTW = {
+    'edit': '編輯',
+    'delete': '刪除',
+    'more': '更多',
+    'delete flashcard alert title': '刪除單字卡',
+    'delete flashcard alert content': '你確定要刪除此單字卡嗎？',
+    'cancel': '取消',
+    'confirm': '確認',
+  };
+
+  deleteAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        child: AlertDialog(
+          title:
+              Text(_displayedStringZHTW['delete flashcard alert title'] ?? ''),
+          content: Text(
+              _displayedStringZHTW['delete flashcard alert content'] ?? ''),
+          contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 10),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(_displayedStringZHTW['cancel'] ?? '')),
+            FlatButton(
+                onPressed: () {
+                  DBManager.db
+                      .deleteFlashcard(widget.repoId, widget.info.flashcardId);
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(_displayedStringZHTW['confirm'] ?? ''))
+          ],
+        ));
+  }
 
   List<Widget> displayedDefinitionList = [];
   List<Widget> displayedWordTypeList = [];
@@ -95,33 +140,94 @@ class _FlashcardState extends State<Flashcard> {
                 key: widget.cardKey,
                 front: Card(
                   child: Container(
-                    padding: EdgeInsets.all(30),
                     width: 350,
                     child: Column(
                       children: <Widget>[
+                        //ANCHOR Setting button
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              PopupMenuButton<String>(
+                                icon: Icon(Icons.more_horiz),
+                                offset: Offset(0, 100),
+                                tooltip: _displayedStringZHTW['more'] ?? '',
+                                onSelected: (String result) async {
+                                  if (result == 'edit') {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return EditFlashcardPage(
+                                        repoId: widget.repoId,
+                                        flashcardInfo: widget.info,
+                                      );
+                                    })).then((newFlashcardInfo) {
+                                      setState(() {
+                                        widget.info = newFlashcardInfo;
+                                      });
+                                    });
+                                  } else if (result == 'delete') {
+                                    if (await deleteAlertDialog(context)) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  }
+                                },
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<String>>[
+                                  PopupMenuItem<String>(
+                                    value: 'edit',
+                                    child: Text(
+                                        _displayedStringZHTW['edit'] ?? ''),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: 'delete',
+                                    child: Text(
+                                        _displayedStringZHTW['delete'] ?? ''),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+
+                        //ANCHOR Displayed word
                         Expanded(
                           child: DisplayedWord(
                             flashcardInfo: widget.info,
+                            hasFurigana: widget.hasFurigana ?? true,
                           ),
                         ),
+
+                        //ANCHOR Buttom action buttons
                         Divider(
                           thickness: 1,
+                          indent: 30,
+                          endIndent: 30,
                           color: Colors.grey[600],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.volume_up),
-                              onPressed: () {
-                                widget.speakWord();
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.star_border),
-                              onPressed: () {},
-                            )
-                          ],
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(30, 0, 30, 30),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  Icons.volume_up,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  widget.speakWord();
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.star_border,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {},
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -155,12 +261,18 @@ class _FlashcardState extends State<Flashcard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               IconButton(
-                                  icon: Icon(Icons.volume_up),
+                                  icon: Icon(
+                                    Icons.volume_up,
+                                    size: 30.0,
+                                  ),
                                   onPressed: () {
                                     widget.speakDefinition();
                                   }),
                               IconButton(
-                                icon: Icon(Icons.star_border),
+                                icon: Icon(
+                                  Icons.star_border,
+                                  size: 30.0,
+                                ),
                                 onPressed: () {},
                               )
                             ],

@@ -11,6 +11,7 @@ import 'package:jp_flashcard/screen/repo/flashcard_page.dart';
 import 'package:jp_flashcard/screen/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/utils/database.dart';
 import 'package:jp_flashcard/utils/text_to_speech.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Repo extends StatefulWidget {
   RepoInfo repoInfo;
@@ -31,7 +32,7 @@ class _RepoState extends State<Repo> {
     flashcardInfoList.clear();
 
     int flashcardCardIndex = 0;
-    await DBManager.db.getFlashcard(widget.repoInfo.repoId).then((data) {
+    await DBManager.db.getFlashcardList(widget.repoInfo.repoId).then((data) {
       var flashcardTable = data['word'];
       var definitionTable = data['definition'];
       var kanjiTable = data['kanji'];
@@ -78,7 +79,9 @@ class _RepoState extends State<Repo> {
           ));
 
           flashcardList.add(Flashcard(
+            repoId: widget.repoInfo.repoId,
             info: info,
+            hasFurigana: true,
           ));
 
           flashcardCardIndex++;
@@ -89,9 +92,14 @@ class _RepoState extends State<Repo> {
   }
 
   void navigateToFlashcard(int index) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return FlashcardPage(flashcardIndex: index, flashcardList: flashcardList,);
-    }));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return FlashcardPage(
+        flashcardIndex: index,
+        flashcardList: flashcardList,
+      );
+    })).then((value) {
+      updateFlashcardCardList();
+    });
   }
 
   @override
