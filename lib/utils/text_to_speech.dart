@@ -1,16 +1,27 @@
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TextToSpeech {
-  String language;
-  FlutterTts flutterTts;
-  TextToSpeech({this.language}) {
-    flutterTts = FlutterTts();
-    flutterTts.setLanguage(language);
-  }
-  static final jpTts = TextToSpeech(language: 'ja-JP');
-  static final enTts = TextToSpeech(language: 'en-US');
+  FlutterTts flutterTts = FlutterTts();
+  bool lastComplete = true;
 
-  void speak(String text) {
+  static final tts = TextToSpeech();
+
+  Future<void> waitSpeakingComplete() async {
+    int i = 0;
+    while (!lastComplete && i < 15) {
+      await new Future.delayed(const Duration(seconds: 1));
+      i++;
+    }
+  }
+
+  Future<void> speak(String language, String text) async {
+    flutterTts.setLanguage(language);
+    flutterTts.setCompletionHandler(() {
+      lastComplete = true;
+    });
+    lastComplete = false;
     flutterTts.speak(text);
+    await waitSpeakingComplete();
+    return;
   }
 }

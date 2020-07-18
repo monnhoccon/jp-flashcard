@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
@@ -5,8 +7,10 @@ import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screen/learning/learning_page.dart';
 import 'package:jp_flashcard/screen/repo/add_flashcard.dart';
 import 'package:jp_flashcard/screen/repo/flashcard.dart';
+import 'package:jp_flashcard/screen/repo/flashcard_page.dart';
 import 'package:jp_flashcard/screen/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/utils/database.dart';
+import 'package:jp_flashcard/utils/text_to_speech.dart';
 
 class Repo extends StatefulWidget {
   RepoInfo repoInfo;
@@ -85,15 +89,8 @@ class _RepoState extends State<Repo> {
   }
 
   void navigateToFlashcard(int index) {
-    PageController pageController = PageController(initialPage: index);
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return Scaffold(
-        appBar: AppBar(),
-        body: PageView(
-          controller: pageController,
-          children: flashcardList,
-        ),
-      );
+      return FlashcardPage(flashcardIndex: index, flashcardList: flashcardList,);
     }));
   }
 

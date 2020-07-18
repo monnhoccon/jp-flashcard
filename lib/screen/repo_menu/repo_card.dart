@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/repo/repo.dart';
+import 'package:jp_flashcard/screen/repo/repo_page.dart';
 import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
 import 'package:jp_flashcard/utils/database.dart';
 

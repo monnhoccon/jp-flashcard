@@ -85,7 +85,6 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   child: FlatButton(
                     onPressed: () async {
-                      TextToSpeech.jpTts.speak(widget.flashcardInfo.word);
                       answerIncorrect();
                     },
                     child: Text('不知道'),
