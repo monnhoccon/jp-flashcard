@@ -26,6 +26,8 @@ dependencies:
   sqflite: any
   shared_preferences: any
   flip_card: any
+  dart_random_choice: any
+  flutter_tts: any
 
 
   # The following adds the Cupertino Icons font to your application.

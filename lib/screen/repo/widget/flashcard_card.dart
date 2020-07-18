@@ -4,15 +4,17 @@ import 'package:jp_flashcard/screen/repo/flashcard.dart';
 
 class FlashcardCard extends StatefulWidget {
   int repoId;
+  int flashcardCardIndex;
   FlashcardInfo info;
+  Function navigateToFlashcard;
   @override
-  FlashcardCard({this.repoId, this.info});
+  FlashcardCard({this.repoId, this.info, this.flashcardCardIndex, this.navigateToFlashcard});
   _FlashcardCardState createState() => _FlashcardCardState();
 }
 
 class _FlashcardCardState extends State<FlashcardCard> {
   //ANCHOR Variables
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,9 +23,7 @@ class _FlashcardCardState extends State<FlashcardCard> {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(5),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Flashcard(info: widget.info);
-            }));
+            widget.navigateToFlashcard(widget.flashcardCardIndex);
           },
           child: Padding(
             padding: EdgeInsets.fromLTRB(10, 10, 0, 10),

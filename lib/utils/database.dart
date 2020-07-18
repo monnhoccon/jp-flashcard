@@ -305,6 +305,15 @@ class DBManager {
     ''', [flashcardId, definition]);
     return;
   }
+
+  Future<dynamic> getDefinitionListExcept(int repoId, int flashcardId) async {
+    final db = await database;
+    await initDefinitionList(repoId, db);
+    var data = await db.rawQuery('''
+      SELECT * FROM definitionList$repoId WHERE flashcardId != ?
+    ''', [flashcardId]);
+    return data;
+  }
   //--------------------------------------------
 
   //ANCHOR KanjiList

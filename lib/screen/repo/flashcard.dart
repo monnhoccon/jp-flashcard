@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/widget/displayed_letter.dart';
+import 'package:jp_flashcard/widget/displayed_word.dart';
 
 // ignore: must_be_immutable
 class Flashcard extends StatefulWidget {
@@ -15,33 +16,8 @@ class Flashcard extends StatefulWidget {
 class _FlashcardState extends State<Flashcard> {
   //ANCHOR Variables
 
-  List<Widget> displayedLetterList = [];
   List<Widget> displayedDefinitionList = [];
   List<Widget> displayedWordTypeList = [];
-
-  void updateDisplayedLetterList() {
-    displayedLetterList.clear();
-    for (int i = 0; i < widget.info.word.length; i++) {
-      bool isKanji = false;
-      for (final kanji in widget.info.kanji) {
-        if (kanji.index == i) {
-          isKanji = true;
-          displayedLetterList.add(DisplayedLetter(
-            hasFurigana: true,
-            letter: widget.info.word[i],
-            furigana: kanji.furigana,
-          ));
-        }
-      }
-      if (!isKanji) {
-        displayedLetterList.add(DisplayedLetter(
-          hasFurigana: false,
-          letter: widget.info.word[i],
-          furigana: null,
-        ));
-      }
-    }
-  }
 
   void updateDisplayedDefinitionList() {
     displayedDefinitionList.clear();
@@ -75,62 +51,57 @@ class _FlashcardState extends State<Flashcard> {
   void updateDisplayedWordTypeList() {
     displayedWordTypeList.clear();
     for (final wordType in widget.info.wordType) {
-      displayedWordTypeList.add(Text(
-          (wordType != widget.info.wordType.last) ? (wordType + ' · ') : (wordType)));
+      displayedWordTypeList.add(Text((wordType != widget.info.wordType.last)
+          ? (wordType + ' · ')
+          : (wordType)));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    updateDisplayedLetterList();
     updateDisplayedDefinitionList();
     updateDisplayedWordTypeList();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
-      body: Center(
-        child: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (OverscrollIndicatorNotification overscroll) {
-            overscroll.disallowGlow();
-            return false;
-          },
-          child: SingleChildScrollView(
-            child: Container(
-                padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: 450),
-                  child: FlipCard(
-                    front: Card(
-                      child: Container(
-                          padding: EdgeInsets.all(30),
-                          width: 350,
-                          child: Wrap(
-                            alignment: WrapAlignment.center,
-                            runAlignment: WrapAlignment.center,
-                            children: displayedLetterList,
-                          )),
-                    ),
-                    back: Card(
-                      child: Container(
-                          padding: EdgeInsets.all(50),
-                          width: 350,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Wrap(
-                                alignment: WrapAlignment.center,
-                                runAlignment: WrapAlignment.center,
-                                children: displayedWordTypeList,
-                              ),
-                              ...displayedDefinitionList,
-                            ],
-                          )),
+    return Center(
+      child: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (OverscrollIndicatorNotification overscroll) {
+          overscroll.disallowGlow();
+          return false;
+        },
+        child: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 450),
+                child: FlipCard(
+                  front: Card(
+                    child: Container(
+                      padding: EdgeInsets.all(30),
+                      width: 350,
+                      child: DisplayedWord(
+                        flashcardInfo: widget.info,
+                      ),
                     ),
                   ),
-                )),
-          ),
+                  back: Card(
+                    child: Container(
+                        padding: EdgeInsets.all(50),
+                        width: 350,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Wrap(
+                              alignment: WrapAlignment.center,
+                              runAlignment: WrapAlignment.center,
+                              children: displayedWordTypeList,
+                            ),
+                            ...displayedDefinitionList,
+                          ],
+                        )),
+                  ),
+                ),
+              )),
         ),
       ),
     );

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
+import 'package:jp_flashcard/screen/learning/learning_page.dart';
 import 'package:jp_flashcard/screen/repo/add_flashcard.dart';
-import 'package:jp_flashcard/screen/repo/flashcard_card.dart';
-import 'package:jp_flashcard/screen/repo/test.dart';
+import 'package:jp_flashcard/screen/repo/flashcard.dart';
+import 'package:jp_flashcard/screen/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/utils/database.dart';
 
 class Repo extends StatefulWidget {
@@ -17,16 +18,21 @@ class Repo extends StatefulWidget {
 class _RepoState extends State<Repo> {
   //ANCHOR Variables
   List<Widget> flashcardCardList = [];
+  List<FlashcardInfo> flashcardInfoList = [];
+  List<Widget> flashcardList = [];
 
   Future<void> updateFlashcardCardList() async {
     flashcardCardList.clear();
+    flashcardList.clear();
+    flashcardInfoList.clear();
 
+    int flashcardCardIndex = 0;
     await DBManager.db.getFlashcard(widget.repoInfo.repoId).then((data) {
-      var flashcardList = data['word'];
+      var flashcardTable = data['word'];
       var definitionTable = data['definition'];
       var kanjiTable = data['kanji'];
       var wordTypeTable = data['wordType'];
-      for (final flashcard in flashcardList) {
+      for (final flashcard in flashcardTable) {
         int flashcardId = flashcard['flashcardId'];
         String word = flashcard['word'];
         List<String> definitionList = [];
@@ -51,17 +57,44 @@ class _RepoState extends State<Repo> {
           }
         }
         setState(() {
+          FlashcardInfo info = FlashcardInfo(
+            flashcardId: flashcardId,
+            word: word,
+            definition: definitionList,
+            kanji: kanjiList,
+            wordType: wordTypeList,
+          );
+
+          flashcardInfoList.add(info);
+
           flashcardCardList.add(FlashcardCard(
-              info: FlashcardInfo(
-                  flashcardId: flashcardId,
-                  word: word,
-                  definition: definitionList,
-                  kanji: kanjiList,
-                  wordType: wordTypeList)));
+            info: info,
+            navigateToFlashcard: navigateToFlashcard,
+            flashcardCardIndex: flashcardCardIndex,
+          ));
+
+          flashcardList.add(Flashcard(
+            info: info,
+          ));
+
+          flashcardCardIndex++;
         });
       }
     });
     return;
+  }
+
+  void navigateToFlashcard(int index) {
+    PageController pageController = PageController(initialPage: index);
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: PageView(
+          controller: pageController,
+          children: flashcardList,
+        ),
+      );
+    }));
   }
 
   @override
@@ -96,6 +129,18 @@ class _RepoState extends State<Repo> {
                   updateFlashcardCardList();
                 },
                 child: Text('Delete All'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return LearningPage(
+                      repoInfo: widget.repoInfo,
+                      flashcardInfoList: flashcardInfoList,
+                    );
+                  }));
+                },
+                child: Text('Learn'),
               ),
             ],
           ),

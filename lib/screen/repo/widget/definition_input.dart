@@ -23,7 +23,7 @@ class _DefinitionInputState extends State<DefinitionInput> {
         InputField(
             validationKey: widget.validationKey,
             displayedString: widget.displayedString,
-            value: widget.value),
+            inputText: widget.value),
       ],
     );
   }

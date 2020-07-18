@@ -51,8 +51,12 @@ class _AddFlashcardState extends State<AddFlashcard> {
   List<KanjiInfo> kanjiInfoList = [];
 
   void parseKanji(String text) {
+    kanjiInputList.clear();
+    kanjiFormKey.clear();
+    kanjiValue.clear();
+    kanjiInfoList.clear();
+    numKanji = 0;
     setState(() {
-      kanjiInputList.clear();
       for (int i = 0; i < text.length; i++) {
         var char = text[i];
         bool isKanji = true;
@@ -64,12 +68,15 @@ class _AddFlashcardState extends State<AddFlashcard> {
         }
         if (isKanji) {
           kanjiFormKey.add(GlobalKey<FormState>());
+
           kanjiValue.add(TextEditingController());
+
           kanjiInputList.add(KanjiInput(
             displayedString: char,
             value: kanjiValue[numKanji],
             validationKey: kanjiFormKey[numKanji],
           ));
+
           kanjiInfoList.add(KanjiInfo(
             furigana: '',
             index: i,
@@ -145,9 +152,12 @@ class _AddFlashcardState extends State<AddFlashcard> {
       DBManager.db.insertDefinition(
           widget.repoId, flashcardId, definition.text.toString());
     }
+
+    int i = 0;
     for (final kanjiInfo in kanjiInfoList) {
-      kanjiInfo.furigana = kanjiValue[kanjiInfo.index].text.toString();
+      kanjiInfo.furigana = kanjiValue[i].text.toString();
       DBManager.db.insertKanji(widget.repoId, flashcardId, kanjiInfo);
+      i++;
     }
 
     for (final wordType in selectedWordTypeBoxList) {
@@ -313,6 +323,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
                 validation = false;
               }
             }
+
             if (validation) {
               await addFlashcard();
               Navigator.of(context).pop();
