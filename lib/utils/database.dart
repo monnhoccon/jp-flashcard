@@ -332,6 +332,15 @@ class DBManager {
     return;
   }
 
+  Future<dynamic> getWordListExcept(int repoId, int flashcardId) async {
+    final db = await database;
+    await initFlashcardList(repoId, db);
+    var data = await db.rawQuery('''
+      SELECT * FROM flashcardList$repoId WHERE flashcardId != ?
+    ''', [flashcardId]);
+    return data;
+  }
+
   //--------------------------------------------
 
   //ANCHOR DefinitionList

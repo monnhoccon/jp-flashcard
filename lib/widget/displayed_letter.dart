@@ -4,10 +4,14 @@ class DisplayedLetter extends StatelessWidget {
   final bool hasFurigana;
   final String letter;
   final String furigana;
+  double furiganaFontSize = 15;
+  double textFontSize = 35;
   DisplayedLetter({
     this.hasFurigana,
     this.letter,
     this.furigana,
+    this.textFontSize,
+    this.furiganaFontSize,
   });
 
   @override
@@ -19,18 +23,21 @@ class DisplayedLetter extends StatelessWidget {
           furigana,
           style: hasFurigana
               ? TextStyle(
-                  fontSize: 15,
+                  fontSize: furiganaFontSize,
                   height: 1.3,
                 )
               : TextStyle(
-                  fontSize: 15,
+                  fontSize: 0,
                   height: 0,
                   color: Colors.transparent,
                 ),
         ),
         Text(
           letter,
-          style: TextStyle(fontSize: 35, height: 1.2),
+          style: TextStyle(
+            fontSize: textFontSize,
+            height: 1.2,
+          ),
         ),
       ],
     );

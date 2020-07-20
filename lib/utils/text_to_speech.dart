@@ -9,7 +9,7 @@ class TextToSpeech {
   Future<void> waitSpeakingComplete() async {
     int i = 0;
     while (!lastComplete && i < 15) {
-      await new Future.delayed(const Duration(seconds: 1));
+      await new Future.delayed(const Duration(milliseconds: 500));
       i++;
     }
   }

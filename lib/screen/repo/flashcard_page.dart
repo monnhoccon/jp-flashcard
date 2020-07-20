@@ -7,14 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FlashcardPage extends StatefulWidget {
   int flashcardIndex;
   List<Widget> flashcardList = [];
-  FlashcardPage({this.flashcardIndex, this.flashcardList});
+  Function toggleFurigana;
+  FlashcardPage({this.flashcardIndex, this.flashcardList, this.toggleFurigana});
   @override
   _FlashcardPageState createState() => _FlashcardPageState();
 }
 
 class _FlashcardPageState extends State<FlashcardPage> {
   //ANCHOR Variables
-
   bool playFlashcards = false;
   bool inFlashcardPage = false;
   PageController _pageController = PageController(initialPage: 0);
@@ -98,18 +98,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
           IconButton(
             icon: displayTagButtonIcon,
             onPressed: () {
+              Flashcard a = widget.flashcardList[1];
               setState(() {
-                if (!hasFurigana) {
-                  displayTagButtonIcon = Icon(Icons.label);
-
-                  hasFurigana = true;
-                } else {
-                  displayTagButtonIcon = Icon(Icons.label_outline);
-                  hasFurigana = false;
-                }
-                Flashcard flashcard = widget.flashcardList[_currentPage];
-                flashcard.toggleFurigana();
-                persistData.setBool('hasFurigana', hasFurigana);
+                widget.flashcardList[0] = Flashcard(
+                  repoId: a.repoId,
+                  info: a.info,
+                  hasFurigana: false,
+                );
               });
             },
           )

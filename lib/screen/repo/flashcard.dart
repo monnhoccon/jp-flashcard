@@ -39,7 +39,6 @@ class Flashcard extends StatefulWidget {
   void toggleFurigana() {
     hasFurigana = !hasFurigana;
     print(hasFurigana);
-    
   }
 
   @override
@@ -124,6 +123,7 @@ class _FlashcardState extends State<Flashcard> {
 
   @override
   Widget build(BuildContext context) {
+    print('hey');
     updateDisplayedDefinitionList();
     updateDisplayedWordTypeList();
     return Center(
@@ -195,6 +195,8 @@ class _FlashcardState extends State<Flashcard> {
                           child: DisplayedWord(
                             flashcardInfo: widget.info,
                             hasFurigana: widget.hasFurigana ?? true,
+                            textFontSize: 35,
+                            furiganaFontSize: 15,
                           ),
                         ),
 
@@ -224,7 +226,9 @@ class _FlashcardState extends State<Flashcard> {
                                   Icons.star_border,
                                   size: 30.0,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  //TODO Favorite button
+                                },
                               )
                             ],
                           ),
@@ -273,7 +277,9 @@ class _FlashcardState extends State<Flashcard> {
                                   Icons.star_border,
                                   size: 30.0,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  //TODO Favorite button
+                                },
                               )
                             ],
                           )

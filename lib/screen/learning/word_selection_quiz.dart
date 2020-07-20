@@ -2,65 +2,66 @@ import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/screen/learning/answer_correct_dialog.dart';
 import 'package:jp_flashcard/screen/learning/widget/selection_card.dart';
 import 'package:jp_flashcard/utils/database.dart';
 import 'package:jp_flashcard/widget/displayed_word.dart';
 
 // ignore: must_be_immutable
-class DefinitionSelectionQuiz extends StatefulWidget {
+class WordSelectionQuiz extends StatefulWidget {
   int repoId;
   FlashcardInfo flashcardInfo;
-  bool hasFurigana;
-  DefinitionSelectionQuiz({this.flashcardInfo, this.repoId, this.hasFurigana});
+  WordSelectionQuiz({this.flashcardInfo, this.repoId});
   @override
-  _DefinitionSelectionQuizState createState() =>
-      _DefinitionSelectionQuizState();
+  _WordSelectionQuizState createState() => _WordSelectionQuizState();
 }
 
-class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
-  List<String> definition = [];
-  List<String> definitionList = [];
+class _WordSelectionQuizState extends State<WordSelectionQuiz> {
+  String definition;
+  List<String> wordList = [];
 
-  void getDefinitionList() async {
-    definitionList.clear();
+  void getWordList() async {
+    wordList.clear();
     await DBManager.db
-        .getDefinitionListExcept(
-            widget.repoId, widget.flashcardInfo.flashcardId)
+        .getWordListExcept(widget.repoId, widget.flashcardInfo.flashcardId)
         .then((result) {
       setState(() {
-        for (final definition in result) {
-          definitionList.add(definition['definition']);
+        for (final word in result) {
+          wordList.add(word['word']);
         }
-        generateDisplayedDefinitionList();
+        generateDisplayedWordList();
       });
     });
   }
 
-  //ANCHOR Generate displayed defintion list
-  List<String> displayedDefinitionList = [];
+  //ANCHOR Generate displayed word list
+  List<String> displayedWordList = [];
   int correctAnswerIndex;
 
-  void generateDisplayedDefinitionList() {
-    displayedDefinitionList.clear();
+  void generateDisplayedWordList() {
+    displayedWordList.clear();
     Set<int> randomIndexSet = Set();
     var randomGenerator = Random();
     while (randomIndexSet.length < 3) {
-      randomIndexSet.add(randomGenerator.nextInt(definitionList.length));
+      randomIndexSet.add(randomGenerator.nextInt(wordList.length));
     }
 
     correctAnswerIndex = randomGenerator.nextInt(4);
     setState(() {
       for (final index in randomIndexSet) {
-        displayedDefinitionList.add(definitionList[index]);
+        displayedWordList.add(wordList[index]);
       }
 
-      displayedDefinitionList.insert(
-          correctAnswerIndex, randomChoice(definition));
+      displayedWordList.insert(correctAnswerIndex, widget.flashcardInfo.word);
     });
   }
 
   void select(int index) {
     if (index == correctAnswerIndex) {
+      AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
+        flashcardInfo: widget.flashcardInfo,
+      );
+      answerCorrectDialog.dialog(context);
       print('correct');
     } else {
       print('incorrect');
@@ -70,8 +71,8 @@ class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
   @override
   void initState() {
     super.initState();
-    getDefinitionList();
-    definition = widget.flashcardInfo.definition;
+    getWordList();
+    definition = randomChoice(widget.flashcardInfo.definition);
   }
 
   @override
@@ -85,12 +86,10 @@ class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                DisplayedWord(
-                  flashcardInfo: widget.flashcardInfo,
-                  hasFurigana: widget.hasFurigana,
-                  textFontSize: 35,
-                  furiganaFontSize: 15,
-                )
+                Text(
+                  definition,
+                  style: TextStyle(fontSize: 35, height: 1.2),
+                ),
               ],
             ),
           ),
@@ -102,12 +101,12 @@ class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
                   return false;
                 },
                 child: ListView.builder(
-                    itemCount: displayedDefinitionList.length,
+                    itemCount: displayedWordList.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
                         child: SelectionCard(
-                          displayedString: displayedDefinitionList[index],
+                          displayedString: displayedWordList[index],
                           select: select,
                           index: index,
                         ),

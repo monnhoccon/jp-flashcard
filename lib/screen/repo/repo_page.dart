@@ -10,7 +10,6 @@ import 'package:jp_flashcard/screen/repo/flashcard.dart';
 import 'package:jp_flashcard/screen/repo/flashcard_page.dart';
 import 'package:jp_flashcard/screen/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/utils/database.dart';
-import 'package:jp_flashcard/utils/text_to_speech.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Repo extends StatefulWidget {
@@ -22,7 +21,7 @@ class Repo extends StatefulWidget {
 
 class _RepoState extends State<Repo> {
   //ANCHOR Variables
-  List<Widget> flashcardCardList = [];
+  List<FlashcardCard> flashcardCardList = [];
   List<FlashcardInfo> flashcardInfoList = [];
   List<Widget> flashcardList = [];
 
@@ -73,15 +72,18 @@ class _RepoState extends State<Repo> {
           flashcardInfoList.add(info);
 
           flashcardCardList.add(FlashcardCard(
-            info: info,
+            repoId: widget.repoInfo.repoId,
+            flashcardInfo: info,
             navigateToFlashcard: navigateToFlashcard,
             flashcardCardIndex: flashcardCardIndex,
+            rebuildFlashcardMenu: rebuildFlashcardMenu,
+            hasFurigana: hasFurigana,
           ));
 
           flashcardList.add(Flashcard(
             repoId: widget.repoInfo.repoId,
             info: info,
-            hasFurigana: true,
+            hasFurigana: hasFurigana,
           ));
 
           flashcardCardIndex++;
@@ -96,9 +98,23 @@ class _RepoState extends State<Repo> {
       return FlashcardPage(
         flashcardIndex: index,
         flashcardList: flashcardList,
+        toggleFurigana: toggleFurigana,
       );
     })).then((value) {
       updateFlashcardCardList();
+    });
+  }
+
+  void rebuildFlashcardMenu() {
+    updateFlashcardCardList();
+  }
+
+  bool hasFurigana = false;
+  var persistData;
+  void getPersistData() async {
+    persistData = await SharedPreferences.getInstance();
+    setState(() {
+      hasFurigana = persistData.getBool('hasFurigana') ?? true;
     });
   }
 
@@ -106,6 +122,20 @@ class _RepoState extends State<Repo> {
   void initState() {
     super.initState();
     updateFlashcardCardList();
+    getPersistData();
+  }
+
+  void toggleFurigana() {
+    setState(() {
+      if (!hasFurigana) {
+        hasFurigana = true;
+      } else {
+        hasFurigana = false;
+      }
+    });
+    updateFlashcardCardList();
+
+    persistData.setBool('hasFurigana', hasFurigana);
   }
 
   @override
@@ -113,6 +143,14 @@ class _RepoState extends State<Repo> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.repoInfo.title),
+        actions: <Widget>[
+          IconButton(
+            icon: hasFurigana ? Icon(Icons.label) : Icon(Icons.label_outline),
+            onPressed: () {
+              toggleFurigana();
+            },
+          )
+        ],
       ),
       body: Container(
           child: Column(

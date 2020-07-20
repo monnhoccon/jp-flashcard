@@ -69,6 +69,9 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
               children: <Widget>[
                 DisplayedWord(
                   flashcardInfo: widget.flashcardInfo,
+                  hasFurigana: true,
+                  textFontSize: 35,
+                  furiganaFontSize: 15,
                 )
               ],
             ),

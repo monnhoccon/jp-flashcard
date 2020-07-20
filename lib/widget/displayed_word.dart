@@ -6,7 +6,14 @@ import 'package:jp_flashcard/widget/displayed_letter.dart';
 class DisplayedWord extends StatelessWidget {
   FlashcardInfo flashcardInfo;
   bool hasFurigana;
-  DisplayedWord({this.flashcardInfo, this.hasFurigana});
+  double furiganaFontSize = 15;
+  double textFontSize = 35;
+  DisplayedWord({
+    this.flashcardInfo,
+    this.hasFurigana,
+    this.textFontSize,
+    this.furiganaFontSize,
+  });
 
   List<Widget> displayedLetterList = [];
   void updateDisplayedLetterList() {
@@ -20,6 +27,8 @@ class DisplayedWord extends StatelessWidget {
             hasFurigana: hasFurigana,
             letter: flashcardInfo.word[i],
             furigana: kanji.furigana,
+            furiganaFontSize: furiganaFontSize,
+            textFontSize: textFontSize,
           ));
         }
       }
@@ -28,6 +37,8 @@ class DisplayedWord extends StatelessWidget {
           hasFurigana: hasFurigana,
           letter: flashcardInfo.word[i],
           furigana: '',
+          furiganaFontSize: furiganaFontSize,
+          textFontSize: textFontSize,
         ));
       }
     }

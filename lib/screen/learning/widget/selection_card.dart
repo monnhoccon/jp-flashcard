@@ -19,6 +19,7 @@ class SelectionCard extends StatelessWidget {
             displayedString,
             style: TextStyle(
               fontSize: 22,
+              height: 1
             ),
           ),
         ),

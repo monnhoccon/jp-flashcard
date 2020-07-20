@@ -374,7 +374,7 @@ class _EditFlashcardPageState extends State<EditFlashcardPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: Icon(Icons.check),
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () async {
             bool validation = true;
