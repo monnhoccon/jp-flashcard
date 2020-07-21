@@ -17,15 +17,9 @@ class LearningPage extends StatefulWidget {
 }
 
 class _LearningPageState extends State<LearningPage> {
-  int flashcardLength;
   var randomGenerator;
-  @override
-  void initState() {
-    super.initState();
-    flashcardLength = widget.flashcardInfoList.length;
-    randomGenerator = Random();
-  }
-
+  int repoId;
+  List<FlashcardInfo> flashcardInfoList;
   bool hasFurigana = true;
   var persistData;
   void getPersistData() async {
@@ -33,6 +27,58 @@ class _LearningPageState extends State<LearningPage> {
     setState(() {
       hasFurigana = persistData.getBool('hasFurigana') ?? true;
     });
+  }
+
+  Widget currentQuiz;
+  int lastIndex = -1;
+  void nextQuiz() {
+    setState(() {
+      int quizType = randomGenerator.nextInt(1);
+      int index = randomGenerator.nextInt(flashcardInfoList.length);
+      while (index == lastIndex) {
+        index = randomGenerator.nextInt(flashcardInfoList.length);
+      }
+
+      lastIndex = index;
+      quizType = 0;
+
+      if (quizType == 0) {
+        currentQuiz = new DefinitionSelectionQuiz(
+          repoId: repoId,
+          flashcardInfo: flashcardInfoList[index],
+          hasFurigana: hasFurigana,
+          nextQuiz: nextQuiz,
+        );
+      } else if (quizType == 1) {
+        currentQuiz = new DefinitionShortAnswerQuiz(
+          repoId: repoId,
+          flashcardInfo: flashcardInfoList[index],
+          hasFurigana: hasFurigana,
+          nextQuiz: nextQuiz,
+        );
+      } else if (quizType == 2) {
+        currentQuiz = new WordSelectionQuiz(
+          repoId: repoId,
+          flashcardInfo: flashcardInfoList[index],
+          hasFurigana: hasFurigana,
+          nextQuiz: nextQuiz,
+        );
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    repoId = widget.repoInfo.repoId;
+    flashcardInfoList = widget.flashcardInfoList;
+    randomGenerator = Random();
+    currentQuiz = new DefinitionSelectionQuiz(
+      repoId: repoId,
+      flashcardInfo: flashcardInfoList[1],
+      hasFurigana: hasFurigana,
+      nextQuiz: nextQuiz,
+    );
   }
 
   @override
@@ -56,11 +102,7 @@ class _LearningPageState extends State<LearningPage> {
           )
         ],
       ),
-      body: DefinitionSelectionQuiz(
-        flashcardInfo: widget.flashcardInfoList[2],
-        repoId: widget.repoInfo.repoId,
-        hasFurigana: hasFurigana,
-      ),
+      body: currentQuiz,
     );
   }
 }

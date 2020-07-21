@@ -76,8 +76,10 @@ class FlashcardCard extends StatelessWidget {
       ));
       i++;
     }
+    
   }
-
+  //TODO Width overflow
+  
   Future<void> speak() async {
     await TextToSpeech.tts.speak('ja-JP', flashcardInfo.word);
     for (final definition in flashcardInfo.definition) {

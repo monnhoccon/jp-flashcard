@@ -9,15 +9,15 @@ import 'package:jp_flashcard/widget/displayed_word.dart';
 // ignore: must_be_immutable
 class Flashcard extends StatefulWidget {
   int repoId;
-  FlashcardInfo info;
+  FlashcardInfo flashcardInfo;
   bool hasFurigana;
   Future<void> speakWord() async {
-    await TextToSpeech.tts.speak('ja-JP', info.word);
+    await TextToSpeech.tts.speak('ja-JP', flashcardInfo.word);
     return;
   }
 
   Future<void> speakDefinition() async {
-    for (final definition in info.definition) {
+    for (final definition in flashcardInfo.definition) {
       await TextToSpeech.tts.speak('zh-TW', definition);
     }
     return;
@@ -42,7 +42,7 @@ class Flashcard extends StatefulWidget {
   }
 
   @override
-  Flashcard({this.repoId, this.info, this.hasFurigana});
+  Flashcard({this.repoId, this.flashcardInfo, this.hasFurigana});
   _FlashcardState createState() => _FlashcardState();
 }
 
@@ -76,7 +76,7 @@ class _FlashcardState extends State<Flashcard> {
             FlatButton(
                 onPressed: () {
                   DBManager.db
-                      .deleteFlashcard(widget.repoId, widget.info.flashcardId);
+                      .deleteFlashcard(widget.repoId, widget.flashcardInfo.flashcardId);
                   Navigator.of(context).pop(true);
                 },
                 child: Text(_displayedStringZHTW['confirm'] ?? ''))
@@ -91,14 +91,14 @@ class _FlashcardState extends State<Flashcard> {
     displayedDefinitionList.clear();
     displayedDefinitionList.add(SizedBox(height: 10));
     int index = 1;
-    for (final definition in widget.info.definition) {
+    for (final definition in widget.flashcardInfo.definition) {
       displayedDefinitionList.add(Flexible(
         child: RichText(
           text: TextSpan(
             style: TextStyle(fontSize: 23, height: 1.5, color: Colors.black),
             children: <TextSpan>[
               TextSpan(
-                text: (widget.info.definition.length != 1) ? '$index. ' : '',
+                text: (widget.flashcardInfo.definition.length != 1) ? '$index. ' : '',
                 style: TextStyle(
                     fontSize: 23, color: Colors.grey[500], height: 1.5),
               ),
@@ -114,8 +114,8 @@ class _FlashcardState extends State<Flashcard> {
 
   void updateDisplayedWordTypeList() {
     displayedWordTypeList.clear();
-    for (final wordType in widget.info.wordType) {
-      displayedWordTypeList.add(Text((wordType != widget.info.wordType.last)
+    for (final wordType in widget.flashcardInfo.wordType) {
+      displayedWordTypeList.add(Text((wordType != widget.flashcardInfo.wordType.last)
           ? (wordType + ' · ')
           : (wordType)));
     }
@@ -159,11 +159,11 @@ class _FlashcardState extends State<Flashcard> {
                                         MaterialPageRoute(builder: (context) {
                                       return EditFlashcardPage(
                                         repoId: widget.repoId,
-                                        flashcardInfo: widget.info,
+                                        flashcardInfo: widget.flashcardInfo,
                                       );
                                     })).then((newFlashcardInfo) {
                                       setState(() {
-                                        widget.info = newFlashcardInfo;
+                                        widget.flashcardInfo = newFlashcardInfo;
                                       });
                                     });
                                   } else if (result == 'delete') {
@@ -193,7 +193,7 @@ class _FlashcardState extends State<Flashcard> {
                         //ANCHOR Displayed word
                         Expanded(
                           child: DisplayedWord(
-                            flashcardInfo: widget.info,
+                            flashcardInfo: widget.flashcardInfo,
                             hasFurigana: widget.hasFurigana ?? true,
                             textFontSize: 35,
                             furiganaFontSize: 15,
@@ -249,8 +249,9 @@ class _FlashcardState extends State<Flashcard> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Wrap(
-                                  alignment: WrapAlignment.center,
+                                  alignment: WrapAlignment.start,
                                   runAlignment: WrapAlignment.center,
+                                  runSpacing: 5,
                                   children: displayedWordTypeList,
                                 ),
                                 ...displayedDefinitionList,

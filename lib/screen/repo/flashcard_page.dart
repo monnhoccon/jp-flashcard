@@ -102,7 +102,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               setState(() {
                 widget.flashcardList[0] = Flashcard(
                   repoId: a.repoId,
-                  info: a.info,
+                  flashcardInfo: a.flashcardInfo,
                   hasFurigana: false,
                 );
               });

@@ -48,7 +48,7 @@ class DisplayedWord extends StatelessWidget {
   Widget build(BuildContext context) {
     updateDisplayedLetterList();
     return Wrap(
-      alignment: WrapAlignment.center,
+      alignment: WrapAlignment.start,
       runAlignment: WrapAlignment.center,
       children: displayedLetterList,
     );

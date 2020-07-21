@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/screen/learning/answer_correct_dialog.dart';
+import 'package:jp_flashcard/screen/learning/answer_incorrect_dialog.dart';
 import 'package:jp_flashcard/screen/repo/widget/input_field.dart';
-import 'package:jp_flashcard/utils/text_to_speech.dart';
 import 'package:jp_flashcard/widget/displayed_word.dart';
 
 // ignore: must_be_immutable
 class DefinitionShortAnswerQuiz extends StatefulWidget {
   int repoId;
   FlashcardInfo flashcardInfo;
-  DefinitionShortAnswerQuiz({this.flashcardInfo, this.repoId});
+  bool hasFurigana;
+  Function nextQuiz;
+  DefinitionShortAnswerQuiz(
+      {this.flashcardInfo, this.repoId, this.hasFurigana, this.nextQuiz});
   @override
   _DefinitionShortAnswerQuizState createState() =>
       _DefinitionShortAnswerQuizState();
@@ -23,15 +26,28 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
   List<GlobalKey<FormState>> validationKeyList = [];
   List<Widget> answerInputList = [];
 
-  void answerCorrect() {
-    print('correct');
+  void answerCorrect() async {
+    AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
+      flashcardInfo: widget.flashcardInfo,
+      hasFurigana: widget.hasFurigana,
+    );
+    await answerCorrectDialog.dialog(context);
+
+    widget.nextQuiz();
   }
 
-  void answerIncorrect() {
-    print('incorrect');
+  void answerIncorrect() async {
+    AnswerIncorrectDialog answerIncorrectDialog = AnswerIncorrectDialog(
+      incorrectFlashcardInfo: widget.flashcardInfo,
+      correctFlashcardInfo: widget.flashcardInfo,
+      hasFurigana: widget.hasFurigana,
+    );
+    await answerIncorrectDialog.dialog(context);
+    widget.nextQuiz();
   }
 
   void initAnswerInputList() {
+     print('init');
     for (int i = 0; i < definition.length; i++) {
       definitionIsAnswered.add(false);
       inputTextList.add(TextEditingController());

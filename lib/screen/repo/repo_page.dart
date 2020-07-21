@@ -82,7 +82,7 @@ class _RepoState extends State<Repo> {
 
           flashcardList.add(Flashcard(
             repoId: widget.repoInfo.repoId,
-            info: info,
+            flashcardInfo: info,
             hasFurigana: hasFurigana,
           ));
 
