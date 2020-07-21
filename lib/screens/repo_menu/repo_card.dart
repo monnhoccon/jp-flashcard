@@ -144,7 +144,7 @@ class _RepoCardState extends State<RepoCard> {
           splashColor: Colors.blue.withAlpha(5),
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return Repo(
+              return RepoPage(
                 repoInfo: widget.info,
               );
             }));

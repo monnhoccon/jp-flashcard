@@ -12,14 +12,15 @@ import 'package:jp_flashcard/screens/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Repo extends StatefulWidget {
+// ignore: must_be_immutable
+class RepoPage extends StatefulWidget {
   RepoInfo repoInfo;
-  Repo({this.repoInfo});
+  RepoPage({this.repoInfo});
   @override
-  _RepoState createState() => _RepoState();
+  _RepoPageState createState() => _RepoPageState();
 }
 
-class _RepoState extends State<Repo> {
+class _RepoPageState extends State<RepoPage> {
   //ANCHOR Variables
   List<FlashcardCard> flashcardCardList = [];
   List<FlashcardInfo> flashcardInfoList = [];
@@ -90,6 +91,10 @@ class _RepoState extends State<Repo> {
         });
       }
     });
+    /*
+    DBManager.db
+        .updateNumTotalOfRepo(widget.repoInfo.repoId, flashcardInfoList.length);
+        */
     return;
   }
 
@@ -144,12 +149,14 @@ class _RepoState extends State<Repo> {
       appBar: AppBar(
         title: Text(widget.repoInfo.title),
         actions: <Widget>[
+          /*
           IconButton(
             icon: hasFurigana ? Icon(Icons.label) : Icon(Icons.label_outline),
             onPressed: () {
               toggleFurigana();
             },
           )
+          */
         ],
       ),
       body: Container(
@@ -157,35 +164,38 @@ class _RepoState extends State<Repo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           //ANCHOR Repo info
-          Row(
-            children: <Widget>[
-              FlatButton(
-                onPressed: () async {
-                  await DBManager.db
-                      .deleteTable('flashcardList${widget.repoInfo.repoId}');
-                  await DBManager.db
-                      .deleteTable('definitionList${widget.repoInfo.repoId}');
-                  await DBManager.db
-                      .deleteTable('kanjiList${widget.repoInfo.repoId}');
-                  await DBManager.db
-                      .deleteTable('wordTypeList${widget.repoInfo.repoId}');
-                  updateFlashcardCardList();
-                },
-                child: Text('Delete All'),
-              ),
-              FlatButton(
-                onPressed: () async {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return LearningPage(
-                      repoInfo: widget.repoInfo,
-                      flashcardInfoList: flashcardInfoList,
-                    );
-                  }));
-                },
-                child: Text('Learn'),
-              ),
-            ],
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+            child: Row(
+              children: <Widget>[
+                FlatButton(
+                  onPressed: () async {
+                    if (flashcardInfoList.length > 3) {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) {
+                        return LearningPage(
+                          repoInfo: widget.repoInfo,
+                          flashcardInfoList: flashcardInfoList,
+                        );
+                      }));
+                    }
+                  },
+                  child: Card(
+                    color: Theme.of(context).primaryColor,
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
+                      child: Text(
+                        '學習',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           //ANCHOR Flashcard card list

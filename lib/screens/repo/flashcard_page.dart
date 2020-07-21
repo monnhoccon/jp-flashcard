@@ -95,6 +95,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               });
             },
           ),
+          /*
           IconButton(
             icon: displayTagButtonIcon,
             onPressed: () {
@@ -108,6 +109,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               });
             },
           )
+          */
         ],
       ),
       body: PageView(

@@ -94,6 +94,17 @@ class DBManager {
       WHERE repoId = ?;
     ''', [newTitle, repoId]);
   }
+
+  Future<dynamic> updateNumTotalOfRepo(int repoId, int numTotal) async {
+    final db = await database;
+    createTable(repos, db);
+
+    return await db.rawUpdate('''
+      UPDATE repos
+      SET numTotal = ?
+      WHERE repoId = ?;
+    ''', [numTotal, repoId]);
+  }
   //--------------------------------------------
 
   //tags
@@ -126,7 +137,7 @@ class DBManager {
     }
   }
 
-  Future<dynamic> getTagsOfRepo(int repoId) async {
+  Future<dynamic> getTagListOfRepo(int repoId) async {
     final db = await database;
     createTable(tags, db);
     return await db.rawQuery('''

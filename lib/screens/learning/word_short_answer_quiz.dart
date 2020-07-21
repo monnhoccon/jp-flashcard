@@ -1,30 +1,31 @@
+import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
 import 'package:jp_flashcard/screens/learning/answer_incorrect_dialog.dart';
 import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
+import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 
 // ignore: must_be_immutable
-class DefinitionShortAnswerQuiz extends StatefulWidget {
+class WordShortAnswerQuiz extends StatefulWidget {
   int repoId;
   FlashcardInfo flashcardInfo;
   bool hasFurigana;
   Function nextQuiz;
-  DefinitionShortAnswerQuiz(
+  WordShortAnswerQuiz(
       {this.flashcardInfo, this.repoId, this.hasFurigana, this.nextQuiz});
   @override
-  _DefinitionShortAnswerQuizState createState() =>
-      _DefinitionShortAnswerQuizState();
+  _WordShortAnswerQuizState createState() => _WordShortAnswerQuizState();
 }
 
-class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
-  List<String> definition = [];
+class _WordShortAnswerQuizState extends State<WordShortAnswerQuiz> {
+  String word;
 
-  List<bool> definitionIsAnswered = [];
-  List<TextEditingController> inputValueList = [];
-  List<GlobalKey<FormState>> validationKeyList = [];
-  List<Widget> answerInputList = [];
+  TextEditingController inputValue = TextEditingController();
+  GlobalKey<FormState> validationKey = GlobalKey<FormState>();
+  Widget answerInput;
 
   void answerCorrect() async {
     AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
@@ -46,32 +47,22 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
     widget.nextQuiz();
   }
 
-  void initAnswerInputList() {
-    definitionIsAnswered.clear();
-    inputValueList.clear();
-    validationKeyList.clear();
-    answerInputList.clear();
-    definition = widget.flashcardInfo.definition;
-    for (int i = 0; i < definition.length; i++) {
-      definitionIsAnswered.add(false);
-      inputValueList.add(TextEditingController());
-      validationKeyList.add(GlobalKey<FormState>());
-      answerInputList.add(
-        Padding(
-          padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
-          child: InputField(
-            validationKey: validationKeyList[i],
-            inputValue: inputValueList[i],
-            displayedString: '請輸入定義',
-          ),
-        ),
-      );
-    }
+  String displayedDefinition;
+  void initAnswerInput() {
+    displayedDefinition = randomChoice(widget.flashcardInfo.definition);
+    answerInput = Padding(
+      padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
+      child: InputField(
+        inputValue: inputValue,
+        validationKey: validationKey,
+        displayedString: '請輸入單字',
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    initAnswerInputList();
+    initAnswerInput();
     return Container(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 25),
       child: Column(
@@ -81,16 +72,14 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                DisplayedWord(
-                  flashcardInfo: widget.flashcardInfo,
-                  hasFurigana: true,
-                  textFontSize: 35,
-                  furiganaFontSize: 15,
-                )
+                Text(
+                  displayedDefinition,
+                  style: TextStyle(fontSize: 35, height: 1.2),
+                ),
               ],
             ),
           ),
-          ...answerInputList,
+          answerInput,
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, 25, 10),
             child: Row(
@@ -115,26 +104,15 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
                     onPressed: () {
                       bool allCorrect = true;
                       bool isEmpty = false;
-                      for (int i = 0; i < definition.length; i++) {
-                        if (validationKeyList[i].currentState.validate()) {
-                          bool correct = false;
-                          for (int j = 0; j < definition.length; j++) {
-                            if (definition[j] ==
-                                    inputValueList[i].text.toString() &&
-                                !definitionIsAnswered[j]) {
-                              correct = true;
-                              definitionIsAnswered[j] = true;
-                              break;
-                            }
-                          }
-                          if (!correct) {
-                            allCorrect = false;
-                            break;
-                          }
-                        } else {
-                          isEmpty = true;
+                      if (validationKey.currentState.validate()) {
+                        if (inputValue.text.toString() !=
+                            widget.flashcardInfo.word) {
+                          allCorrect = false;
                         }
+                      } else {
+                        isEmpty = true;
                       }
+
                       if (isEmpty) {
                         return;
                       }

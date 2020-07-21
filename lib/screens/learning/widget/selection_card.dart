@@ -11,7 +11,7 @@ class SelectionCard extends StatelessWidget {
       child: InkWell(
         splashColor: Colors.blue.withAlpha(10),
         onTap: () {
-          select(index);
+          select(index, context);
         },
         child: Container(
           padding: EdgeInsets.all(20),

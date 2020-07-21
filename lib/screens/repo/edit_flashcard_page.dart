@@ -76,7 +76,7 @@ class _EditFlashcardPageState extends State<EditFlashcardPage> {
 
           kanjiInputList.add(KanjiInput(
             displayedString: char,
-            value: kanjiValue[numKanji],
+            inputValue: kanjiValue[numKanji],
             validationKey: kanjiFormKey[numKanji],
           ));
 
@@ -217,7 +217,7 @@ class _EditFlashcardPageState extends State<EditFlashcardPage> {
 
       kanjiInputList.add(KanjiInput(
         displayedString: flashcardInfo.word[kanji.index],
-        value: kanjiValue[numKanji],
+        inputValue: kanjiValue[numKanji],
         validationKey: kanjiFormKey[numKanji],
       ));
 

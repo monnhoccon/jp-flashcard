@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 class InputField extends StatelessWidget {
   final validationKey;
   final String displayedString;
-  final TextEditingController inputText;
-  InputField({this.inputText, this.validationKey, this.displayedString});
+  final TextEditingController inputValue;
+  InputField({this.inputValue, this.validationKey, this.displayedString});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class InputField extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
             errorStyle: TextStyle(fontSize: 0, height: 0),
           ),
-          controller: inputText,
+          controller: inputValue,
           validator: (value) {
             if (value.isEmpty) {
               return displayedString ?? '';

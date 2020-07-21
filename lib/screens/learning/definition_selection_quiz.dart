@@ -9,35 +9,30 @@ import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 
 // ignore: must_be_immutable
-class DefinitionSelectionQuiz extends StatefulWidget {
+class DefinitionSelectionQuiz extends StatelessWidget {
   int repoId;
   FlashcardInfo flashcardInfo;
   bool hasFurigana;
   Function nextQuiz;
   DefinitionSelectionQuiz(
       {this.flashcardInfo, this.repoId, this.hasFurigana, this.nextQuiz});
-  @override
-  _DefinitionSelectionQuizState createState() =>
-      _DefinitionSelectionQuizState();
-}
-
-class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
+ 
   List<String> definition = [];
   List<String> definitionList = [];
 
-  Future<List<String>> getDefinitionList() async {
-    definition = widget.flashcardInfo.definition;
+  Future<bool> getDefinitionList() async {
+    definition = flashcardInfo.definition;
     definitionList.clear();
     await DBManager.db
         .getDefinitionListExcept(
-            widget.repoId, widget.flashcardInfo.flashcardId)
+            repoId, flashcardInfo.flashcardId)
         .then((result) {
       for (final definition in result) {
         definitionList.add(definition['definition']);
       }
       generateDisplayedDefinitionList();
     });
-    return displayedDefinitionList;
+    return true;
   }
 
   //ANCHOR Generate displayed defintion list
@@ -62,28 +57,28 @@ class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
         correctAnswerIndex, randomChoice(definition));
   }
 
-  void select(int index) async {
+  void select(int index, BuildContext context) async {
     if (index == correctAnswerIndex) {
       AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
-        flashcardInfo: widget.flashcardInfo,
-        hasFurigana: widget.hasFurigana,
+        flashcardInfo: flashcardInfo,
+        hasFurigana: hasFurigana,
       );
       await answerCorrectDialog.dialog(context);
     } else {
       //TODO Get incorrect flashcardinfo
       AnswerIncorrectDialog answerIncorrectDialog = AnswerIncorrectDialog(
-        incorrectFlashcardInfo: widget.flashcardInfo,
-        correctFlashcardInfo: widget.flashcardInfo,
-        hasFurigana: widget.hasFurigana,
+        incorrectFlashcardInfo: flashcardInfo,
+        correctFlashcardInfo: flashcardInfo,
+        hasFurigana: hasFurigana,
       );
       await answerIncorrectDialog.dialog(context);
     }
-    widget.nextQuiz();
+    nextQuiz();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<String>>(
+    return FutureBuilder<bool>(
         future: getDefinitionList(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -97,8 +92,8 @@ class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         DisplayedWord(
-                          flashcardInfo: widget.flashcardInfo,
-                          hasFurigana: widget.hasFurigana,
+                          flashcardInfo: flashcardInfo,
+                          hasFurigana: hasFurigana,
                           textFontSize: 35,
                           furiganaFontSize: 15,
                         )

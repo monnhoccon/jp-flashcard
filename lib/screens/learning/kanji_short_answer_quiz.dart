@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
 import 'package:jp_flashcard/screens/learning/answer_incorrect_dialog.dart';
 import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
+import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 
 // ignore: must_be_immutable
-class DefinitionShortAnswerQuiz extends StatefulWidget {
+class KanjiShortAnswerQuiz extends StatefulWidget {
   int repoId;
   FlashcardInfo flashcardInfo;
   bool hasFurigana;
   Function nextQuiz;
-  DefinitionShortAnswerQuiz(
+  KanjiShortAnswerQuiz(
       {this.flashcardInfo, this.repoId, this.hasFurigana, this.nextQuiz});
   @override
-  _DefinitionShortAnswerQuizState createState() =>
-      _DefinitionShortAnswerQuizState();
+  _KanjiShortAnswerQuizState createState() => _KanjiShortAnswerQuizState();
 }
 
-class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
-  List<String> definition = [];
+class _KanjiShortAnswerQuizState extends State<KanjiShortAnswerQuiz> {
+  List<KanjiInfo> kanji = [];
 
-  List<bool> definitionIsAnswered = [];
   List<TextEditingController> inputValueList = [];
   List<GlobalKey<FormState>> validationKeyList = [];
   List<Widget> answerInputList = [];
@@ -47,22 +47,20 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
   }
 
   void initAnswerInputList() {
-    definitionIsAnswered.clear();
     inputValueList.clear();
     validationKeyList.clear();
     answerInputList.clear();
-    definition = widget.flashcardInfo.definition;
-    for (int i = 0; i < definition.length; i++) {
-      definitionIsAnswered.add(false);
+    kanji = widget.flashcardInfo.kanji;
+    for (int i = 0; i < kanji.length; i++) {
       inputValueList.add(TextEditingController());
       validationKeyList.add(GlobalKey<FormState>());
       answerInputList.add(
         Padding(
           padding: EdgeInsets.fromLTRB(25, 0, 25, 10),
-          child: InputField(
+          child: KanjiInput(
             validationKey: validationKeyList[i],
             inputValue: inputValueList[i],
-            displayedString: '請輸入定義',
+            displayedString: widget.flashcardInfo.word[kanji[i].index],
           ),
         ),
       );
@@ -83,7 +81,7 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
               children: <Widget>[
                 DisplayedWord(
                   flashcardInfo: widget.flashcardInfo,
-                  hasFurigana: true,
+                  hasFurigana: false,
                   textFontSize: 35,
                   furiganaFontSize: 15,
                 )
@@ -115,22 +113,14 @@ class _DefinitionShortAnswerQuizState extends State<DefinitionShortAnswerQuiz> {
                     onPressed: () {
                       bool allCorrect = true;
                       bool isEmpty = false;
-                      for (int i = 0; i < definition.length; i++) {
+                      for (int i = 0; i < kanji.length; i++) {
                         if (validationKeyList[i].currentState.validate()) {
-                          bool correct = false;
-                          for (int j = 0; j < definition.length; j++) {
-                            if (definition[j] ==
-                                    inputValueList[i].text.toString() &&
-                                !definitionIsAnswered[j]) {
-                              correct = true;
-                              definitionIsAnswered[j] = true;
-                              break;
-                            }
-                          }
-                          if (!correct) {
+                          if (inputValueList[i].text.toString() !=
+                              widget.flashcardInfo.word[kanji[i].index]) {
                             allCorrect = false;
                             break;
                           }
+
                         } else {
                           isEmpty = true;
                         }

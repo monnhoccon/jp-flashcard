@@ -5,8 +5,8 @@ import 'package:jp_flashcard/services/jp_letter.dart';
 class KanjiInput extends StatelessWidget {
   final validationKey;
   final String displayedString;
-  final TextEditingController value;
-  KanjiInput({this.value, this.validationKey, this.displayedString});
+  final TextEditingController inputValue;
+  KanjiInput({this.inputValue, this.validationKey, this.displayedString});
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +40,11 @@ class KanjiInput extends StatelessWidget {
                     contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                     errorStyle: TextStyle(fontSize: 0, height: 0),
                   ),
-                  controller: value,
+                  controller: inputValue,
                   validator: (input) {
+                    if (input.isEmpty) {
+                      return 'error';
+                    }
                     for (int i = 0; i < input.length; i++) {
                       bool isKanji = true;
                       for (final letter in JPLetter.letterList) {

@@ -20,21 +20,22 @@ class WordSelectionQuiz extends StatefulWidget {
 }
 
 class _WordSelectionQuizState extends State<WordSelectionQuiz> {
-  String definition;
+  
+  String displayedDefinition;
   List<String> wordList = [];
 
-  void getWordList() async {
+  Future<bool> getWordList() async {
     wordList.clear();
+    displayedDefinition = randomChoice(widget.flashcardInfo.definition);
     await DBManager.db
         .getWordListExcept(widget.repoId, widget.flashcardInfo.flashcardId)
-        .then((result) {
-      setState(() {
-        for (final word in result) {
-          wordList.add(word['word']);
-        }
-        generateDisplayedWordList();
-      });
+        .then((resultWordList) {
+      for (final word in resultWordList) {
+        wordList.add(word['word']);
+      }
+      generateDisplayedWordList();
     });
+    return true;
   }
 
   //ANCHOR Generate displayed word list
@@ -50,16 +51,15 @@ class _WordSelectionQuizState extends State<WordSelectionQuiz> {
     }
 
     correctAnswerIndex = randomGenerator.nextInt(4);
-    setState(() {
-      for (final index in randomIndexSet) {
-        displayedWordList.add(wordList[index]);
-      }
 
-      displayedWordList.insert(correctAnswerIndex, widget.flashcardInfo.word);
-    });
+    for (final index in randomIndexSet) {
+      displayedWordList.add(wordList[index]);
+    }
+
+    displayedWordList.insert(correctAnswerIndex, widget.flashcardInfo.word);
   }
 
-  void select(int index) async {
+  void select(int index, BuildContext context) async {
     if (index == correctAnswerIndex) {
       AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
         flashcardInfo: widget.flashcardInfo,
@@ -78,52 +78,55 @@ class _WordSelectionQuizState extends State<WordSelectionQuiz> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    getWordList();
-    definition = randomChoice(widget.flashcardInfo.definition);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 20, 0, 25),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  definition,
-                  style: TextStyle(fontSize: 35, height: 1.2),
-                ),
-              ],
-            ),
-          ),
-          Container(
-              height: 300,
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (OverscrollIndicatorNotification overscroll) {
-                  overscroll.disallowGlow();
-                  return false;
-                },
-                child: ListView.builder(
-                    itemCount: displayedWordList.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
-                        child: SelectionCard(
-                          displayedString: displayedWordList[index],
-                          select: select,
-                          index: index,
+    return FutureBuilder<bool>(
+        future: getWordList(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              padding: EdgeInsets.fromLTRB(0, 20, 0, 25),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          displayedDefinition,
+                          style: TextStyle(fontSize: 35, height: 1.2),
                         ),
-                      );
-                    }),
-              ))
-        ],
-      ),
-    );
+                      ],
+                    ),
+                  ),
+                  Container(
+                      height: 300,
+                      child:
+                          NotificationListener<OverscrollIndicatorNotification>(
+                        onNotification:
+                            (OverscrollIndicatorNotification overscroll) {
+                          overscroll.disallowGlow();
+                          return false;
+                        },
+                        child: ListView.builder(
+                            itemCount: displayedWordList.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
+                                child: SelectionCard(
+                                  displayedString: displayedWordList[index],
+                                  select: select,
+                                  index: index,
+                                ),
+                              );
+                            }),
+                      ))
+                ],
+              ),
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        });
   }
 }
