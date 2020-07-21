@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/repo_menu/repo_card.dart';
-import 'package:jp_flashcard/screen/repo_menu/sort_filter.dart';
-import 'package:jp_flashcard/screen/repo_menu/tag_filter.dart';
-import 'package:jp_flashcard/utils/database.dart';
+import 'package:jp_flashcard/screens/repo_menu/repo_card.dart';
+import 'package:jp_flashcard/screens/repo_menu/sort_filter.dart';
+import 'package:jp_flashcard/screens/repo_menu/tag_filter.dart';
+import 'package:jp_flashcard/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RepoMenu extends StatefulWidget {

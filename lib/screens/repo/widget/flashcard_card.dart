@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/screen/repo/edit_flashcard_page.dart';
-import 'package:jp_flashcard/utils/database.dart';
-import 'package:jp_flashcard/utils/text_to_speech.dart';
-import 'package:jp_flashcard/widget/displayed_word.dart';
+import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
+import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/text_to_speech.dart';
+import 'package:jp_flashcard/components/displayed_word.dart';
 
 // ignore: must_be_immutable
 class FlashcardCard extends StatelessWidget {
@@ -76,10 +76,9 @@ class FlashcardCard extends StatelessWidget {
       ));
       i++;
     }
-    
   }
   //TODO Width overflow
-  
+
   Future<void> speak() async {
     await TextToSpeech.tts.speak('ja-JP', flashcardInfo.word);
     for (final definition in flashcardInfo.definition) {

@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/learning/learning_page.dart';
-import 'package:jp_flashcard/screen/repo/add_flashcard.dart';
-import 'package:jp_flashcard/screen/repo/flashcard.dart';
-import 'package:jp_flashcard/screen/repo/flashcard_page.dart';
-import 'package:jp_flashcard/screen/repo/widget/flashcard_card.dart';
-import 'package:jp_flashcard/utils/database.dart';
+import 'package:jp_flashcard/screens/learning/learning_page.dart';
+import 'package:jp_flashcard/screens/repo/add_flashcard.dart';
+import 'package:jp_flashcard/screens/repo/flashcard.dart';
+import 'package:jp_flashcard/screens/repo/flashcard_page.dart';
+import 'package:jp_flashcard/screens/repo/widget/flashcard_card.dart';
+import 'package:jp_flashcard/services/database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Repo extends StatefulWidget {

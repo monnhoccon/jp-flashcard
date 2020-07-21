@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
-import 'package:jp_flashcard/utils/database.dart';
+import 'package:jp_flashcard/screens/main_menu/components/tag_box.dart';
+import 'package:jp_flashcard/services/database.dart';
 
 class TagFilter {
   //Variables

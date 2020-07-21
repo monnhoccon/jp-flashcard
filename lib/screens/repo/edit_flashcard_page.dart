@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
-import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
-import 'package:jp_flashcard/screen/repo/widget/add_word_type_dialog.dart';
-import 'package:jp_flashcard/screen/repo/widget/definition_input.dart';
-import 'package:jp_flashcard/screen/repo/widget/kanji_input.dart';
-import 'package:jp_flashcard/screen/repo/widget/word_input.dart';
-import 'package:jp_flashcard/utils/database.dart';
-import 'package:jp_flashcard/utils/jp_letter.dart';
+import 'package:jp_flashcard/screens/main_menu/components/tag_box.dart';
+import 'package:jp_flashcard/screens/repo/widget/add_word_type_dialog.dart';
+import 'package:jp_flashcard/screens/repo/widget/definition_input.dart';
+import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
+import 'package:jp_flashcard/screens/repo/widget/word_input.dart';
+import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/jp_letter.dart';
 
 // ignore: must_be_immutable
 class EditFlashcardPage extends StatefulWidget {

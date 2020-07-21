@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
-import 'package:jp_flashcard/screen/repo/widget/add_word_type_dialog.dart';
-import 'package:jp_flashcard/screen/repo/widget/input_field.dart';
+import 'package:jp_flashcard/screens/main_menu/components/tag_box.dart';
+import 'package:jp_flashcard/screens/repo/widget/add_word_type_dialog.dart';
+import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
 
 class DefinitionInput extends StatefulWidget {
   final validationKey;

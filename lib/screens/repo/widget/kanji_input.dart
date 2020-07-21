@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/utils/jp_letter.dart';
+import 'package:jp_flashcard/services/jp_letter.dart';
 
 // ignore: must_be_immutable
 class KanjiInput extends StatelessWidget {

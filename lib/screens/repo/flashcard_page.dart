@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/screen/repo/flashcard.dart';
+import 'package:jp_flashcard/screens/repo/flashcard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable

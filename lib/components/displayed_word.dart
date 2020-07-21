@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/widget/displayed_letter.dart';
+import 'package:jp_flashcard/components/displayed_letter.dart';
 
 // ignore: must_be_immutable
 class DisplayedWord extends StatelessWidget {

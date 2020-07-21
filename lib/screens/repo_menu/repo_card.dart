@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/repo/repo_page.dart';
-import 'package:jp_flashcard/screen/main_menu/widgets/tag_box.dart';
-import 'package:jp_flashcard/utils/database.dart';
+import 'package:jp_flashcard/screens/repo/repo_page.dart';
+import 'package:jp_flashcard/screens/main_menu/components/tag_box.dart';
+import 'package:jp_flashcard/services/database.dart';
 
 // ignore: must_be_immutable
 class RepoCard extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/utils/text_to_speech.dart';
-import 'package:jp_flashcard/widget/displayed_word.dart';
+import 'package:jp_flashcard/services/text_to_speech.dart';
+import 'package:jp_flashcard/components/displayed_word.dart';
 
 class AnswerIncorrectDialog {
   FlashcardInfo correctFlashcardInfo;
@@ -184,7 +184,6 @@ class AnswerIncorrectDialog {
                       ],
                     ),
                   ),
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[

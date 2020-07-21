@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/screen/learning/answer_correct_dialog.dart';
-import 'package:jp_flashcard/screen/learning/answer_incorrect_dialog.dart';
-import 'package:jp_flashcard/screen/repo/widget/input_field.dart';
-import 'package:jp_flashcard/widget/displayed_word.dart';
+import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
+import 'package:jp_flashcard/screens/learning/answer_incorrect_dialog.dart';
+import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
+import 'package:jp_flashcard/components/displayed_word.dart';
 
 // ignore: must_be_immutable
 class DefinitionShortAnswerQuiz extends StatefulWidget {

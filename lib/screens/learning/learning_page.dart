@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screen/learning/definition_selection_quiz.dart';
-import 'package:jp_flashcard/screen/learning/definition_short_answer_quiz.dart';
-import 'package:jp_flashcard/screen/learning/word_selection_quiz.dart';
+import 'package:jp_flashcard/screens/learning/definition_selection_quiz.dart';
+import 'package:jp_flashcard/screens/learning/definition_short_answer_quiz.dart';
+import 'package:jp_flashcard/screens/learning/word_selection_quiz.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LearningPage extends StatefulWidget {

@@ -1,10 +1,10 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/screen/repo/edit_flashcard_page.dart';
-import 'package:jp_flashcard/utils/database.dart';
-import 'package:jp_flashcard/utils/text_to_speech.dart';
-import 'package:jp_flashcard/widget/displayed_word.dart';
+import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
+import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/text_to_speech.dart';
+import 'package:jp_flashcard/components/displayed_word.dart';
 
 // ignore: must_be_immutable
 class Flashcard extends StatefulWidget {
@@ -75,8 +75,8 @@ class _FlashcardState extends State<Flashcard> {
                 child: Text(_displayedStringZHTW['cancel'] ?? '')),
             FlatButton(
                 onPressed: () {
-                  DBManager.db
-                      .deleteFlashcard(widget.repoId, widget.flashcardInfo.flashcardId);
+                  DBManager.db.deleteFlashcard(
+                      widget.repoId, widget.flashcardInfo.flashcardId);
                   Navigator.of(context).pop(true);
                 },
                 child: Text(_displayedStringZHTW['confirm'] ?? ''))
@@ -98,7 +98,9 @@ class _FlashcardState extends State<Flashcard> {
             style: TextStyle(fontSize: 23, height: 1.5, color: Colors.black),
             children: <TextSpan>[
               TextSpan(
-                text: (widget.flashcardInfo.definition.length != 1) ? '$index. ' : '',
+                text: (widget.flashcardInfo.definition.length != 1)
+                    ? '$index. '
+                    : '',
                 style: TextStyle(
                     fontSize: 23, color: Colors.grey[500], height: 1.5),
               ),
@@ -115,9 +117,10 @@ class _FlashcardState extends State<Flashcard> {
   void updateDisplayedWordTypeList() {
     displayedWordTypeList.clear();
     for (final wordType in widget.flashcardInfo.wordType) {
-      displayedWordTypeList.add(Text((wordType != widget.flashcardInfo.wordType.last)
-          ? (wordType + ' · ')
-          : (wordType)));
+      displayedWordTypeList.add(Text(
+          (wordType != widget.flashcardInfo.wordType.last)
+              ? (wordType + ' · ')
+              : (wordType)));
     }
   }
 
