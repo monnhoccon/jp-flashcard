@@ -69,7 +69,7 @@ class _RepoMenuState extends State<RepoMenu> {
             repoId: info['repoId'],
             numMemorized: info['numMemorized'],
             numTotal: info['numTotal'],
-            tags: newTags);
+            tagList: newTags);
         newRepoList.add(RepoCard(info: newRepoInfo, displayTag: displayTag));
 
         if (sortBy == SortBy.increasing) {

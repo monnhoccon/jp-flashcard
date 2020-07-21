@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/repo/repo_page.dart';
-import 'package:jp_flashcard/screens/main_menu/components/tag_box.dart';
+import 'package:jp_flashcard/components/tag_box.dart';
 import 'package:jp_flashcard/services/database.dart';
 
 // ignore: must_be_immutable
@@ -115,7 +115,7 @@ class _RepoCardState extends State<RepoCard> {
   @override
   Widget build(BuildContext context) {
     tagBoxListOfRepo.clear();
-    for (final tag in widget.info.tags) {
+    for (final tag in widget.info.tagList) {
       tagBoxListOfRepo.add(Transform.scale(
           scale: 0.9,
           child: Container(
@@ -131,9 +131,9 @@ class _RepoCardState extends State<RepoCard> {
         size: 15,
       ),
     ));
-    for (final tag in widget.info.tags) {
+    for (final tag in widget.info.tagList) {
       displayedTagList.add(Text(
-        tag == widget.info.tags.last ? tag + ' ' : tag + ', ',
+        tag == widget.info.tagList.last ? tag + ' ' : tag + ', ',
         style: TextStyle(fontSize: 12),
       ));
     }
@@ -209,7 +209,7 @@ class _RepoCardState extends State<RepoCard> {
                       ],
                     )
                   ]),
-              widget.info.tags.isNotEmpty && widget.displayTag
+              widget.info.tagList.isNotEmpty && widget.displayTag
                   ? Divider(
                       color: Colors.black,
                       height: 0,
@@ -218,7 +218,7 @@ class _RepoCardState extends State<RepoCard> {
                       endIndent: 15,
                     )
                   : Container(),
-              widget.info.tags.isNotEmpty && widget.displayTag
+              widget.info.tagList.isNotEmpty && widget.displayTag
                   ? Container(
                       width: 200,
                       padding: EdgeInsets.fromLTRB(10, 7, 20, 10),
@@ -242,7 +242,7 @@ class _RepoCardState extends State<RepoCard> {
     await DBManager.db.getTagList().then((tags) {
       for (final tag in tags) {
         bool selected = false;
-        for (final selectedTag in widget.info.tags) {
+        for (final selectedTag in widget.info.tagList) {
           if (tag['tag'] == selectedTag) {
             selected = true;
             break;

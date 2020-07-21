@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
+class TitleInput extends StatelessWidget {
   final formKey;
   final String displayedString;
   final String errorMessage;
   final TextEditingController textController;
-  MyTextField(
+  TitleInput(
       {this.displayedString,
       this.textController,
       this.formKey,

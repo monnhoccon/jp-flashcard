@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
-import 'package:jp_flashcard/screens/main_menu/components/tag_box.dart';
+import 'package:jp_flashcard/components/tag_box.dart';
 import 'package:jp_flashcard/screens/repo/widget/add_word_type_dialog.dart';
 import 'package:jp_flashcard/screens/repo/widget/definition_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';

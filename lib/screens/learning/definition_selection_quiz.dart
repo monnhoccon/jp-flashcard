@@ -83,7 +83,6 @@ class _DefinitionSelectionQuizState extends State<DefinitionSelectionQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    print('jey');
     return FutureBuilder<List<String>>(
         future: getDefinitionList(),
         builder: (context, snapshot) {

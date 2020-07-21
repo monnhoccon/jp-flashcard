@@ -1,9 +1,9 @@
 class RepoInfo {
   String title;
-  List<String> tags;
+  List<String> tagList;
   int numTotal;
   int numMemorized;
   int repoId;
   RepoInfo(
-      {this.title, this.tags, this.numTotal, this.numMemorized, this.repoId});
+      {this.title, this.tagList, this.numTotal, this.numMemorized, this.repoId});
 }
