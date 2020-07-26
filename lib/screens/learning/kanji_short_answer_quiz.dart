@@ -3,7 +3,6 @@ import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
 import 'package:jp_flashcard/screens/learning/answer_incorrect_dialog.dart';
-import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 
@@ -116,11 +115,10 @@ class _KanjiShortAnswerQuizState extends State<KanjiShortAnswerQuiz> {
                       for (int i = 0; i < kanji.length; i++) {
                         if (validationKeyList[i].currentState.validate()) {
                           if (inputValueList[i].text.toString() !=
-                              widget.flashcardInfo.word[kanji[i].index]) {
+                              kanji[i].furigana) {
                             allCorrect = false;
                             break;
                           }
-
                         } else {
                           isEmpty = true;
                         }

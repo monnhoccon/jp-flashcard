@@ -89,8 +89,13 @@ class _LearningPageState extends State<LearningPage> {
     repoId = widget.repoInfo.repoId;
     flashcardInfoList = widget.flashcardInfoList;
     randomGenerator = Random();
-
-    nextQuiz();
+    currentQuiz = KanjiShortAnswerQuiz(
+          repoId: repoId,
+          flashcardInfo: flashcardInfoList[0],
+          hasFurigana: hasFurigana,
+          nextQuiz: nextQuiz,
+        );
+    //nextQuiz();
   }
 
   @override

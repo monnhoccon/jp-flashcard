@@ -37,11 +37,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
       if (!inFlashcardPage || !playFlashcards) break;
       await flashcard.speakDefinition();
 
-      if (_currentPage < widget.flashcardList.length) {
+      if (_currentPage < widget.flashcardList.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
+        i = -1;
       }
+ 
       if (!inFlashcardPage || !playFlashcards) break;
       _pageController.animateToPage(
         _currentPage,

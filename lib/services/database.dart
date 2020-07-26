@@ -206,7 +206,22 @@ class DBManager {
 
   //ANCHOR WordTypeList
   Future<void> initWordTypeList() async {
-    List<String> wordTypes = ['名詞', '形容詞', '副詞', '自動詞', '他動詞', '代名詞'];
+    List<String> wordTypes = [
+      '名詞',
+      'い形',
+      'な形',
+      '副詞',
+      '自五',
+      '他五',
+      '自上ㄧ',
+      '他上ㄧ',
+      '自下ㄧ',
+      '他下ㄧ',
+      '自サ',
+      '他サ',
+      '代名詞',
+      '其它',
+    ];
     final db = await database;
     createTable(wordTypeList, db);
     for (final wordType in wordTypes) {

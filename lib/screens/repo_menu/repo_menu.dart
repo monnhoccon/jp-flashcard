@@ -122,6 +122,14 @@ class _RepoMenuState extends State<RepoMenu> {
                 title: Text(_displayedStringZHTW['repository']),
                 actions: <Widget>[
                   IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() async {
+                          await DBManager.db.deleteTable('tagList');
+                          await DBManager.db.deleteTable('tags');
+                        });
+                      }),
+                  IconButton(
                       icon: displayTagButtonIcon,
                       onPressed: () {
                         setState(() {
