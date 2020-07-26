@@ -1,29 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/displayed_word_settings.dart';
+import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class DisplayedLetter extends StatelessWidget {
-  final bool hasFurigana;
+  //ANCHOR Variables
   final String letter;
   final String furigana;
-  double furiganaFontSize = 15;
-  double textFontSize = 35;
+  DisplayingSettings _generalSettings;
+  DisplayedWordSettings _displayedWordSettings;
+
+  //ANCHOR Constructor
   DisplayedLetter({
-    this.hasFurigana,
     this.letter,
     this.furigana,
-    this.textFontSize,
-    this.furiganaFontSize,
   });
+
+  //ANCHOR Initialize variables
+  void initVariables(BuildContext context) {
+    _generalSettings = Provider.of<DisplayingSettings>(context);
+    _displayedWordSettings = Provider.of<DisplayedWordSettings>(context);
+  }
 
   @override
   Widget build(BuildContext context) {
+    //ANCHOR Initialize
+    initVariables(context);
+
+    //ANCHOR Displayed letter widget
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        //ANCHOR Furigana text
         Text(
           furigana,
-          style: hasFurigana
+          style: _generalSettings.hasFurigana
               ? TextStyle(
-                  fontSize: furiganaFontSize,
+                  fontSize: _displayedWordSettings.furiganaFontSize,
                   height: 1.3,
                 )
               : TextStyle(
@@ -32,10 +46,12 @@ class DisplayedLetter extends StatelessWidget {
                   color: Colors.transparent,
                 ),
         ),
+
+        //ANCHOR Letter text
         Text(
           letter,
           style: TextStyle(
-            fontSize: textFontSize,
+            fontSize: _displayedWordSettings.textFontSize,
             height: 1.2,
           ),
         ),

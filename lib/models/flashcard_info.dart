@@ -6,5 +6,11 @@ class FlashcardInfo {
   List<String> definition;
   List<KanjiInfo> kanji;
   List<String> wordType;
-  FlashcardInfo({this.flashcardId, this.word, this.definition, this.kanji, this.wordType});
+  FlashcardInfo({
+    this.flashcardId,
+    this.word,
+    this.definition,
+    this.kanji,
+    this.wordType,
+  });
 }

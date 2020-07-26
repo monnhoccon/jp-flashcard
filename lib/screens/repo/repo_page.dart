@@ -1,16 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/flashcard_list.dart';
+import 'package:jp_flashcard/models/general_settings.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/learning/learning_page.dart';
 import 'package:jp_flashcard/screens/repo/add_flashcard.dart';
-import 'package:jp_flashcard/screens/repo/flashcard.dart';
-import 'package:jp_flashcard/screens/repo/flashcard_page.dart';
+import 'package:jp_flashcard/screens/flashcard_page/displayed_flashcard.dart';
+import 'package:jp_flashcard/screens/flashcard_page/flashcard_page.dart';
 import 'package:jp_flashcard/screens/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/services/database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jp_flashcard/services/refresh_page.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class RepoPage extends StatefulWidget {
@@ -26,7 +28,7 @@ class _RepoPageState extends State<RepoPage> {
   List<FlashcardInfo> flashcardInfoList = [];
   List<Widget> flashcardList = [];
 
-  Future<void> updateFlashcardCardList() async {
+  Future<bool> updateFlashcardCardList() async {
     flashcardCardList.clear();
     flashcardList.clear();
     flashcardInfoList.clear();
@@ -61,41 +63,38 @@ class _RepoPageState extends State<RepoPage> {
             wordTypeList.add(wordType['wordType']);
           }
         }
-        setState(() {
-          FlashcardInfo info = FlashcardInfo(
-            flashcardId: flashcardId,
-            word: word,
-            definition: definitionList,
-            kanji: kanjiList,
-            wordType: wordTypeList,
-          );
 
-          flashcardInfoList.add(info);
+        FlashcardInfo info = FlashcardInfo(
+          flashcardId: flashcardId,
+          word: word,
+          definition: definitionList,
+          kanji: kanjiList,
+          wordType: wordTypeList,
+        );
 
-          flashcardCardList.add(FlashcardCard(
-            repoId: widget.repoInfo.repoId,
-            flashcardInfo: info,
-            navigateToFlashcard: navigateToFlashcard,
-            flashcardCardIndex: flashcardCardIndex,
-            rebuildFlashcardMenu: rebuildFlashcardMenu,
-            hasFurigana: hasFurigana,
-          ));
+        flashcardInfoList.add(info);
 
-          flashcardList.add(Flashcard(
-            repoId: widget.repoInfo.repoId,
-            flashcardInfo: info,
-            hasFurigana: hasFurigana,
-          ));
+        flashcardCardList.add(FlashcardCard(
+          repoId: widget.repoInfo.repoId,
+          flashcardInfo: info,
+          navigateToFlashcard: navigateToFlashcard,
+          flashcardCardIndex: flashcardCardIndex,
+        ));
 
-          flashcardCardIndex++;
-        });
+        flashcardList.add(DisplayedFlashcard(
+          repoId: widget.repoInfo.repoId,
+          flashcardInfo: info,
+          hasFurigana: true,
+        ));
+
+        flashcardCardIndex++;
       }
     });
     /*
     DBManager.db
         .updateNumTotalOfRepo(widget.repoInfo.repoId, flashcardInfoList.length);
         */
-    return;
+    return true;
   }
 
   void navigateToFlashcard(int index) {
@@ -103,126 +102,164 @@ class _RepoPageState extends State<RepoPage> {
       return FlashcardPage(
         flashcardIndex: index,
         flashcardList: flashcardList,
-        toggleFurigana: toggleFurigana,
       );
     })).then((value) {
       updateFlashcardCardList();
     });
   }
 
-  void rebuildFlashcardMenu() {
-    updateFlashcardCardList();
-  }
-
-  bool hasFurigana = false;
-  var persistData;
-  void getPersistData() async {
-    persistData = await SharedPreferences.getInstance();
-    setState(() {
-      hasFurigana = persistData.getBool('hasFurigana') ?? true;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    updateFlashcardCardList();
-    getPersistData();
-  }
-
-  void toggleFurigana() {
-    setState(() {
-      if (!hasFurigana) {
-        hasFurigana = true;
-      } else {
-        hasFurigana = false;
-      }
-    });
-    updateFlashcardCardList();
-
-    persistData.setBool('hasFurigana', hasFurigana);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.repoInfo.title),
-        actions: <Widget>[
-          /*
-          IconButton(
-            icon: hasFurigana ? Icon(Icons.label) : Icon(Icons.label_outline),
-            onPressed: () {
-              toggleFurigana();
-            },
-          )
-          */
-        ],
-      ),
-      body: Container(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          //ANCHOR Repo info
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
-            child: Row(
-              children: <Widget>[
-                FlatButton(
-                  onPressed: () async {
-                    if (flashcardInfoList.length > 3) {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return LearningPage(
-                          repoInfo: widget.repoInfo,
+    return ChangeNotifierProvider<RefreshPage>(
+      create: (context) {
+        return RefreshPage();
+      },
+      child: Consumer<RefreshPage>(
+        builder: (context, refreshPage, child) {
+          return FutureBuilder(
+            future: updateFlashcardCardList(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider<DisplayingSettings>(
+                      create: (context) {
+                        return DisplayingSettings();
+                      },
+                    ),
+                    ChangeNotifierProvider<FlashcardList>(
+                      create: (context) {
+                        return FlashcardList(
                           flashcardInfoList: flashcardInfoList,
+                          flashcardCardList: flashcardCardList,
                         );
-                      }));
-                    }
-                  },
-                  child: Card(
-                    color: Theme.of(context).primaryColor,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
-                      child: Text(
-                        '學習',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+                      },
+                    ),
+                    Provider<RepoInfo>(
+                      create: (context) {
+                        return widget.repoInfo;
+                      },
+                    ),
+                  ],
+                  //ANCHOR Repo page widget
+                  child: Scaffold(
+                    appBar: AppBar(
+                      title: Text(widget.repoInfo.title),
+                      //ANCHOR Setting buttons
+                      actions: <Widget>[
+                        //ANCHOR Kanji toggle button
+                        Consumer<DisplayingSettings>(
+                            builder: (context, generalSettings, child) {
+                          return IconButton(
+                            icon: generalSettings.hasKanji
+                                ? Icon(Icons.visibility)
+                                : Icon(Icons.visibility_off),
+                            onPressed: () {
+                              generalSettings.toggleKanji();
+                            },
+                          );
+                        }),
+
+                        //ANCHOR Furigana toggle button
+                        Consumer<DisplayingSettings>(
+                            builder: (context, generalSettings, child) {
+                          return IconButton(
+                            icon: generalSettings.hasFurigana
+                                ? Icon(Icons.speaker_notes)
+                                : Icon(Icons.speaker_notes_off),
+                            onPressed: () {
+                              generalSettings.toggleFurigana();
+                            },
+                          );
+                        })
+                      ],
+                    ),
+                    body: Container(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        //ANCHOR Learning page button
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+                          child: Row(
+                            children: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  if (flashcardInfoList.length > 3) {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return LearningPage(
+                                        repoInfo: widget.repoInfo,
+                                        flashcardInfoList: flashcardInfoList,
+                                      );
+                                    }));
+                                  }
+                                },
+                                child: Card(
+                                  color: Theme.of(context).primaryColor,
+                                  child: Container(
+                                    padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
+                                    child: Text(
+                                      '學習',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+
+                        //ANCHOR Flashcard card list
+                        Expanded(
+                          child: NotificationListener<
+                              OverscrollIndicatorNotification>(
+                            onNotification:
+                                (OverscrollIndicatorNotification overscroll) {
+                              overscroll.disallowGlow();
+                              return false;
+                            },
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  ...flashcardCardList,
+                                  SizedBox(
+                                    height: 50,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+
+                    //ANCHOR Add flashcard button
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () async {
+                        await Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return AddFlashcard(
+                            repoId: widget.repoInfo.repoId,
+                          );
+                        }));
+                        refreshPage.refresh();
+                      },
+                      child: Icon(Icons.add),
+                      backgroundColor: Theme.of(context).primaryColor,
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          //ANCHOR Flashcard card list
-          Expanded(
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                  onNotification: (OverscrollIndicatorNotification overscroll) {
-                    overscroll.disallowGlow();
-                    return false;
-                  },
-                  child: ListView.builder(
-                      itemCount: flashcardCardList.length,
-                      itemBuilder: (context, index) {
-                        return flashcardCardList[index];
-                      }))),
-        ],
-      )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return AddFlashcard(
-              repoId: widget.repoInfo.repoId,
-            );
-          }));
-          updateFlashcardCardList();
+                );
+              } else {
+                return Container();
+              }
+            },
+          );
         },
-        child: Icon(Icons.add),
-        backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }

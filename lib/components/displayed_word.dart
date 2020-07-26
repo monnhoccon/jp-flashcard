@@ -1,56 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/displayed_word_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/components/displayed_letter.dart';
+import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DisplayedWord extends StatelessWidget {
+  //ANCHOR Variables
   FlashcardInfo flashcardInfo;
-  bool hasFurigana;
-  double furiganaFontSize = 15;
-  double textFontSize = 35;
+  DisplayedWordSettings displayedWordSettings;
+  bool _hasKanji;
+
+  //ANCHOR Constructor
   DisplayedWord({
     this.flashcardInfo,
-    this.hasFurigana,
-    this.textFontSize,
-    this.furiganaFontSize,
+    this.displayedWordSettings,
   });
 
-  List<Widget> displayedLetterList = [];
-  void updateDisplayedLetterList() {
-    displayedLetterList.clear();
+  //ANCHOR Initialize displayed letter list
+  List<Widget> _displayedLetterList = [];
+  void initDisplayedLetterList() {
+    _displayedLetterList.clear();
     for (int i = 0; i < flashcardInfo.word.length; i++) {
       bool isKanji = false;
       for (final kanji in flashcardInfo.kanji) {
         if (kanji.index == i) {
           isKanji = true;
-          displayedLetterList.add(DisplayedLetter(
-            hasFurigana: hasFurigana,
-            letter: flashcardInfo.word[i],
-            furigana: kanji.furigana,
-            furiganaFontSize: furiganaFontSize,
-            textFontSize: textFontSize,
-          ));
+          if (_hasKanji) {
+            _displayedLetterList.add(DisplayedLetter(
+              letter: flashcardInfo.word[i],
+              furigana: kanji.furigana,
+            ));
+          } else {
+            for (int j = 0; j < kanji.furigana.length; j++)
+              _displayedLetterList.add(DisplayedLetter(
+                letter: kanji.furigana[j],
+                furigana: '',
+              ));
+          }
         }
       }
       if (!isKanji) {
-        displayedLetterList.add(DisplayedLetter(
-          hasFurigana: hasFurigana,
+        _displayedLetterList.add(DisplayedLetter(
           letter: flashcardInfo.word[i],
           furigana: '',
-          furiganaFontSize: furiganaFontSize,
-          textFontSize: textFontSize,
         ));
       }
     }
   }
 
+  //ANCHOR Initialize variables
+  void initVariables(BuildContext context) {
+    _hasKanji = Provider.of<DisplayingSettings>(context).hasKanji;
+  }
+
   @override
   Widget build(BuildContext context) {
-    updateDisplayedLetterList();
-    return Wrap(
-      alignment: WrapAlignment.start,
-      runAlignment: WrapAlignment.center,
-      children: displayedLetterList,
+    //ANCHOR Initialize
+    initVariables(context);
+    initDisplayedLetterList();
+
+    //ANCHOR Displayed word widget
+    return Provider<DisplayedWordSettings>(
+      create: (context) {
+        return displayedWordSettings;
+      },
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        runAlignment: WrapAlignment.center,
+        children: _displayedLetterList,
+      ),
     );
   }
 }

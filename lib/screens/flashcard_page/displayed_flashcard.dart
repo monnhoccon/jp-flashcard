@@ -1,5 +1,6 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/displayed_word_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
 import 'package:jp_flashcard/services/database.dart';
@@ -7,7 +8,7 @@ import 'package:jp_flashcard/services/text_to_speech.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 
 // ignore: must_be_immutable
-class Flashcard extends StatefulWidget {
+class DisplayedFlashcard extends StatefulWidget {
   int repoId;
   FlashcardInfo flashcardInfo;
   bool hasFurigana;
@@ -36,17 +37,12 @@ class Flashcard extends StatefulWidget {
     }
   }
 
-  void toggleFurigana() {
-    hasFurigana = !hasFurigana;
-    print(hasFurigana);
-  }
-
   @override
-  Flashcard({this.repoId, this.flashcardInfo, this.hasFurigana});
-  _FlashcardState createState() => _FlashcardState();
+  DisplayedFlashcard({this.repoId, this.flashcardInfo, this.hasFurigana});
+  _DisplayedFlashcardState createState() => _DisplayedFlashcardState();
 }
 
-class _FlashcardState extends State<Flashcard> {
+class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
   //ANCHOR Variables
   final Map _displayedStringZHTW = {
     'edit': '編輯',
@@ -126,7 +122,6 @@ class _FlashcardState extends State<Flashcard> {
 
   @override
   Widget build(BuildContext context) {
-    print('hey');
     updateDisplayedDefinitionList();
     updateDisplayedWordTypeList();
     return Center(
@@ -197,9 +192,7 @@ class _FlashcardState extends State<Flashcard> {
                         Expanded(
                           child: DisplayedWord(
                             flashcardInfo: widget.flashcardInfo,
-                            hasFurigana: widget.hasFurigana ?? true,
-                            textFontSize: 35,
-                            furiganaFontSize: 15,
+                            displayedWordSettings: DisplayedWordSettings.large(),
                           ),
                         ),
 

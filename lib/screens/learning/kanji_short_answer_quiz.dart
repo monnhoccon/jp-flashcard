@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/displayed_word_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
@@ -80,9 +81,7 @@ class _KanjiShortAnswerQuizState extends State<KanjiShortAnswerQuiz> {
               children: <Widget>[
                 DisplayedWord(
                   flashcardInfo: widget.flashcardInfo,
-                  hasFurigana: false,
-                  textFontSize: 35,
-                  furiganaFontSize: 15,
+                  displayedWordSettings: DisplayedWordSettings.large(),
                 )
               ],
             ),

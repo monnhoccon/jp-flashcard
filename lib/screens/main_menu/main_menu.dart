@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/repo_info.dart';
+import 'package:jp_flashcard/models/general_settings.dart';
 import 'package:jp_flashcard/screens/main_menu/components/add_repo_dialog.dart';
-import 'package:jp_flashcard/screens/main_menu/components/add_tag_dialog.dart';
 import 'package:jp_flashcard/screens/repo_menu/repo_menu.dart';
 import 'package:jp_flashcard/screens/profile/profile.dart';
-import 'dart:async';
 import 'package:jp_flashcard/services/database.dart';
-import 'package:jp_flashcard/screens/main_menu/components/title_input.dart';
-import 'package:jp_flashcard/components/tag_box.dart';
+import 'package:provider/provider.dart';
 
 class MainMenu extends StatefulWidget {
   @override
@@ -54,26 +51,31 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: Center(
-          child: _bodySelected().elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile'),
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Theme.of(context).primaryColor,
-          onTap: _onItemTapped,
-        ),
-        floatingActionButton: createRepoButton(context));
+    return ChangeNotifierProvider<DisplayingSettings>(
+      create: (BuildContext context) {
+        return DisplayingSettings();
+      },
+      child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          body: Center(
+            child: _bodySelected().elementAt(_selectedIndex),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                title: Text('Profile'),
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Theme.of(context).primaryColor,
+            onTap: _onItemTapped,
+          ),
+          floatingActionButton: createRepoButton(context)),
+    );
   }
 }

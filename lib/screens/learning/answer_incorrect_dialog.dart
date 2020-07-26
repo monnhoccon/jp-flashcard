@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/displayed_word_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/services/text_to_speech.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
@@ -129,9 +130,7 @@ class AnswerIncorrectDialog {
                         ),
                         DisplayedWord(
                           flashcardInfo: correctFlashcardInfo,
-                          furiganaFontSize: 12,
-                          textFontSize: 28,
-                          hasFurigana: hasFurigana,
+                          displayedWordSettings: DisplayedWordSettings.large(),
                         ),
                         SizedBox(
                           height: 8,
