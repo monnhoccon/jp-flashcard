@@ -302,7 +302,7 @@ class DBManager {
     return;
   }
 
-  Future<dynamic> getFlashcardList(int repoId) async {
+  Future<dynamic> _getFlashcardList(int repoId) async {
     final db = await database;
     await initFlashcardList(repoId, db);
     await initDefinitionList(repoId, db);
@@ -473,6 +473,57 @@ class DBManager {
   }
   //--------------------------------------------
 
+  Future<dynamic> getFlashcardInfoList(int repoId) async {
+    List<FlashcardInfo> flashcardInfoList = [];
+    await _getFlashcardList(repoId).then((data) {
+      var flashcardTable = data['word'];
+      var definitionTable = data['definition'];
+      var kanjiTable = data['kanji'];
+      var wordTypeTable = data['wordType'];
+      for (final flashcard in flashcardTable) {
+        int flashcardId = flashcard['flashcardId'];
+        String word = flashcard['word'];
+        List<String> definitionList = [];
+        for (final definition in definitionTable) {
+          if (definition['flashcardId'] == flashcardId) {
+            definitionList.add(definition['definition']);
+          }
+        }
+        List<KanjiInfo> kanjiList = [];
+        for (final kanji in kanjiTable) {
+          if (kanji['flashcardId'] == flashcardId) {
+            kanjiList.add(KanjiInfo(
+                furigana: kanji['furigana'],
+                index: kanji['ind'],
+                length: kanji['length']));
+          }
+        }
+        List<String> wordTypeList = [];
+        for (final wordType in wordTypeTable) {
+          if (wordType['flashcardId'] == flashcardId) {
+            wordTypeList.add(wordType['wordType']);
+          }
+        }
+
+        FlashcardInfo info = FlashcardInfo(
+          flashcardId: flashcardId,
+          word: word,
+          definition: definitionList,
+          kanji: kanjiList,
+          wordType: wordTypeList,
+        );
+
+        flashcardInfoList.add(info);
+      }
+    });
+    /*
+    DBManager.db
+        .updateNumTotalOfRepo(widget.repoInfo.repoId, flashcardInfoList.length);
+        */
+    return flashcardInfoList;
+  }
+
+  //==============
   deleteTable(String name) async {
     final db = await database;
     await db.execute('''

@@ -13,20 +13,42 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class FlashcardCard extends StatelessWidget {
+  //ANCHOR Variables
   int repoId;
-  int flashcardCardIndex;
+  int index;
   FlashcardInfo flashcardInfo;
-  Function navigateToFlashcard;
 
-  @override
+  //ANCHOR Constructor
   FlashcardCard({
     this.repoId,
     this.flashcardInfo,
-    this.flashcardCardIndex,
-    this.navigateToFlashcard,
+    this.index,
   });
 
-  deleteAlertDialog(BuildContext context) {
+  //ANCHOR Navigate to flashcard page
+  void navigateToFlashcardPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return FlashcardPage(
+        flashcardIndex: index,
+        displayedFlashcardList: _flashcardList.displayedFlashcardList,
+      );
+    }));
+  }
+
+  //ANCHOR Navigate to flashcard page
+  void navigateToEditFlashcardPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return EditFlashcardPage(
+        repoId: repoId,
+        flashcardInfo: flashcardInfo,
+      );
+    })).then((newFlashcardInfo) {
+      _flashcardList.refresh();
+    });
+  }
+
+  //ANCHOR Delete flashcard dialog
+  Future<dynamic> deleteFlashcardDialog(BuildContext context) {
     return showDialog(
       context: context,
       child: AlertDialog(
@@ -42,8 +64,9 @@ class FlashcardCard extends StatelessWidget {
               child: Text(DisplayedString.zhtw['cancel'] ?? '')),
           FlatButton(
             onPressed: () {
-              DBManager.db.deleteFlashcard(repoId, flashcardInfo.flashcardId);
               Navigator.of(context).pop(true);
+              _flashcardList.refresh();
+              DBManager.db.deleteFlashcard(repoId, flashcardInfo.flashcardId);
             },
             child: Text(DisplayedString.zhtw['confirm'] ?? ''),
           )
@@ -53,12 +76,12 @@ class FlashcardCard extends StatelessWidget {
   }
 
   //ANCHOR Initialize displayed definition list
-  List<Widget> displayedDefinitionList = [];
+  List<Widget> _displayedDefinitionList = [];
   void initDisplayedDefinitionList() {
-    displayedDefinitionList.clear();
+    _displayedDefinitionList.clear();
     int i = 1;
     for (final definition in flashcardInfo.definition) {
-      displayedDefinitionList.add(Padding(
+      _displayedDefinitionList.add(Padding(
         padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
         child: Text(
           flashcardInfo.definition.length > 1
@@ -79,9 +102,10 @@ class FlashcardCard extends StatelessWidget {
     return;
   }
 
-  FlashcardList flashcardList;
+  //ANCHOR Initialize variables
+  FlashcardList _flashcardList;
   void initVariables(BuildContext context) {
-    flashcardList = Provider.of<FlashcardList>(context);
+    _flashcardList = Provider.of<FlashcardList>(context, listen: false);
   }
 
   @override
@@ -97,17 +121,7 @@ class FlashcardCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(5),
           onTap: () {
-            /*
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return FlashcardPage(
-                flashcardIndex:  flashcardCardIndex,
-                flashcardList: flashcardList.info,
-              );
-            })).then((value) {
-              updateFlashcardCardList();
-            });
-            */
-            //navigateToFlashcard(flashcardCardIndex);
+            navigateToFlashcardPage(context);
           },
           child: Padding(
             padding: EdgeInsets.fromLTRB(15, 12, 0, 12),
@@ -134,7 +148,7 @@ class FlashcardCard extends StatelessWidget {
                     ),
 
                     //ANCHOR Displayed definition list
-                    ...displayedDefinitionList,
+                    ..._displayedDefinitionList,
                   ],
                 ),
 
@@ -171,16 +185,10 @@ class FlashcardCard extends StatelessWidget {
                       onSelected: (String result) async {
                         if (result == 'edit') {
                           //ANCHOR Edit button
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return EditFlashcardPage(
-                              repoId: repoId,
-                              flashcardInfo: flashcardInfo,
-                            );
-                          })).then((newFlashcardInfo) {});
+                          navigateToEditFlashcardPage(context);
                         } else if (result == 'delete') {
                           //ANCHOR Delete button
-                          if (await deleteAlertDialog(context)) {}
+                          deleteFlashcardDialog(context);
                         }
                       },
 

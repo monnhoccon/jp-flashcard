@@ -7,9 +7,10 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class FlashcardPage extends StatefulWidget {
   int flashcardIndex;
-  List<Widget> flashcardList = [];
+  List<DisplayedFlashcard> displayedFlashcardList = [];
   Function toggleFurigana;
-  FlashcardPage({this.flashcardIndex, this.flashcardList, this.toggleFurigana});
+  FlashcardPage(
+      {this.flashcardIndex, this.displayedFlashcardList, this.toggleFurigana});
   @override
   _FlashcardPageState createState() => _FlashcardPageState();
 }
@@ -22,8 +23,8 @@ class _FlashcardPageState extends State<FlashcardPage> {
   int _currentPage = 0;
 
   Future<void> changePage() async {
-    for (int i = _currentPage; i < widget.flashcardList.length; i++) {
-      DisplayedFlashcard flashcard = widget.flashcardList[i];
+    for (int i = _currentPage; i < widget.displayedFlashcardList.length; i++) {
+      DisplayedFlashcard flashcard = widget.displayedFlashcardList[i];
 
       if (!inFlashcardPage || !playFlashcards) break;
       flashcard.flipPageToFront();
@@ -38,7 +39,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
       if (!inFlashcardPage || !playFlashcards) break;
       await flashcard.speakDefinition();
 
-      if (_currentPage < widget.flashcardList.length - 1) {
+      if (_currentPage < widget.displayedFlashcardList.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
@@ -123,7 +124,9 @@ class _FlashcardPageState extends State<FlashcardPage> {
         ),
         body: PageView(
           controller: _pageController,
-          children: widget.flashcardList,
+          children: <Widget>[
+            ...widget.displayedFlashcardList,
+          ],
           onPageChanged: (index) {
             _currentPage = index;
           },

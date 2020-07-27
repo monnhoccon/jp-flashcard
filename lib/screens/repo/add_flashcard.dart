@@ -145,6 +145,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
 
   //ANCHOR Add the flashcard to database
   int flashcardId;
+  FlashcardInfo flashcardInfo;
   Future<void> addFlashcard() async {
     flashcardId =
         await DBManager.db.insertWord(widget.repoId, wordValue.text.toString());
@@ -166,7 +167,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
     for (final wordType in selectedWordTypeBoxList) {
       wordTypeList.add(wordType.displayedString);
     }
-    FlashcardInfo flashcardInfo = FlashcardInfo(
+    flashcardInfo = FlashcardInfo(
       flashcardId: flashcardId,
       word: wordValue.text.toString(),
       definition: definitionList,
@@ -335,7 +336,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
 
             if (validation) {
               await addFlashcard();
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(flashcardInfo);
             }
           }),
     );
