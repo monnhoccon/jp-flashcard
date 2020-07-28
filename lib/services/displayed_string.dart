@@ -22,5 +22,13 @@ class DisplayedString {
     'continue': '繼續',
     'answer incorrect': '答錯了！',
     'correct answer': '正確答案:',
+    'quiz settings': '設定',
+    'enable definition selection quiz': '顯示定義選擇題',
+    'enable definition short answer quiz': '顯示定義簡答題',
+    'enable word selection quiz': '顯示單字選擇題',
+    'enable word short answer quiz': '顯示單字簡答題',
+    'enable kanji short answer quiz': '顯示漢字簡答題',
+    'enable answer audio': '答案語音',
+    'only show favorite': '只顯示最愛',
   };
 }

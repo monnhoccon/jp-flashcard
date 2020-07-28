@@ -10,25 +10,29 @@ import 'package:provider/provider.dart';
 class QuizAnswerDialog {
   //ANCHOR Public variables
   FlashcardInfo flashcardInfo;
-  bool speak = true;
+  bool enableAnswerAudio = true;
   bool answerCorrect;
 
   //ANCHOR APIs
-  static correct(FlashcardInfo flashcardInfo) {
+  static correct(FlashcardInfo flashcardInfo, bool enableAnswerAudio) {
     return QuizAnswerDialog(
       flashcardInfo: flashcardInfo,
       answerCorrect: true,
+      enableAnswerAudio: enableAnswerAudio,
     );
   }
-  static incorrect(FlashcardInfo flashcardInfo) {
+
+  static incorrect(FlashcardInfo flashcardInfo, bool enableAnswerAudio) {
     return QuizAnswerDialog(
       flashcardInfo: flashcardInfo,
       answerCorrect: false,
+      enableAnswerAudio: enableAnswerAudio,
     );
   }
 
   //ANCHOR Constructor
-  QuizAnswerDialog({this.flashcardInfo, this.answerCorrect});
+  QuizAnswerDialog(
+      {this.flashcardInfo, this.answerCorrect, this.enableAnswerAudio});
 
   //ANCHOR Initialize displayed definition list
   List<Widget> _displayedDefinitionList = [];
@@ -103,7 +107,7 @@ class QuizAnswerDialog {
     initDisplayedWordTypeList();
 
     //ANCHOR Speak the word
-    if (speak) {
+    if (enableAnswerAudio) {
       TextToSpeech.tts.speak('ja-JP', flashcardInfo.word);
     }
 

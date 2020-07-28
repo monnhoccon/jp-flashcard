@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screens/learning/learning_page.dart';
+import 'package:jp_flashcard/screens/learning/quiz_page.dart';
+import 'package:jp_flashcard/screens/quiz_settings_page/quiz_settings_page.dart';
 import 'package:jp_flashcard/screens/repo/add_flashcard_page.dart';
 import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
@@ -48,6 +49,36 @@ class RepoPage extends StatelessWidget {
   FlashcardList _flashcardList;
   void initVariables(BuildContext context) {
     _flashcardList = Provider.of<FlashcardList>(context, listen: false);
+  }
+
+  //ANCHOR Navigation
+  void navigateToAddFlashcardPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return AddFlashcard(
+        repoId: repoInfo.repoId,
+      );
+    })).then((newFlashcardInfo) {
+      _flashcardList.refresh();
+    });
+  }
+
+  void navigateToQuizSettingsPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return QuizSettingsPage(
+        repoId: repoInfo.repoId,
+      );
+    }));
+  }
+
+  void navigateToQuizPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return QuizPage(
+        repoInfo: repoInfo,
+        flashcardList: _flashcardList,
+      );
+    })).then((value) {
+      _flashcardList.refresh();
+    });
   }
 
   //ANCHOR Repo Page widget
@@ -98,11 +129,11 @@ class RepoPage extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            //ANCHOR Learning page button
             Padding(
               padding: EdgeInsets.fromLTRB(20, 15, 0, 10),
               child: Row(
                 children: <Widget>[
+                  //ANCHOR Learning page button
                   ButtonTheme(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
@@ -112,13 +143,7 @@ class RepoPage extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                       onPressed: () {
                         if (_flashcardList.flashcardInfoList.length > 3) {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(builder: (context) {
-                            return LearningPage(
-                              repoInfo: repoInfo,
-                              flashcardList: _flashcardList,
-                            );
-                          }));
+                          navigateToQuizPage(context);
                         }
                       },
                       child: Text(
@@ -135,8 +160,13 @@ class RepoPage extends StatelessWidget {
                     width: 10,
                   ),
 
-                  //ANCHOR Settings button
-                  IconButton(icon: Icon(Icons.tune), onPressed: () {})
+                  //ANCHOR Quiz settings button
+                  IconButton(
+                    icon: Icon(Icons.tune),
+                    onPressed: () {
+                      navigateToQuizSettingsPage(context);
+                    },
+                  )
                 ],
               ),
             ),
@@ -170,13 +200,7 @@ class RepoPage extends StatelessWidget {
         //ANCHOR Add flashcard button
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return AddFlashcard(
-                repoId: repoInfo.repoId,
-              );
-            })).then((newFlashcardInfo) {
-              _flashcardList.refresh();
-            });
+            navigateToAddFlashcardPage(context);
           },
           child: Icon(Icons.add),
           backgroundColor: Theme.of(context).primaryColor,

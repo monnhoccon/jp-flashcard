@@ -29,6 +29,7 @@ dependencies:
   dart_random_choice: any
   flutter_tts: any
   provider: any
+  collection: any
 
 
   # The following adds the Cupertino Icons font to your application.

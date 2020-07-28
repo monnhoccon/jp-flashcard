@@ -10,7 +10,7 @@ class DisplayingSettings with ChangeNotifier {
   void refresh() async {
     persistData = await SharedPreferences.getInstance();
     hasFurigana = persistData.getBool('hasFurigana') ?? true;
-    hasKanji = persistData.getBool('noKanji') ?? true;
+    hasKanji = persistData.getBool('hasKanji') ?? true;
     displayTag = persistData.getBool('displayTag') ?? false;
 
     if (!hasKanji) {
@@ -42,7 +42,7 @@ class DisplayingSettings with ChangeNotifier {
     }
     hasKanji = !hasKanji;
 
-    persistData.setBool('noKanji', hasKanji);
+    persistData.setBool('hasKanji', hasKanji);
     notifyListeners();
   }
 }

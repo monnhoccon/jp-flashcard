@@ -6,7 +6,6 @@ import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/learning/widget/selection_card.dart';
-import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/quiz_manager.dart';
@@ -25,7 +24,7 @@ class DefinitionSelectionQuiz extends StatelessWidget {
   List<String> _displayedDefinitionList = [];
   int _correctAnswerIndex;
 
-  Future<bool> getDefinitionList() async {
+  Future<bool> _getDefinitionList() async {
     _definitionList.clear();
     await FlashcardManager.db(_repoId)
         .getDefinitionListExcept(flashcardInfo.flashcardId)
@@ -33,12 +32,12 @@ class DefinitionSelectionQuiz extends StatelessWidget {
       for (final definition in result) {
         _definitionList.add(definition['definition']);
       }
-      generateDisplayedDefinitionList();
+      _generateDisplayedDefinitionList();
     });
     return true;
   }
 
-  void generateDisplayedDefinitionList() {
+  void _generateDisplayedDefinitionList() {
     _displayedDefinitionList.clear();
 
     //Generate 3 random integers
@@ -61,27 +60,28 @@ class DefinitionSelectionQuiz extends StatelessWidget {
   //ANCHOR Apply selection
   void applySelection(int index, BuildContext context) async {
     if (index == _correctAnswerIndex) {
-      await QuizAnswerDialog.correct(flashcardInfo).dialog(context);
+      _quizManager.answerCorrect(flashcardInfo, context);
     } else {
-      await QuizAnswerDialog.incorrect(flashcardInfo).dialog(context);
+      _quizManager.answerIncorrect(flashcardInfo, context);
     }
-    Provider.of<QuizManager>(context, listen: false).navigateToNextQuiz();
   }
 
   //ANCHOR Initialize variables
   int _repoId;
-  void initVariables(BuildContext context) {
+  QuizManager _quizManager;
+  void _initVariables(BuildContext context) {
     _repoId = Provider.of<RepoInfo>(context, listen: false).repoId;
+    _quizManager = Provider.of<QuizManager>(context, listen: false);
   }
 
   @override
   //ANCHOR Build
   Widget build(BuildContext context) {
     //ANCHOR Initialize
-    initVariables(context);
+    _initVariables(context);
 
     return FutureBuilder<bool>(
-      future: getDefinitionList(),
+      future: _getDefinitionList(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           //ANCHOR Definition selection quiz qidget

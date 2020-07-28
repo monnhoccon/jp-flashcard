@@ -22,7 +22,7 @@ class FlashcardList with ChangeNotifier {
     refresh();
   }
 
-  void refresh() async {
+  Future<void> refresh() async {
     await FlashcardManager.db(repoId)
         .getFlashcardInfoList()
         .then((newFlashcardInfoList) {
