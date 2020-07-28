@@ -1,22 +1,22 @@
-class DisplayedWordSettings {
+class DisplayedWordSize {
   double furiganaFontSize;
   double textFontSize;
 
   static large() {
-    return DisplayedWordSettings(
+    return DisplayedWordSize(
       furiganaFontSize: 15,
       textFontSize: 35,
     );
   }
 
   static medium() {
-    return DisplayedWordSettings(
+    return DisplayedWordSize(
       furiganaFontSize: 9,
       textFontSize: 21,
     );
   }
 
-  DisplayedWordSettings({
+  DisplayedWordSize({
     this.furiganaFontSize,
     this.textFontSize,
   });

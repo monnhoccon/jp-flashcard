@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/screens/main_menu/components/add_repo_dialog.dart';
 import 'package:jp_flashcard/screens/repo_menu/repo_menu.dart';
 import 'package:jp_flashcard/screens/profile/profile.dart';

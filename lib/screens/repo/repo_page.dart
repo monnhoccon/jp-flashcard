@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
-import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/learning/learning_page.dart';
 import 'package:jp_flashcard/screens/repo/add_flashcard.dart';
 import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -17,37 +18,28 @@ class RepoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: DBManager.db.getFlashcardInfoList(repoInfo.repoId),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return MultiProvider(
-            providers: [
-              ChangeNotifierProvider<DisplayingSettings>(
-                create: (context) {
-                  return DisplayingSettings();
-                },
-              ),
-              ChangeNotifierProvider<FlashcardList>(
-                create: (context) {
-                  return FlashcardList(
-                    repoId: repoInfo.repoId,
-                    flashcardInfoList: snapshot.data,
-                  );
-                },
-              ),
-              Provider<RepoInfo>(
-                create: (context) {
-                  return repoInfo;
-                },
-              ),
-            ],
-            child: repoPage(),
-          );
-        } else {
-          return Container();
-        }
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DisplayingSettings>(
+          create: (context) {
+            return DisplayingSettings();
+          },
+        ),
+        ChangeNotifierProvider<FlashcardList>(
+          create: (context) {
+            return FlashcardList(
+              repoId: repoInfo.repoId,
+              //flashcardInfoList: snapshot.data,
+            );
+          },
+        ),
+        ChangeNotifierProvider<RepoInfo>(
+          create: (context) {
+            return repoInfo;
+          },
+        ),
+      ],
+      child: repoPage(),
     );
   }
 
@@ -109,7 +101,7 @@ class RepoPage extends StatelessWidget {
                             .push(MaterialPageRoute(builder: (context) {
                           return LearningPage(
                             repoInfo: repoInfo,
-                            flashcardInfoList: _flashcardList.flashcardInfoList,
+                            flashcardList: _flashcardList,
                           );
                         }));
                       }
@@ -119,7 +111,7 @@ class RepoPage extends StatelessWidget {
                       child: Container(
                         padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
                         child: Text(
-                          '學習',
+                          DisplayedString.zhtw['learn'] ?? '',
                           style: TextStyle(
                             fontSize: 15,
                             color: Colors.white,

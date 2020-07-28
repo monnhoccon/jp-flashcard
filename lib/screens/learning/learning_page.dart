@@ -1,127 +1,74 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/flashcard_list.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screens/learning/definition_selection_quiz.dart';
-import 'package:jp_flashcard/screens/learning/definition_short_answer_quiz.dart';
-import 'package:jp_flashcard/screens/learning/kanji_short_answer_quiz.dart';
-import 'package:jp_flashcard/screens/learning/word_selection_quiz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'word_short_answer_quiz.dart';
+import 'package:jp_flashcard/services/quiz_manager.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class LearningPage extends StatefulWidget {
+class LearningPage extends StatelessWidget {
   RepoInfo repoInfo;
-  List<FlashcardInfo> flashcardInfoList;
-  LearningPage({this.repoInfo, this.flashcardInfoList});
-  @override
-  _LearningPageState createState() => _LearningPageState();
-}
-
-class _LearningPageState extends State<LearningPage> {
-  var randomGenerator;
-  int repoId;
-  List<FlashcardInfo> flashcardInfoList;
-  bool hasFurigana = true;
-  var persistData;
-  void getPersistData() async {
-    persistData = await SharedPreferences.getInstance();
-    setState(() {
-      hasFurigana = persistData.getBool('hasFurigana') ?? true;
-    });
-  }
-
-  Widget currentQuiz;
-  int lastIndex = -1;
-  void nextQuiz() {
-    setState(() {
-      int quizType = randomGenerator.nextInt(5);
-      int index = randomGenerator.nextInt(flashcardInfoList.length);
-      while (index == lastIndex) {
-        index = randomGenerator.nextInt(flashcardInfoList.length);
-      }
-
-      lastIndex = index;
-
-      if (quizType == 0) {
-        currentQuiz = DefinitionSelectionQuiz(
-          repoId: repoId,
-          flashcardInfo: flashcardInfoList[index],
-          hasFurigana: hasFurigana,
-          nextQuiz: nextQuiz,
-        );
-      } else if (quizType == 1) {
-        currentQuiz = DefinitionShortAnswerQuiz(
-          repoId: repoId,
-          flashcardInfo: flashcardInfoList[index],
-          hasFurigana: hasFurigana,
-          nextQuiz: nextQuiz,
-        );
-      } else if (quizType == 2) {
-        currentQuiz = WordSelectionQuiz(
-          repoId: repoId,
-          flashcardInfo: flashcardInfoList[index],
-          hasFurigana: hasFurigana,
-          nextQuiz: nextQuiz,
-        );
-      } else if (quizType == 3) {
-        currentQuiz = WordShortAnswerQuiz(
-          repoId: repoId,
-          flashcardInfo: flashcardInfoList[index],
-          hasFurigana: hasFurigana,
-          nextQuiz: nextQuiz,
-        );
-      } else if (quizType == 4) {
-        currentQuiz = KanjiShortAnswerQuiz(
-          repoId: repoId,
-          flashcardInfo: flashcardInfoList[index],
-          hasFurigana: hasFurigana,
-          nextQuiz: nextQuiz,
-        );
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    repoId = widget.repoInfo.repoId;
-    flashcardInfoList = widget.flashcardInfoList;
-    randomGenerator = Random();
-    currentQuiz = KanjiShortAnswerQuiz(
-          repoId: repoId,
-          flashcardInfo: flashcardInfoList[0],
-          hasFurigana: hasFurigana,
-          nextQuiz: nextQuiz,
-        );
-    //nextQuiz();
-  }
+  FlashcardList flashcardList;
+  LearningPage({this.repoInfo, this.flashcardList});
 
   @override
   Widget build(BuildContext context) {
-    getPersistData();
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          /*
-          IconButton(
-            icon: hasFurigana ? Icon(Icons.label) : Icon(Icons.label_outline),
-            onPressed: () {
-              setState(() {
-                if (!hasFurigana) {
-                  hasFurigana = true;
-                } else {
-                  hasFurigana = false;
-                }
-                persistData.setBool('hasFurigana', hasFurigana);
-              });
-            },
-          )
-          */
-        ],
+    return MultiProvider(
+      //ANCHOR Providers
+      providers: [
+        ChangeNotifierProvider<DisplayingSettings>(
+          create: (context) {
+            return DisplayingSettings();
+          },
+        ),
+        ChangeNotifierProvider<QuizManager>(
+          create: (context) {
+            return QuizManager(repoId: repoInfo.repoId);
+          },
+        ),
+        ChangeNotifierProvider<RepoInfo>(
+          create: (context) {
+            return RepoInfo.fromRepoInfo(repoInfo);
+          },
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          //ANCHOR Setting buttons
+          actions: <Widget>[
+            //ANCHOR Kanji toggle button
+            Consumer<DisplayingSettings>(
+                builder: (context, generalSettings, child) {
+              return IconButton(
+                icon: generalSettings.hasKanji
+                    ? Icon(Icons.visibility)
+                    : Icon(Icons.visibility_off),
+                onPressed: () {
+                  generalSettings.toggleKanji();
+                },
+              );
+            }),
+
+            //ANCHOR Furigana toggle button
+            Consumer<DisplayingSettings>(
+                builder: (context, generalSettings, child) {
+              return IconButton(
+                icon: generalSettings.hasFurigana
+                    ? Icon(Icons.speaker_notes)
+                    : Icon(Icons.speaker_notes_off),
+                onPressed: () {
+                  generalSettings.toggleFurigana();
+                },
+              );
+            })
+          ],
+        ),
+        body: Consumer<QuizManager>(
+          builder: (context, quizManager, child) {
+            return quizManager.currentQuiz;
+          },
+        ),
       ),
-      body: currentQuiz,
     );
   }
 }

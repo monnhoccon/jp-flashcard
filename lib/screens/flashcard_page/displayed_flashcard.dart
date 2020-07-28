@@ -1,6 +1,6 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displayed_word_settings.dart';
+import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
 import 'package:jp_flashcard/services/database.dart';
@@ -192,7 +192,7 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                         Expanded(
                           child: DisplayedWord(
                             flashcardInfo: widget.flashcardInfo,
-                            displayedWordSettings: DisplayedWordSettings.large(),
+                            displayedWordSize: DisplayedWordSize.large(),
                           ),
                         ),
 

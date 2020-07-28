@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displayed_word_settings.dart';
+import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
-import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/flashcard_page.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
 import 'package:jp_flashcard/services/database.dart';
@@ -32,7 +32,9 @@ class FlashcardCard extends StatelessWidget {
         flashcardIndex: index,
         displayedFlashcardList: _flashcardList.displayedFlashcardList,
       );
-    }));
+    })).then((value) {
+      _flashcardList.refresh();
+    });
   }
 
   //ANCHOR Navigate to flashcard page
@@ -138,7 +140,7 @@ class FlashcardCard extends StatelessWidget {
                       builder: (context, generalSettings, child) {
                         return DisplayedWord(
                           flashcardInfo: flashcardInfo,
-                          displayedWordSettings: DisplayedWordSettings.medium(),
+                          displayedWordSize: DisplayedWordSize.medium(),
                         );
                       },
                     ),

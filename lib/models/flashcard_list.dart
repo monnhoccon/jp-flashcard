@@ -11,24 +11,6 @@ class FlashcardList with ChangeNotifier {
   List<FlashcardCard> flashcardCardList = [];
   List<DisplayedFlashcard> displayedFlashcardList = [];
 
-  void initVariables() {
-    flashcardCardList.clear();
-    displayedFlashcardList.clear();
-    for (index = 0; index < flashcardInfoList.length; index++) {
-      flashcardCardList.add(FlashcardCard(
-        repoId: repoId,
-        flashcardInfo: flashcardInfoList[index],
-        index: index,
-      ));
-
-      displayedFlashcardList.add(DisplayedFlashcard(
-        repoId: repoId,
-        flashcardInfo: flashcardInfoList[index],
-        hasFurigana: true,
-      ));
-    }
-  }
-
   void delete(int index) {
     for (final flashcardCard in flashcardCardList) {
       if (flashcardCard.index == index) {
@@ -70,20 +52,31 @@ class FlashcardList with ChangeNotifier {
     return;
   }
 
-  void refresh() async {
+  Future<void> refresh() async {
     await DBManager.db
         .getFlashcardInfoList(repoId)
         .then((newFlashcardInfoList) {
       flashcardInfoList = newFlashcardInfoList;
     });
-    initVariables();
+    flashcardCardList.clear();
+    displayedFlashcardList.clear();
+    for (index = 0; index < flashcardInfoList.length; index++) {
+      flashcardCardList.add(FlashcardCard(
+        repoId: repoId,
+        flashcardInfo: flashcardInfoList[index],
+        index: index,
+      ));
+
+      displayedFlashcardList.add(DisplayedFlashcard(
+        repoId: repoId,
+        flashcardInfo: flashcardInfoList[index],
+        hasFurigana: true,
+      ));
+    }
     notifyListeners();
   }
 
-  FlashcardList({
-    this.repoId,
-    this.flashcardInfoList,
-  }) {
-    initVariables();
+  FlashcardList({this.repoId}) {
+    refresh();
   }
 }

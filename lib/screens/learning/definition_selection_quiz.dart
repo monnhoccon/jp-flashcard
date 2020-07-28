@@ -1,133 +1,138 @@
 import 'dart:math';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displayed_word_settings.dart';
+import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
-import 'package:jp_flashcard/screens/learning/answer_incorrect_dialog.dart';
+import 'package:jp_flashcard/models/repo_info.dart';
+import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/learning/widget/selection_card.dart';
 import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
+import 'package:jp_flashcard/services/quiz_manager.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DefinitionSelectionQuiz extends StatelessWidget {
-  int repoId;
-  FlashcardInfo flashcardInfo;
-  bool hasFurigana;
-  Function nextQuiz;
-  DefinitionSelectionQuiz(
-      {this.flashcardInfo, this.repoId, this.hasFurigana, this.nextQuiz});
- 
-  List<String> definition = [];
-  List<String> definitionList = [];
+  //ANCHOR Public Variables
+  final FlashcardInfo flashcardInfo;
+
+  //ANCHOR Constructor
+  DefinitionSelectionQuiz({this.flashcardInfo});
+
+  //ANCHOR Generate displayed defintion list
+  List<String> _definitionList = [];
+  List<String> _displayedDefinitionList = [];
+  int _correctAnswerIndex;
 
   Future<bool> getDefinitionList() async {
-    definition = flashcardInfo.definition;
-    definitionList.clear();
+    _definitionList.clear();
     await DBManager.db
-        .getDefinitionListExcept(
-            repoId, flashcardInfo.flashcardId)
+        .getDefinitionListExcept(_repoId, flashcardInfo.flashcardId)
         .then((result) {
       for (final definition in result) {
-        definitionList.add(definition['definition']);
+        _definitionList.add(definition['definition']);
       }
       generateDisplayedDefinitionList();
     });
     return true;
   }
 
-  //ANCHOR Generate displayed defintion list
-  List<String> displayedDefinitionList = [];
-  int correctAnswerIndex;
-
   void generateDisplayedDefinitionList() {
-    displayedDefinitionList.clear();
+    _displayedDefinitionList.clear();
+
+    //Generate 3 random integers
     Set<int> randomIndexSet = Set();
-    var randomGenerator = Random();
     while (randomIndexSet.length < 3) {
-      randomIndexSet.add(randomGenerator.nextInt(definitionList.length));
+      randomIndexSet.add(Random().nextInt(_definitionList.length));
     }
 
-    correctAnswerIndex = randomGenerator.nextInt(4);
-
+    //Add inorrect answers to the list
     for (final index in randomIndexSet) {
-      displayedDefinitionList.add(definitionList[index]);
+      _displayedDefinitionList.add(_definitionList[index]);
     }
 
-    displayedDefinitionList.insert(
-        correctAnswerIndex, randomChoice(definition));
+    //Add correct answer to the list
+    _correctAnswerIndex = Random().nextInt(4);
+    _displayedDefinitionList.insert(
+        _correctAnswerIndex, randomChoice(flashcardInfo.definition));
   }
 
-  void select(int index, BuildContext context) async {
-    if (index == correctAnswerIndex) {
-      AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
-        flashcardInfo: flashcardInfo,
-        hasFurigana: hasFurigana,
-      );
-      await answerCorrectDialog.dialog(context);
+  //ANCHOR Apply selection
+  void applySelection(int index, BuildContext context) async {
+    if (index == _correctAnswerIndex) {
+      await QuizAnswerDialog.correct(flashcardInfo).dialog(context);
     } else {
-      //TODO Get incorrect flashcardinfo
-      AnswerIncorrectDialog answerIncorrectDialog = AnswerIncorrectDialog(
-        incorrectFlashcardInfo: flashcardInfo,
-        correctFlashcardInfo: flashcardInfo,
-        hasFurigana: hasFurigana,
-      );
-      await answerIncorrectDialog.dialog(context);
+      await QuizAnswerDialog.incorrect(flashcardInfo).dialog(context);
     }
-    nextQuiz();
+    Provider.of<QuizManager>(context, listen: false).navigateToNextQuiz();
+  }
+
+  //ANCHOR Initialize variables
+  int _repoId;
+  void initVariables(BuildContext context) {
+    _repoId = Provider.of<RepoInfo>(context, listen: false).repoId;
   }
 
   @override
+  //ANCHOR Build
   Widget build(BuildContext context) {
+    //ANCHOR Initialize
+    initVariables(context);
+
     return FutureBuilder<bool>(
-        future: getDefinitionList(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 25),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        DisplayedWord(
-                          flashcardInfo: flashcardInfo,
-                          displayedWordSettings: DisplayedWordSettings.large(),
-                        )
-                      ],
+      future: getDefinitionList(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          //ANCHOR Definition selection quiz qidget
+          return Container(
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 25),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                //ANCHOR Displayed word
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      DisplayedWord(
+                        flashcardInfo: flashcardInfo,
+                        displayedWordSize: DisplayedWordSize.large(),
+                      )
+                    ],
+                  ),
+                ),
+
+                //ANCHOR Displayed definition list
+                Container(
+                  height: 300,
+                  child: NotificationListener<OverscrollIndicatorNotification>(
+                    onNotification:
+                        (OverscrollIndicatorNotification overscroll) {
+                      overscroll.disallowGlow();
+                      return false;
+                    },
+                    child: ListView.builder(
+                      itemCount: _displayedDefinitionList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
+                          child: SelectionCard(
+                            displayedString: _displayedDefinitionList[index],
+                            applySelection: applySelection,
+                            index: index,
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  Container(
-                      height: 300,
-                      child:
-                          NotificationListener<OverscrollIndicatorNotification>(
-                        onNotification:
-                            (OverscrollIndicatorNotification overscroll) {
-                          overscroll.disallowGlow();
-                          return false;
-                        },
-                        child: ListView.builder(
-                            itemCount: displayedDefinitionList.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
-                                child: SelectionCard(
-                                  displayedString:
-                                      displayedDefinitionList[index],
-                                  select: select,
-                                  index: index,
-                                ),
-                              );
-                            }),
-                      ))
-                ],
-              ),
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-        });
+                )
+              ],
+            ),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
   }
 }

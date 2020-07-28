@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displayed_word_settings.dart';
+import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/components/displayed_letter.dart';
-import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class DisplayedWord extends StatelessWidget {
   //ANCHOR Variables
   FlashcardInfo flashcardInfo;
-  DisplayedWordSettings displayedWordSettings;
-  bool _hasKanji;
+  DisplayedWordSize displayedWordSize;
 
   //ANCHOR Constructor
   DisplayedWord({
     this.flashcardInfo,
-    this.displayedWordSettings,
+    this.displayedWordSize,
   });
 
   //ANCHOR Initialize displayed letter list
@@ -51,6 +50,7 @@ class DisplayedWord extends StatelessWidget {
   }
 
   //ANCHOR Initialize variables
+  bool _hasKanji;
   void initVariables(BuildContext context) {
     _hasKanji = Provider.of<DisplayingSettings>(context).hasKanji;
   }
@@ -62,9 +62,9 @@ class DisplayedWord extends StatelessWidget {
     initDisplayedLetterList();
 
     //ANCHOR Displayed word widget
-    return Provider<DisplayedWordSettings>(
+    return Provider<DisplayedWordSize>(
       create: (context) {
-        return displayedWordSettings;
+        return displayedWordSize;
       },
       child: Wrap(
         alignment: WrapAlignment.start,

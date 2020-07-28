@@ -2,11 +2,12 @@ import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
-import 'package:jp_flashcard/screens/learning/answer_correct_dialog.dart';
-import 'package:jp_flashcard/screens/learning/answer_incorrect_dialog.dart';
+import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
+import 'package:jp_flashcard/services/quiz_manager.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class WordShortAnswerQuiz extends StatefulWidget {
@@ -28,23 +29,22 @@ class _WordShortAnswerQuizState extends State<WordShortAnswerQuiz> {
   Widget answerInput;
 
   void answerCorrect() async {
-    AnswerCorrectDialog answerCorrectDialog = AnswerCorrectDialog(
+    QuizAnswerDialog answerCorrectDialog = QuizAnswerDialog(
       flashcardInfo: widget.flashcardInfo,
-      hasFurigana: widget.hasFurigana,
+      answerCorrect: true,
     );
     await answerCorrectDialog.dialog(context);
 
-    widget.nextQuiz();
+    Provider.of<QuizManager>(context, listen: false).navigateToNextQuiz();
   }
 
   void answerIncorrect() async {
-    AnswerIncorrectDialog answerIncorrectDialog = AnswerIncorrectDialog(
-      incorrectFlashcardInfo: widget.flashcardInfo,
-      correctFlashcardInfo: widget.flashcardInfo,
-      hasFurigana: widget.hasFurigana,
+    QuizAnswerDialog answerIncorrectDialog = QuizAnswerDialog(
+      flashcardInfo: widget.flashcardInfo,
+      answerCorrect: false,
     );
     await answerIncorrectDialog.dialog(context);
-    widget.nextQuiz();
+    Provider.of<QuizManager>(context, listen: false).navigateToNextQuiz();
   }
 
   String displayedDefinition;

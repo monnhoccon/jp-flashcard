@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/general_settings.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/displayed_flashcard.dart';
 import 'package:provider/provider.dart';
 

@@ -17,5 +17,10 @@ class DisplayedString {
     'delete flashcard alert content': '你確定要刪除此單字卡嗎？',
     'cancel': '取消',
     'confirm': '確認',
+    'learn': '學習',
+    'answer correct': '答對了！',
+    'continue': '繼續',
+    'answer incorrect': '答錯了！',
+    'correct answer': '正確答案:',
   };
 }

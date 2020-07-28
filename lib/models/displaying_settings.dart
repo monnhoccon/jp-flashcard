@@ -7,7 +7,7 @@ class DisplayingSettings with ChangeNotifier {
   bool displayTag = false;
   var persistData;
 
-  void getPersistData() async {
+  void refresh() async {
     persistData = await SharedPreferences.getInstance();
     hasFurigana = persistData.getBool('hasFurigana') ?? true;
     hasKanji = persistData.getBool('noKanji') ?? true;
@@ -16,10 +16,11 @@ class DisplayingSettings with ChangeNotifier {
     if (!hasKanji) {
       hasFurigana = false;
     }
+    notifyListeners();
   }
 
   DisplayingSettings() {
-    getPersistData();
+    refresh();
   }
 
   void toggleFurigana() {
