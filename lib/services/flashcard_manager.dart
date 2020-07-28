@@ -322,4 +322,37 @@ class FlashcardManager {
     ''', [flashcardId]);
     return data;
   }
+
+  Future<void> updateFavorite(int flashcardId, bool favorite) async {
+    final db = await database;
+    await _initFlashcardList();
+    await db.rawUpdate('''
+      UPDATE flashcardList$repoId
+      SET favorite = ?
+      WHERE flashcardId = ?;
+    ''', [favorite ? 1 : 0, flashcardId]);
+    return;
+  }
+
+  Future<void> updateProgress(int flashcardId, int progress) async {
+    final db = await database;
+    await _initFlashcardList();
+    await db.rawUpdate('''
+      UPDATE flashcardList$repoId
+      SET progress = ?
+      WHERE flashcardId = ?;
+    ''', [progress, flashcardId]);
+    return;
+  }
+
+  Future<void> updateCompleteDate(int flashcardId, String completeDate) async {
+    final db = await database;
+    await _initFlashcardList();
+    await db.rawUpdate('''
+      UPDATE flashcardList$repoId
+      SET completeDate = ?
+      WHERE flashcardId = ?;
+    ''', [completeDate, flashcardId]);
+    return;
+  }
 }

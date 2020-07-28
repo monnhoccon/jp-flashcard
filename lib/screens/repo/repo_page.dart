@@ -3,7 +3,7 @@ import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/learning/learning_page.dart';
-import 'package:jp_flashcard/screens/repo/add_flashcard.dart';
+import 'package:jp_flashcard/screens/repo/add_flashcard_page.dart';
 import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +64,6 @@ class RepoPage extends StatelessWidget {
               icon: Icon(Icons.delete_forever),
               onPressed: () {
                 DBManager.db.deleteAllFlashcard(repoInfo.repoId);
-                //eneralSettings.toggleKanji();
               },
             ),
 
@@ -101,35 +100,43 @@ class RepoPage extends StatelessWidget {
           children: <Widget>[
             //ANCHOR Learning page button
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 5),
+              padding: EdgeInsets.fromLTRB(20, 15, 0, 10),
               child: Row(
                 children: <Widget>[
-                  FlatButton(
-                    onPressed: () {
-                      if (_flashcardList.flashcardInfoList.length > 3) {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return LearningPage(
-                            repoInfo: repoInfo,
-                            flashcardList: _flashcardList,
-                          );
-                        }));
-                      }
-                    },
-                    child: Card(
+                  ButtonTheme(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+                    minWidth: 0,
+                    height: 0,
+                    child: FlatButton(
                       color: Theme.of(context).primaryColor,
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(20, 8, 20, 8),
-                        child: Text(
-                          DisplayedString.zhtw['learn'] ?? '',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
+                      onPressed: () {
+                        if (_flashcardList.flashcardInfoList.length > 3) {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(builder: (context) {
+                            return LearningPage(
+                              repoInfo: repoInfo,
+                              flashcardList: _flashcardList,
+                            );
+                          }));
+                        }
+                      },
+                      child: Text(
+                        DisplayedString.zhtw['learn'] ?? '',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
+
+                  SizedBox(
+                    width: 10,
+                  ),
+
+                  //ANCHOR Settings button
+                  IconButton(icon: Icon(Icons.tune), onPressed: () {})
                 ],
               ),
             ),

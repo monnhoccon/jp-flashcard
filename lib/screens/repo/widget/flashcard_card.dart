@@ -154,7 +154,6 @@ class FlashcardCard extends StatelessWidget {
                     ..._displayedDefinitionList,
 
                     Text(flashcardInfo.completeDate ?? ''),
-                    Text(flashcardInfo.favorite ? 'favorite' : 'no'),
                     Text(flashcardInfo.progress.toString()),
                   ],
                 ),
@@ -176,11 +175,12 @@ class FlashcardCard extends StatelessWidget {
                     //ANCHOR Favorite button
                     IconButton(
                       icon: Icon(
-                        Icons.star_border,
+                        flashcardInfo.favorite ? Icons.star : Icons.star_border,
                         size: 23.0,
                       ),
                       onPressed: () {
-                        //TODO Favorite button
+                        _flashcardList
+                            .toggleFavorite(flashcardInfo.flashcardId);
                       },
                     ),
 

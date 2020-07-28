@@ -219,11 +219,21 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                               ),
                               IconButton(
                                 icon: Icon(
-                                  Icons.star_border,
+                                  widget.flashcardInfo.favorite
+                                      ? Icons.star
+                                      : Icons.star_border,
                                   size: 30.0,
                                 ),
                                 onPressed: () {
-                                  //TODO Favorite button
+                                  setState(() {
+                                    widget.flashcardInfo.favorite =
+                                        !widget.flashcardInfo.favorite;
+                                    FlashcardManager.db(widget.repoId)
+                                        .updateFavorite(
+                                      widget.flashcardInfo.flashcardId,
+                                      widget.flashcardInfo.favorite,
+                                    );
+                                  });
                                 },
                               )
                             ],

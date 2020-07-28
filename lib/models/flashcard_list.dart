@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/flashcard_page/displayed_flashcard.dart';
 import 'package:jp_flashcard/screens/repo/widget/flashcard_card.dart';
-import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/services/flashcard_manager.dart';
 
 class FlashcardList with ChangeNotifier {
@@ -12,48 +11,18 @@ class FlashcardList with ChangeNotifier {
   List<FlashcardCard> flashcardCardList = [];
   List<DisplayedFlashcard> displayedFlashcardList = [];
 
-  void delete(int index) {
-    for (final flashcardCard in flashcardCardList) {
-      if (flashcardCard.index == index) {
-        for (final flashcardInfo in flashcardInfoList) {
-          if (flashcardInfo == flashcardCard.flashcardInfo) {
-            flashcardInfoList.remove(flashcardInfo);
-            for (final displayedFlashcard in displayedFlashcardList) {
-              if (displayedFlashcard.flashcardInfo == flashcardInfo) {
-                displayedFlashcardList.remove(displayedFlashcard);
-                break;
-              }
-            }
-            break;
-          }
-        }
-        flashcardCardList.remove(flashcardCard);
-        notifyListeners();
-        return;
+  void toggleFavorite(int flashcardId) async {
+    for (final flashcardInfo in flashcardInfoList) {
+      if (flashcardInfo.flashcardId == flashcardId) {
+        flashcardInfo.favorite = !flashcardInfo.favorite;
+        await FlashcardManager.db(repoId)
+            .updateFavorite(flashcardId, flashcardInfo.favorite);
       }
     }
-
-    return;
+    refresh();
   }
 
-  void add(FlashcardInfo flashcardInfo) {
-    flashcardInfoList.add(flashcardInfo);
-    flashcardCardList.add(FlashcardCard(
-      repoId: repoId,
-      flashcardInfo: flashcardInfo,
-      index: index,
-    ));
-    displayedFlashcardList.add(DisplayedFlashcard(
-      repoId: repoId,
-      flashcardInfo: flashcardInfo,
-      hasFurigana: true,
-    ));
-    index++;
-    notifyListeners();
-    return;
-  }
-
-  Future<void> refresh() async {
+  void refresh() async {
     await FlashcardManager.db(repoId)
         .getFlashcardInfoList()
         .then((newFlashcardInfoList) {
