@@ -8,6 +8,7 @@ import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/learning/widget/selection_card.dart';
 import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
+import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/quiz_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +27,8 @@ class DefinitionSelectionQuiz extends StatelessWidget {
 
   Future<bool> getDefinitionList() async {
     _definitionList.clear();
-    await DBManager.db
-        .getDefinitionListExcept(_repoId, flashcardInfo.flashcardId)
+    await FlashcardManager.db(_repoId)
+        .getDefinitionListExcept(flashcardInfo.flashcardId)
         .then((result) {
       for (final definition in result) {
         _definitionList.add(definition['definition']);

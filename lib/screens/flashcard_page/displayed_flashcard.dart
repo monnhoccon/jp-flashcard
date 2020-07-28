@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
-import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/text_to_speech.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 
@@ -71,8 +71,8 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                 child: Text(_displayedStringZHTW['cancel'] ?? '')),
             FlatButton(
                 onPressed: () {
-                  DBManager.db.deleteFlashcard(
-                      widget.repoId, widget.flashcardInfo.flashcardId);
+                  FlashcardManager.db(widget.repoId)
+                      .deleteFlashcard(widget.flashcardInfo.flashcardId);
                   Navigator.of(context).pop(true);
                 },
                 child: Text(_displayedStringZHTW['confirm'] ?? ''))

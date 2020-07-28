@@ -8,8 +8,8 @@ class DisplayedLetter extends StatelessWidget {
   //ANCHOR Variables
   final String letter;
   final String furigana;
-  DisplayingSettings _generalSettings;
-  DisplayedWordSize _displayedWordSettings;
+  DisplayingSettings _displayingSettings;
+  DisplayedWordSize _displayedWordSize;
 
   //ANCHOR Constructor
   DisplayedLetter({
@@ -19,8 +19,8 @@ class DisplayedLetter extends StatelessWidget {
 
   //ANCHOR Initialize variables
   void initVariables(BuildContext context) {
-    _generalSettings = Provider.of<DisplayingSettings>(context);
-    _displayedWordSettings = Provider.of<DisplayedWordSize>(context);
+    _displayingSettings = Provider.of<DisplayingSettings>(context);
+    _displayedWordSize = Provider.of<DisplayedWordSize>(context);
   }
 
   @override
@@ -35,9 +35,9 @@ class DisplayedLetter extends StatelessWidget {
         //ANCHOR Furigana text
         Text(
           furigana,
-          style: _generalSettings.hasFurigana
+          style: _displayingSettings.hasFurigana && furigana != ''
               ? TextStyle(
-                  fontSize: _displayedWordSettings.furiganaFontSize,
+                  fontSize: _displayedWordSize.furiganaFontSize,
                   height: 1.3,
                 )
               : TextStyle(
@@ -51,7 +51,7 @@ class DisplayedLetter extends StatelessWidget {
         Text(
           letter,
           style: TextStyle(
-            fontSize: _displayedWordSettings.textFontSize,
+            fontSize: _displayedWordSize.textFontSize,
             height: 1.2,
           ),
         ),

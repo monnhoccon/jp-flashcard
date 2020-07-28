@@ -5,8 +5,8 @@ import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/flashcard_page.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
-import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
+import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/text_to_speech.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 import 'package:provider/provider.dart';
@@ -67,8 +67,9 @@ class FlashcardCard extends StatelessWidget {
           FlatButton(
             onPressed: () {
               Navigator.of(context).pop(true);
+              FlashcardManager.db(repoId)
+                  .deleteFlashcard(flashcardInfo.flashcardId);
               _flashcardList.refresh();
-              DBManager.db.deleteFlashcard(repoId, flashcardInfo.flashcardId);
             },
             child: Text(DisplayedString.zhtw['confirm'] ?? ''),
           )
@@ -151,6 +152,10 @@ class FlashcardCard extends StatelessWidget {
 
                     //ANCHOR Displayed definition list
                     ..._displayedDefinitionList,
+
+                    Text(flashcardInfo.completeDate ?? ''),
+                    Text(flashcardInfo.favorite ? 'favorite' : 'no'),
+                    Text(flashcardInfo.progress.toString()),
                   ],
                 ),
 

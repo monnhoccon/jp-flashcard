@@ -17,6 +17,8 @@ class RepoPage extends StatelessWidget {
   RepoPage({this.repoInfo});
 
   @override
+
+  //ANCHOR Build
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
@@ -29,7 +31,6 @@ class RepoPage extends StatelessWidget {
           create: (context) {
             return FlashcardList(
               repoId: repoInfo.repoId,
-              //flashcardInfoList: snapshot.data,
             );
           },
         ),
@@ -58,6 +59,15 @@ class RepoPage extends StatelessWidget {
           title: Text(repoInfo.title),
           //ANCHOR Setting buttons
           actions: <Widget>[
+            //ANCHOR Delete all button
+            IconButton(
+              icon: Icon(Icons.delete_forever),
+              onPressed: () {
+                DBManager.db.deleteAllFlashcard(repoInfo.repoId);
+                //eneralSettings.toggleKanji();
+              },
+            ),
+
             //ANCHOR Kanji toggle button
             Consumer<DisplayingSettings>(
                 builder: (context, generalSettings, child) {

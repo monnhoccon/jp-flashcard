@@ -7,6 +7,7 @@ import 'package:jp_flashcard/screens/repo/widget/definition_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/word_input.dart';
 import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/jp_letter.dart';
 
 // ignore: must_be_immutable
@@ -171,8 +172,11 @@ class _EditFlashcardPageState extends State<EditFlashcardPage> {
       definition: definitionList,
       kanji: kanjiList,
       wordType: wordTypeList,
+      favorite: flashcardInfo.favorite,
+      progress: flashcardInfo.progress,
+      completeDate: flashcardInfo.completeDate,
     );
-    await DBManager.db.updateFlashcard(widget.repoId, newFlashcardInfo);
+    await FlashcardManager.db(widget.repoId).updateFlashcard(newFlashcardInfo);
     return;
   }
 

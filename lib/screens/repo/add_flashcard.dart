@@ -7,6 +7,7 @@ import 'package:jp_flashcard/screens/repo/widget/definition_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/word_input.dart';
 import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/jp_letter.dart';
 
 // ignore: must_be_immutable
@@ -147,8 +148,6 @@ class _AddFlashcardState extends State<AddFlashcard> {
   int flashcardId;
   FlashcardInfo flashcardInfo;
   Future<void> addFlashcard() async {
-    flashcardId =
-        await DBManager.db.insertWord(widget.repoId, wordValue.text.toString());
 
     List<String> definitionList = [];
     for (final definition in definitionValue) {
@@ -167,14 +166,14 @@ class _AddFlashcardState extends State<AddFlashcard> {
     for (final wordType in selectedWordTypeBoxList) {
       wordTypeList.add(wordType.displayedString);
     }
+    
     flashcardInfo = FlashcardInfo(
-      flashcardId: flashcardId,
       word: wordValue.text.toString(),
       definition: definitionList,
       kanji: kanjiList,
       wordType: wordTypeList,
     );
-    await DBManager.db.insertFlashcard(widget.repoId, flashcardInfo);
+    await FlashcardManager.db(widget.repoId).insertFlashcard(flashcardInfo);
     return;
   }
 

@@ -5,6 +5,7 @@ import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/learning/widget/selection_card.dart';
 import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/quiz_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -28,8 +29,8 @@ class _WordSelectionQuizState extends State<WordSelectionQuiz> {
   Future<bool> getWordList() async {
     wordList.clear();
     displayedDefinition = randomChoice(widget.flashcardInfo.definition);
-    await DBManager.db
-        .getWordListExcept(widget.repoId, widget.flashcardInfo.flashcardId)
+    await FlashcardManager.db(widget.repoId)
+        .getWordListExcept(widget.flashcardInfo.flashcardId)
         .then((resultWordList) {
       for (final word in resultWordList) {
         wordList.add(word['word']);
