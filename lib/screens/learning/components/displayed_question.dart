@@ -12,11 +12,14 @@ class DisplayedQuestion extends StatelessWidget {
   Widget build(BuildContext context) {
     //ANCHOR Displayed Question
     return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          child,
-        ],
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            child,
+          ],
+        ),
       ),
     );
   }

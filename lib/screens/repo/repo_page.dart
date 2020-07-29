@@ -27,6 +27,7 @@ class RepoPage extends StatelessWidget {
     })).then((newFlashcardInfo) {
       _flashcardList.refresh();
     });
+    return;
   }
 
   void navigateToQuizSettingsPage(BuildContext context) {
@@ -35,17 +36,22 @@ class RepoPage extends StatelessWidget {
         repoId: repoInfo.repoId,
       );
     }));
+    return;
   }
 
   void navigateToQuizPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return QuizPage(
-        repoInfo: repoInfo,
-      );
-    })).then((value) {
-      _flashcardList.refresh();
-      _displayingSettings.refresh();
-    });
+    if (_flashcardList.flashcardInfoList.length > 3) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return QuizPage(
+          repoInfo: repoInfo,
+        );
+      })).then((value) {
+        _flashcardList.refresh();
+        _displayingSettings.refresh();
+      });
+    }
+
+    return;
   }
 
   @override
@@ -79,6 +85,7 @@ class RepoPage extends StatelessWidget {
   //ANCHOR Initialize varialbes
   FlashcardList _flashcardList;
   DisplayingSettings _displayingSettings;
+
   void initVariables(BuildContext context) {
     _flashcardList = Provider.of<FlashcardList>(context, listen: false);
     _displayingSettings =
@@ -132,72 +139,81 @@ class RepoPage extends StatelessWidget {
           ],
         ),
         body: Container(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 15, 0, 10),
-              child: Row(
-                children: <Widget>[
-                  //ANCHOR Learning page button
-                  ButtonTheme(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
-                    minWidth: 0,
-                    height: 0,
-                    child: FlatButton(
-                      color: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        if (_flashcardList.flashcardInfoList.length > 3) {
-                          navigateToQuizPage(context);
-                        }
-                      },
-                      child: Text(
-                        DisplayedString.zhtw['learn'] ?? '',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: NoOverscrollGlow(
+                  child: SingleChildScrollView(
+                    child: Consumer<FlashcardList>(
+                        builder: (context, flashcardList, child) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          //ANCHOR Repo info and buttons
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 15, 5, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  '${repoInfo.numMemorized}/${repoInfo.numTotal} 已學習',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    //ANCHOR Learning page button
+                                    ButtonTheme(
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      padding:
+                                          EdgeInsets.fromLTRB(20, 5, 20, 5),
+                                      minWidth: 0,
+                                      height: 0,
+                                      child: FlatButton(
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          navigateToQuizPage(context);
+                                        },
+                                        child: Text(
+                                          DisplayedString.zhtw['learn'] ?? '',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    //ANCHOR Quiz settings button
+                                    IconButton(
+                                      icon: Icon(Icons.tune),
+                                      onPressed: () {
+                                        navigateToQuizSettingsPage(context);
+                                      },
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          //ANCHOR Flashcard card list
+                          ...flashcardList.flashcardCardList,
+                          SizedBox(
+                            height: 50,
+                          ),
+                        ],
+                      );
+                    }),
                   ),
-
-                  SizedBox(
-                    width: 10,
-                  ),
-
-                  //ANCHOR Quiz settings button
-                  IconButton(
-                    icon: Icon(Icons.tune),
-                    onPressed: () {
-                      navigateToQuizSettingsPage(context);
-                    },
-                  )
-                ],
-              ),
-            ),
-
-            //ANCHOR Flashcard card list
-            Expanded(
-              child: NoOverscrollGlow(
-                child: SingleChildScrollView(
-                  child: Consumer<FlashcardList>(
-                      builder: (context, flashcardList, child) {
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ...flashcardList.flashcardCardList,
-                        SizedBox(
-                          height: 50,
-                        ),
-                      ],
-                    );
-                  }),
                 ),
               ),
-            ),
-          ],
-        )),
+            ],
+          ),
+        ),
 
         //ANCHOR Add flashcard button
         floatingActionButton: FloatingActionButton(

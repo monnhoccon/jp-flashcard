@@ -136,26 +136,28 @@ class FlashcardCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 //ANCHOR Displayed word and definition list
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    //ANCHOR Displayed word
-                    DisplayedWord(
-                      flashcardInfo: flashcardInfo,
-                      displayedWordSize: DisplayedWordSize.medium(),
-                    ),
+                Flexible(
+                  
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      //ANCHOR Displayed word
+                      DisplayedWord(
+                        flashcardInfo: flashcardInfo,
+                        displayedWordSize: DisplayedWordSize.medium(),
+                      ),
 
-                    SizedBox(
-                      height: 5,
-                    ),
+                      SizedBox(
+                        height: 5,
+                      ),
 
-                    //ANCHOR Displayed definition list
-                    ..._displayedDefinitionList,
+                      //ANCHOR Displayed definition list
+                      ..._displayedDefinitionList,
 
-                    Text(flashcardInfo.completeDate ?? ''),
-                    Text(flashcardInfo.progress.toString()),
-                  ],
+                      Text(flashcardInfo.progress.toString()),
+                    ],
+                  ),
                 ),
 
                 //ANCHOR Action buttons

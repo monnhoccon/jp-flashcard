@@ -24,6 +24,7 @@ class DefinitionSelectionQuiz extends StatelessWidget {
     } else {
       _quizManager.answerIncorrect(flashcardInfo, context);
     }
+    return;
   }
 
   //ANCHOR Initialize displayed defintion list
@@ -47,16 +48,19 @@ class DefinitionSelectionQuiz extends StatelessWidget {
     _correctAnswerIndex = Random().nextInt(4);
     _displayedDefinitionList.insert(
         _correctAnswerIndex, randomChoice(flashcardInfo.definition));
+    return;
   }
 
   //ANCHOR Initialize variables
   QuizManager _quizManager;
+
   void _initVariables(BuildContext context) {
     _quizManager = Provider.of<QuizManager>(context, listen: false);
+    return;
   }
 
   @override
-  //ANCHOR Build
+  //ANCHOR Builder
   Widget build(BuildContext context) {
     //ANCHOR Initialize
     _initVariables(context);

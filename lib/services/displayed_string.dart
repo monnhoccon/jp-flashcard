@@ -33,5 +33,6 @@ class DisplayedString {
     'dont know': '不知道',
     'enter word': '請輸入單字',
     'enter definition':'請輸入定義',
+    'no card': '找不到單字卡',
   };
 }

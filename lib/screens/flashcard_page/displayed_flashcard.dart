@@ -131,173 +131,186 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
           return false;
         },
         child: Container(
-            padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 450),
-              child: FlipCard(
-                key: widget.cardKey,
-                front: Card(
-                  child: Container(
-                    width: 350,
-                    child: Column(
-                      children: <Widget>[
-                        //ANCHOR Setting button
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              PopupMenuButton<String>(
-                                icon: Icon(Icons.more_horiz),
-                                offset: Offset(0, 100),
-                                tooltip: _displayedStringZHTW['more'] ?? '',
-                                onSelected: (String result) async {
-                                  if (result == 'edit') {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                      return EditFlashcardPage(
-                                        repoId: widget.repoId,
-                                        flashcardInfo: widget.flashcardInfo,
-                                      );
-                                    })).then((newFlashcardInfo) {
-                                      setState(() {
-                                        if (newFlashcardInfo != null) {
-                                          widget.flashcardInfo =
-                                              newFlashcardInfo;
-                                        }
-                                      });
+          padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: 450),
+            child: FlipCard(
+              key: widget.cardKey,
+              front: Card(
+                child: Container(
+                  width: 350,
+                  child: Column(
+                    children: <Widget>[
+                      //ANCHOR Setting button
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            PopupMenuButton<String>(
+                              icon: Icon(Icons.more_horiz),
+                              offset: Offset(0, 100),
+                              tooltip: _displayedStringZHTW['more'] ?? '',
+                              onSelected: (String result) async {
+                                if (result == 'edit') {
+                                  Navigator.of(context).push(
+                                      MaterialPageRoute(builder: (context) {
+                                    return EditFlashcardPage(
+                                      repoId: widget.repoId,
+                                      flashcardInfo: widget.flashcardInfo,
+                                    );
+                                  })).then((newFlashcardInfo) {
+                                    setState(() {
+                                      if (newFlashcardInfo != null) {
+                                        widget.flashcardInfo = newFlashcardInfo;
+                                      }
                                     });
-                                  } else if (result == 'delete') {
-                                    if (await deleteAlertDialog(context)) {
-                                      Navigator.of(context).pop();
-                                    }
+                                  });
+                                } else if (result == 'delete') {
+                                  if (await deleteAlertDialog(context)) {
+                                    Navigator.of(context).pop();
                                   }
-                                },
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<String>>[
-                                  PopupMenuItem<String>(
-                                    value: 'edit',
-                                    child: Text(
-                                        _displayedStringZHTW['edit'] ?? ''),
-                                  ),
-                                  PopupMenuItem<String>(
-                                    value: 'delete',
-                                    child: Text(
-                                        _displayedStringZHTW['delete'] ?? ''),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
+                                }
+                              },
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                PopupMenuItem<String>(
+                                  value: 'edit',
+                                  child:
+                                      Text(_displayedStringZHTW['edit'] ?? ''),
+                                ),
+                                PopupMenuItem<String>(
+                                  value: 'delete',
+                                  child: Text(
+                                      _displayedStringZHTW['delete'] ?? ''),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
+                      ),
 
-                        //ANCHOR Displayed word
-                        Expanded(
+                      //ANCHOR Displayed word
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(24),
                           child: DisplayedWord(
                             flashcardInfo: widget.flashcardInfo,
                             displayedWordSize: DisplayedWordSize.large(),
                           ),
                         ),
+                      ),
 
-                        //ANCHOR Buttom action buttons
+                      //ANCHOR Buttom action buttons
+                      Divider(
+                        thickness: 1,
+                        indent: 30,
+                        endIndent: 30,
+                        color: Colors.grey[600],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(30, 0, 30, 30),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            IconButton(
+                              icon: Icon(
+                                Icons.volume_up,
+                                size: 30.0,
+                              ),
+                              onPressed: () {
+                                widget.speakWord();
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                widget.flashcardInfo.favorite
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                size: 30.0,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  widget.flashcardInfo.favorite =
+                                      !widget.flashcardInfo.favorite;
+                                  FlashcardManager.db(widget.repoId)
+                                      .updateFavorite(
+                                    widget.flashcardInfo.flashcardId,
+                                    widget.flashcardInfo.favorite,
+                                  );
+                                });
+                              },
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              back: Card(
+                child: Container(
+                    padding: EdgeInsets.all(30),
+                    width: 350,
+                    child: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Wrap(
+                                alignment: WrapAlignment.start,
+                                runAlignment: WrapAlignment.center,
+                                runSpacing: 5,
+                                children: displayedWordTypeList,
+                              ),
+                              ...displayedDefinitionList,
+                            ],
+                          ),
+                        ),
                         Divider(
                           thickness: 1,
-                          indent: 30,
-                          endIndent: 30,
                           color: Colors.grey[600],
                         ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(30, 0, 30, 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              IconButton(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            IconButton(
                                 icon: Icon(
                                   Icons.volume_up,
                                   size: 30.0,
                                 ),
                                 onPressed: () {
-                                  widget.speakWord();
-                                },
+                                  widget.speakDefinition();
+                                }),
+                            IconButton(
+                              icon: Icon(
+                                widget.flashcardInfo.favorite
+                                    ? Icons.star
+                                    : Icons.star_border,
+                                size: 30.0,
                               ),
-                              IconButton(
-                                icon: Icon(
-                                  widget.flashcardInfo.favorite
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  size: 30.0,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    widget.flashcardInfo.favorite =
-                                        !widget.flashcardInfo.favorite;
-                                    FlashcardManager.db(widget.repoId)
-                                        .updateFavorite(
-                                      widget.flashcardInfo.flashcardId,
-                                      widget.flashcardInfo.favorite,
-                                    );
-                                  });
-                                },
-                              )
-                            ],
-                          ),
+                              onPressed: () {
+                                setState(() {
+                                  widget.flashcardInfo.favorite =
+                                      !widget.flashcardInfo.favorite;
+                                  FlashcardManager.db(widget.repoId)
+                                      .updateFavorite(
+                                    widget.flashcardInfo.flashcardId,
+                                    widget.flashcardInfo.favorite,
+                                  );
+                                });
+                              },
+                            )
+                          ],
                         )
                       ],
-                    ),
-                  ),
-                ),
-                back: Card(
-                  child: Container(
-                      padding: EdgeInsets.all(30),
-                      width: 350,
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Wrap(
-                                  alignment: WrapAlignment.start,
-                                  runAlignment: WrapAlignment.center,
-                                  runSpacing: 5,
-                                  children: displayedWordTypeList,
-                                ),
-                                ...displayedDefinitionList,
-                              ],
-                            ),
-                          ),
-                          Divider(
-                            thickness: 1,
-                            color: Colors.grey[600],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              IconButton(
-                                  icon: Icon(
-                                    Icons.volume_up,
-                                    size: 30.0,
-                                  ),
-                                  onPressed: () {
-                                    widget.speakDefinition();
-                                  }),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.star_border,
-                                  size: 30.0,
-                                ),
-                                onPressed: () {
-                                  //TODO Favorite button
-                                },
-                              )
-                            ],
-                          )
-                        ],
-                      )),
-                ),
+                    )),
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }

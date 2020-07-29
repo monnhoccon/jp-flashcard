@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/flashcard_page/displayed_flashcard.dart';
 import 'package:jp_flashcard/screens/repo/widget/flashcard_card.dart';
+import 'package:jp_flashcard/services/database.dart';
 import 'package:jp_flashcard/services/flashcard_manager.dart';
 
 class FlashcardList with ChangeNotifier {
   int repoId;
-  int index;
   List<FlashcardInfo> flashcardInfoList = [];
   List<FlashcardCard> flashcardCardList = [];
   List<DisplayedFlashcard> displayedFlashcardList = [];
@@ -20,6 +20,7 @@ class FlashcardList with ChangeNotifier {
       }
     }
     refresh();
+    return;
   }
 
   Future<void> refresh() async {
@@ -30,7 +31,10 @@ class FlashcardList with ChangeNotifier {
     });
     flashcardCardList.clear();
     displayedFlashcardList.clear();
-    for (index = 0; index < flashcardInfoList.length; index++) {
+
+    int numTotal = flashcardInfoList.length;
+    int numCompleted = 0;
+    for (int index = 0; index < flashcardInfoList.length; index++) {
       flashcardCardList.add(FlashcardCard(
         repoId: repoId,
         flashcardInfo: flashcardInfoList[index],
@@ -42,11 +46,19 @@ class FlashcardList with ChangeNotifier {
         flashcardInfo: flashcardInfoList[index],
         hasFurigana: true,
       ));
+
+      if (flashcardInfoList[index].progress >= 100) {
+        numCompleted++;
+      }
     }
+
+    await DBManager.db.updateNumTotalOfRepo(repoId, numTotal, numCompleted);
     notifyListeners();
+    return;
   }
 
   FlashcardList({this.repoId}) {
     refresh();
+    return;
   }
 }

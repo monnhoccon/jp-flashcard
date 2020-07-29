@@ -5,6 +5,7 @@ class DisplayingSettings with ChangeNotifier {
   bool hasFurigana = true;
   bool hasKanji = true;
   bool displayTag = false;
+  bool furiganaLocked = false;
   var persistData;
 
   void refresh() async {
@@ -22,9 +23,10 @@ class DisplayingSettings with ChangeNotifier {
   DisplayingSettings() {
     refresh();
   }
+  
 
   void toggleFurigana() {
-    if (!hasKanji) {
+    if (!hasKanji || furiganaLocked) {
       return;
     }
     hasFurigana = !hasFurigana;

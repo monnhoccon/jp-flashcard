@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/quiz_settings.dart';
@@ -11,7 +12,9 @@ import 'package:jp_flashcard/screens/learning/kanji_short_answer_quiz.dart';
 import 'package:jp_flashcard/screens/learning/components/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/learning/word_selection_quiz.dart';
 import 'package:jp_flashcard/screens/learning/word_short_answer_quiz.dart';
+import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:jp_flashcard/services/flashcard_manager.dart';
+import 'package:provider/provider.dart';
 
 enum QuizType {
   definition_selection,
@@ -23,10 +26,11 @@ enum QuizType {
 
 class QuizManager extends ChangeNotifier {
   //ANCHOR Public variables
-  int repoId;
+  final int repoId;
+  final BuildContext context;
 
   //ANCHOR Constructor
-  QuizManager({this.repoId}) {
+  QuizManager({this.repoId, this.context}) {
     _initVariables();
   }
 
@@ -48,6 +52,9 @@ class QuizManager extends ChangeNotifier {
       FlashcardInfo flashcardInfo, bool positive) async {
     //Add or minus progress according to the quiz type
     int newProgress = flashcardInfo.progress;
+    if (newProgress >= 100) {
+      return;
+    }
     if (_quizType == QuizType.definition_selection) {
       newProgress += positive ? 5 : -5;
     } else if (_quizType == QuizType.definition_short_answer) {
@@ -68,7 +75,6 @@ class QuizManager extends ChangeNotifier {
     }
     await FlashcardManager.db(repoId)
         .updateProgress(flashcardInfo.flashcardId, newProgress);
-    await _refreshFlashcardList();
     return;
   }
 
@@ -79,6 +85,7 @@ class QuizManager extends ChangeNotifier {
             flashcardInfo, _quizSettings.enableAnswerAudio)
         .dialog(context);
     navigateToNextQuiz();
+    return;
   }
 
   //ANCHOR Answer incorrect
@@ -89,12 +96,31 @@ class QuizManager extends ChangeNotifier {
             flashcardInfo, _quizSettings.enableAnswerAudio)
         .dialog(context);
     navigateToNextQuiz();
+    return;
   }
 
-  void navigateToNextQuiz() {
+  void navigateToNextQuiz() async {
     _quizType = _randomQuizType();
+    int indexUpperBound = await _refreshFlashcardList();
 
-    _currentFlashcardInfo = _randomFlashcardInfo();
+    //No cards founded
+    if (indexUpperBound == 0) {
+      currentQuiz = Container(
+        child: Center(
+          child: Text(
+            DisplayedString.zhtw['no card'] ?? '',
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      );
+      notifyListeners();
+      return;
+    }
+
+    _currentFlashcardInfo = _randomFlashcardInfo(indexUpperBound);
     if (_quizType == QuizType.definition_selection) {
       currentQuiz = DefinitionSelectionQuiz(
         flashcardInfo: _currentFlashcardInfo,
@@ -118,20 +144,38 @@ class QuizManager extends ChangeNotifier {
     }
 
     notifyListeners();
+    return;
   }
 
   //ANCHOR Generate random quiz type
   QuizType _quizType;
   QuizType _randomQuizType() {
-    int randomInt = Random().nextInt(1); //QuizType.values.length);
-    return QuizType.definition_short_answer;
+    int randomInt = Random().nextInt(100);
+    if (randomInt < 25 && _quizSettings.enableDefinitionSelectionQuiz) {
+      //25%
+      return QuizType.definition_selection;
+    } else if (randomInt < 35 &&
+        _quizSettings.enableDefinitionShortAnswerQuiz) {
+      //10%
+      return QuizType.definition_short_answer;
+    } else if (randomInt < 60 && _quizSettings.enableWordSelectionQuiz) {
+      //25%
+      return QuizType.word_selection;
+    } else if (randomInt < 70 && _quizSettings.enableWordShortAnswerQuiz) {
+      //10%
+      return QuizType.word_short_answer;
+    } else if (randomInt < 100 && _quizSettings.enableKanjiShortAnswerQuiz) {
+      //30%
+      return QuizType.kanji_short_answer;
+    }
+    return _randomQuizType();
   }
 
   //ANCHOR Generate random flashcardInfo
   FlashcardInfo _currentFlashcardInfo;
-  FlashcardInfo _randomFlashcardInfo() {
+  FlashcardInfo _randomFlashcardInfo(int indexUpperBound) {
     return _currentFlashcardInfoList
-        .toList()[Random().nextInt(_indexUpperBound)];
+        .toList()[Random().nextInt(indexUpperBound)];
   }
 
   PriorityQueue<FlashcardInfo> _currentFlashcardInfoList = PriorityQueue(
@@ -140,30 +184,36 @@ class QuizManager extends ChangeNotifier {
     },
   );
 
-  int _indexUpperBound;
-  Future<void> _refreshFlashcardList() async {
+  Future<int> _refreshFlashcardList() async {
     await _flashcardList.refresh();
     _currentFlashcardInfoList.clear();
     for (final flashcardInfo in _flashcardList.flashcardInfoList) {
+      //Check whether the flashcard has kanji
+      if (_quizType == QuizType.kanji_short_answer &&
+          flashcardInfo.kanji.isEmpty) {
+        continue;
+      }
       if (!_quizSettings.onlyShowFavorite) {
-        if (flashcardInfo.progress >= 100) {
+        if (flashcardInfo.progress >= 100 && Random().nextInt(7) > 5) {
           continue;
         } else if (flashcardInfo.progress >= 80 && Random().nextInt(2) > 0) {
           continue;
-        } else if (flashcardInfo.progress >= 40 && Random().nextInt(4) > 3) {
+        } else if (flashcardInfo.progress >= 40 && Random().nextInt(4) > 2) {
           continue;
         }
-      }
-      if (!_quizSettings.onlyShowFavorite && flashcardInfo.progress < 100 ||
-          (_quizSettings.onlyShowFavorite && flashcardInfo.favorite)) {
         _currentFlashcardInfoList.add(flashcardInfo);
+      } else {
+        if (flashcardInfo.favorite) {
+          _currentFlashcardInfoList.add(flashcardInfo);
+        }
       }
     }
 
-    _indexUpperBound = _currentFlashcardInfoList.length;
-    if (!_quizSettings.onlyShowFavorite && _indexUpperBound > 10) {
-      _indexUpperBound = 10;
+    int indexUpperBound = _currentFlashcardInfoList.length;
+    if (!_quizSettings.onlyShowFavorite && indexUpperBound > 8) {
+      indexUpperBound = 8;
     }
+    return indexUpperBound;
   }
 
   //ANCHOR Refresh quiz settings

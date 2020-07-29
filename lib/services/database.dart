@@ -93,15 +93,16 @@ class DBManager {
     ''', [newTitle, repoId]);
   }
 
-  Future<dynamic> updateNumTotalOfRepo(int repoId, int numTotal) async {
+  Future<dynamic> updateNumTotalOfRepo(
+      int repoId, int numTotal, int numCompleted) async {
     final db = await database;
     createTable(repos, db);
 
     return await db.rawUpdate('''
       UPDATE repos
-      SET numTotal = ?
+      SET numTotal = ?, numMemorized = ?
       WHERE repoId = ?;
-    ''', [numTotal, repoId]);
+    ''', [numTotal, numCompleted, repoId]);
   }
   //--------------------------------------------
 

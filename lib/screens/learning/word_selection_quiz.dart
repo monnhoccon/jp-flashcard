@@ -20,6 +20,7 @@ class WordSelectionQuiz extends StatelessWidget {
     } else {
       _quizManager.answerIncorrect(flashcardInfo, context);
     }
+    return;
   }
 
   //ANCHOR Initialize displayed word list
@@ -37,6 +38,7 @@ class WordSelectionQuiz extends StatelessWidget {
     //Add the correct answer
     _correctAnswerIndex = Random().nextInt(4);
     _displayedWordList.insert(_correctAnswerIndex, flashcardInfo);
+    return;
   }
 
   //ANCHOR Initialize variables
@@ -44,6 +46,7 @@ class WordSelectionQuiz extends StatelessWidget {
 
   void _initVariables(BuildContext context) {
     _quizManager = Provider.of<QuizManager>(context, listen: false);
+    return;
   }
 
   @override

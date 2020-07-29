@@ -10,23 +10,26 @@ class DisplayedOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      child: NoOverscrollGlow(
-        child: ListView.builder(
-          itemCount: options.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
-              child: SelectionCard(
-                content: options[index],
-                onlyString: onlyString,
-                applySelection: applySelection,
-                index: index,
-              ),
-            );
-          },
-        ),
+    return NoOverscrollGlow(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: options.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
+                child: SelectionCard(
+                  content: options[index],
+                  onlyString: onlyString,
+                  applySelection: applySelection,
+                  index: index,
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

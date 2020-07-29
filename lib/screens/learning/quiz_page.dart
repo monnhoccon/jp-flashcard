@@ -33,12 +33,10 @@ class QuizPage extends StatelessWidget {
         ),
         ChangeNotifierProvider<QuizManager>(
           create: (context) {
-            return QuizManager(repoId: repoInfo.repoId);
-          },
-        ),
-        ChangeNotifierProvider<RepoInfo>(
-          create: (context) {
-            return RepoInfo.fromRepoInfo(repoInfo);
+            return QuizManager(
+              repoId: repoInfo.repoId,
+              context: context,
+            );
           },
         ),
       ],
