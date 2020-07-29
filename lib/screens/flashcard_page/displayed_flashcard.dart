@@ -161,7 +161,10 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                                       );
                                     })).then((newFlashcardInfo) {
                                       setState(() {
-                                        widget.flashcardInfo = newFlashcardInfo;
+                                        if (newFlashcardInfo != null) {
+                                          widget.flashcardInfo =
+                                              newFlashcardInfo;
+                                        }
                                       });
                                     });
                                   } else if (result == 'delete') {

@@ -34,6 +34,7 @@ class FlashcardCard extends StatelessWidget {
       );
     })).then((value) {
       _flashcardList.refresh();
+      _displayingSettings.refresh();
     });
   }
 
@@ -107,8 +108,11 @@ class FlashcardCard extends StatelessWidget {
 
   //ANCHOR Initialize variables
   FlashcardList _flashcardList;
+  DisplayingSettings _displayingSettings;
   void initVariables(BuildContext context) {
     _flashcardList = Provider.of<FlashcardList>(context, listen: false);
+    _displayingSettings =
+        Provider.of<DisplayingSettings>(context, listen: false);
   }
 
   @override

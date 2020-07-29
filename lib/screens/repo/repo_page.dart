@@ -44,6 +44,7 @@ class RepoPage extends StatelessWidget {
       );
     })).then((value) {
       _flashcardList.refresh();
+      _displayingSettings.refresh();
     });
   }
 
