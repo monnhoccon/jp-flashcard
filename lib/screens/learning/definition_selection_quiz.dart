@@ -68,7 +68,7 @@ class DefinitionSelectionQuiz extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          //ANCHOR Displayed word
+          //ANCHOR Displayed question
           DisplayedQuestion(
             child: DisplayedWord(
               flashcardInfo: flashcardInfo,
@@ -76,7 +76,7 @@ class DefinitionSelectionQuiz extends StatelessWidget {
             ),
           ),
 
-          //ANCHOR Displayed definition list
+          //ANCHOR Displayed options
           DisplayedOptions(
             options: _displayedDefinitionList,
             applySelection: _applySelection,

@@ -30,5 +30,8 @@ class DisplayedString {
     'enable kanji short answer quiz': '顯示漢字簡答題',
     'enable answer audio': '答案語音',
     'only show favorite': '只顯示最愛',
+    'dont know': '不知道',
+    'enter word': '請輸入單字',
+    'enter definition':'請輸入定義',
   };
 }

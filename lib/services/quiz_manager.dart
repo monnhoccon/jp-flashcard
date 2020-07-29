@@ -15,7 +15,7 @@ import 'package:jp_flashcard/services/flashcard_manager.dart';
 
 enum QuizType {
   definition_selection,
-  definition_shortAnswer,
+  definition_short_answer,
   word_selection,
   word_short_answer,
   kanji_short_answer,
@@ -50,7 +50,7 @@ class QuizManager extends ChangeNotifier {
     int newProgress = flashcardInfo.progress;
     if (_quizType == QuizType.definition_selection) {
       newProgress += positive ? 5 : -5;
-    } else if (_quizType == QuizType.definition_shortAnswer) {
+    } else if (_quizType == QuizType.definition_short_answer) {
       newProgress += positive ? 7 : -3;
     } else if (_quizType == QuizType.word_selection) {
       newProgress += positive ? 5 : -5;
@@ -99,9 +99,8 @@ class QuizManager extends ChangeNotifier {
       currentQuiz = DefinitionSelectionQuiz(
         flashcardInfo: _currentFlashcardInfo,
       );
-    } else if (_quizType == QuizType.definition_shortAnswer) {
+    } else if (_quizType == QuizType.definition_short_answer) {
       currentQuiz = DefinitionShortAnswerQuiz(
-        repoId: repoId,
         flashcardInfo: _currentFlashcardInfo,
       );
     } else if (_quizType == QuizType.word_selection) {
@@ -110,12 +109,10 @@ class QuizManager extends ChangeNotifier {
       );
     } else if (_quizType == QuizType.word_short_answer) {
       currentQuiz = WordShortAnswerQuiz(
-        repoId: repoId,
-        flashcardInfo: _flashcardList.flashcardInfoList[0],
+        flashcardInfo: _currentFlashcardInfo,
       );
     } else if (_quizType == QuizType.kanji_short_answer) {
       currentQuiz = KanjiShortAnswerQuiz(
-        repoId: repoId,
         flashcardInfo: _currentFlashcardInfo,
       );
     }
@@ -127,7 +124,7 @@ class QuizManager extends ChangeNotifier {
   QuizType _quizType;
   QuizType _randomQuizType() {
     int randomInt = Random().nextInt(1); //QuizType.values.length);
-    return QuizType.definition_selection;
+    return QuizType.definition_short_answer;
   }
 
   //ANCHOR Generate random flashcardInfo

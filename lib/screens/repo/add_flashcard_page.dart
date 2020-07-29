@@ -75,7 +75,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
 
           kanjiInputList.add(KanjiInput(
             displayedString: char,
-            inputValue: kanjiValue[numKanji],
+            inputController: kanjiValue[numKanji],
             validationKey: kanjiFormKey[numKanji],
           ));
 

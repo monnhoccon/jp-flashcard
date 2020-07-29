@@ -59,7 +59,7 @@ class WordSelectionQuiz extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          //ANCHOR Displayed definition
+          //ANCHOR Displayed question
           DisplayedQuestion(
             child: Text(
               _displayedDefinition,
@@ -67,7 +67,7 @@ class WordSelectionQuiz extends StatelessWidget {
             ),
           ),
 
-          //ANCHOR Displayed word list
+          //ANCHOR Displayed options
           DisplayedOptions(
             options: _displayedWordList,
             applySelection: _applySelection,
