@@ -137,13 +137,9 @@ class FlashcardCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     //ANCHOR Displayed word
-                    Consumer<DisplayingSettings>(
-                      builder: (context, generalSettings, child) {
-                        return DisplayedWord(
-                          flashcardInfo: flashcardInfo,
-                          displayedWordSize: DisplayedWordSize.medium(),
-                        );
-                      },
+                    DisplayedWord(
+                      flashcardInfo: flashcardInfo,
+                      displayedWordSize: DisplayedWordSize.medium(),
                     ),
 
                     SizedBox(

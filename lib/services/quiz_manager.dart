@@ -8,7 +8,7 @@ import 'package:jp_flashcard/models/quiz_settings.dart';
 import 'package:jp_flashcard/screens/learning/definition_selection_quiz.dart';
 import 'package:jp_flashcard/screens/learning/definition_short_answer_quiz.dart';
 import 'package:jp_flashcard/screens/learning/kanji_short_answer_quiz.dart';
-import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
+import 'package:jp_flashcard/screens/learning/components/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/learning/word_selection_quiz.dart';
 import 'package:jp_flashcard/screens/learning/word_short_answer_quiz.dart';
 import 'package:jp_flashcard/services/flashcard_manager.dart';
@@ -33,69 +33,80 @@ class QuizManager extends ChangeNotifier {
   //ANCHOR Initialize variables
   FlashcardList _flashcardList;
   QuizSettings _quizSettings;
-  QuizType _quizType;
+
   void _initVariables() async {
-    _flashcardList = FlashcardList(repoId: repoId);
-    await _flashcardList.refresh();
-    _refreshCurrentFlashcardInfoList();
     _quizSettings = QuizSettings();
     await _quizSettings.refresh();
-    enableAnswerAudio = _quizSettings.enableAnswerAudio;
+    _flashcardList = FlashcardList(repoId: repoId);
+    await _refreshFlashcardList();
     navigateToNextQuiz();
   }
 
   Widget currentQuiz = Container();
 
-  void answerCorrect(FlashcardInfo flashcardInfo, BuildContext context) async {
-    int newProgress = flashcardInfo.progress + 5;
+  Future<void> _updateProgress(
+      FlashcardInfo flashcardInfo, bool positive) async {
+    //Add or minus progress according to the quiz type
+    int newProgress = flashcardInfo.progress;
+    if (_quizType == QuizType.definition_selection) {
+      newProgress += positive ? 5 : -5;
+    } else if (_quizType == QuizType.definition_shortAnswer) {
+      newProgress += positive ? 7 : -3;
+    } else if (_quizType == QuizType.word_selection) {
+      newProgress += positive ? 5 : -5;
+    } else if (_quizType == QuizType.word_short_answer) {
+      newProgress += positive ? 7 : -3;
+    } else if (_quizType == QuizType.kanji_short_answer) {
+      newProgress += positive ? 7 : -3;
+    }
+
+    //Checking whether out of range
     if (newProgress > 100) {
       newProgress = 100;
-    }
-    await FlashcardManager.db(repoId)
-        .updateProgress(flashcardInfo.flashcardId, newProgress);
-    await _flashcardList.refresh();
-    _refreshCurrentFlashcardInfoList();
-    await QuizAnswerDialog.correct(flashcardInfo, enableAnswerAudio)
-        .dialog(context);
-    navigateToNextQuiz();
-  }
-
-  void answerIncorrect(
-      FlashcardInfo flashcardInfo, BuildContext context) async {
-    int newProgress = flashcardInfo.progress - 5;
-    if (newProgress < 0) {
+    } else if (newProgress < 0) {
       newProgress = 0;
     }
     await FlashcardManager.db(repoId)
         .updateProgress(flashcardInfo.flashcardId, newProgress);
-    await _flashcardList.refresh();
-    _refreshCurrentFlashcardInfoList();
-    await QuizAnswerDialog.incorrect(flashcardInfo, enableAnswerAudio)
+    await _refreshFlashcardList();
+    return;
+  }
+
+  //ANCHOR Answer correct
+  void answerCorrect(FlashcardInfo flashcardInfo, BuildContext context) async {
+    await _updateProgress(flashcardInfo, true);
+    await QuizAnswerDialog.correct(
+            flashcardInfo, _quizSettings.enableAnswerAudio)
+        .dialog(context);
+    navigateToNextQuiz();
+  }
+
+  //ANCHOR Answer incorrect
+  void answerIncorrect(
+      FlashcardInfo flashcardInfo, BuildContext context) async {
+    await _updateProgress(flashcardInfo, false);
+    await QuizAnswerDialog.incorrect(
+            flashcardInfo, _quizSettings.enableAnswerAudio)
         .dialog(context);
     navigateToNextQuiz();
   }
 
   void navigateToNextQuiz() {
     _quizType = _randomQuizType();
-    int upperBound = _flashcardList.flashcardInfoList.length - 1;
-    if (upperBound > 8) {
-      upperBound = 8;
-    }
-    FlashcardInfo flashcardInfo =
-        _currentFlashcardInfoList.toList()[Random().nextInt(upperBound)];
+
+    _currentFlashcardInfo = _randomFlashcardInfo();
     if (_quizType == QuizType.definition_selection) {
       currentQuiz = DefinitionSelectionQuiz(
-        flashcardInfo: flashcardInfo,
+        flashcardInfo: _currentFlashcardInfo,
       );
     } else if (_quizType == QuizType.definition_shortAnswer) {
       currentQuiz = DefinitionShortAnswerQuiz(
         repoId: repoId,
-        flashcardInfo: flashcardInfo,
+        flashcardInfo: _currentFlashcardInfo,
       );
     } else if (_quizType == QuizType.word_selection) {
       currentQuiz = WordSelectionQuiz(
-        repoId: repoId,
-        flashcardInfo: flashcardInfo,
+        flashcardInfo: _currentFlashcardInfo,
       );
     } else if (_quizType == QuizType.word_short_answer) {
       currentQuiz = WordShortAnswerQuiz(
@@ -105,16 +116,25 @@ class QuizManager extends ChangeNotifier {
     } else if (_quizType == QuizType.kanji_short_answer) {
       currentQuiz = KanjiShortAnswerQuiz(
         repoId: repoId,
-        flashcardInfo: flashcardInfo,
+        flashcardInfo: _currentFlashcardInfo,
       );
     }
 
     notifyListeners();
   }
 
+  //ANCHOR Generate random quiz type
+  QuizType _quizType;
   QuizType _randomQuizType() {
     int randomInt = Random().nextInt(1); //QuizType.values.length);
-    return QuizType.values[randomInt];
+    return QuizType.definition_selection;
+  }
+
+  //ANCHOR Generate random flashcardInfo
+  FlashcardInfo _currentFlashcardInfo;
+  FlashcardInfo _randomFlashcardInfo() {
+    return _currentFlashcardInfoList
+        .toList()[Random().nextInt(_indexUpperBound)];
   }
 
   PriorityQueue<FlashcardInfo> _currentFlashcardInfoList = PriorityQueue(
@@ -123,20 +143,48 @@ class QuizManager extends ChangeNotifier {
     },
   );
 
-  void _refreshCurrentFlashcardInfoList() {
+  int _indexUpperBound;
+  Future<void> _refreshFlashcardList() async {
+    await _flashcardList.refresh();
     _currentFlashcardInfoList.clear();
     for (final flashcardInfo in _flashcardList.flashcardInfoList) {
-      if (flashcardInfo.progress > 100) {
-        continue;
+      if (!_quizSettings.onlyShowFavorite) {
+        if (flashcardInfo.progress >= 100) {
+          continue;
+        } else if (flashcardInfo.progress >= 80 && Random().nextInt(2) > 0) {
+          continue;
+        } else if (flashcardInfo.progress >= 40 && Random().nextInt(4) > 3) {
+          continue;
+        }
       }
-      _currentFlashcardInfoList.add(flashcardInfo);
+      if (!_quizSettings.onlyShowFavorite && flashcardInfo.progress < 100 ||
+          (_quizSettings.onlyShowFavorite && flashcardInfo.favorite)) {
+        _currentFlashcardInfoList.add(flashcardInfo);
+      }
+    }
+
+    _indexUpperBound = _currentFlashcardInfoList.length;
+    if (!_quizSettings.onlyShowFavorite && _indexUpperBound > 10) {
+      _indexUpperBound = 10;
     }
   }
 
   //ANCHOR Refresh quiz settings
-  bool enableAnswerAudio;
   void refreshQuizSettings() async {
     await _quizSettings.refresh();
-    enableAnswerAudio = _quizSettings.enableAnswerAudio;
+  }
+
+  dynamic getRandomFlashcardInfoList(FlashcardInfo flashcardInfo) {
+    int numResult = 3;
+    Set<FlashcardInfo> randomFlashcardInfoSet = Set();
+    while (randomFlashcardInfoSet.length < numResult) {
+      FlashcardInfo randomFlashcardInfo =
+          randomChoice(_flashcardList.flashcardInfoList);
+      if (randomFlashcardInfo != flashcardInfo) {
+        randomFlashcardInfoSet.add(randomFlashcardInfo);
+      }
+    }
+
+    return randomFlashcardInfoSet.toList();
   }
 }

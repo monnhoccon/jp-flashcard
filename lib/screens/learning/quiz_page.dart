@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/quiz_settings_page/quiz_settings_page.dart';
@@ -9,8 +8,7 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class QuizPage extends StatelessWidget {
   RepoInfo repoInfo;
-  FlashcardList flashcardList;
-  QuizPage({this.repoInfo, this.flashcardList});
+  QuizPage({this.repoInfo});
 
   Future<void> navigateToQuizSettingsPage(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
@@ -45,9 +43,9 @@ class QuizPage extends StatelessWidget {
         ),
       ],
 
-      //ANCHOR Quiz page widget
       child: Builder(
         builder: (context) {
+          //ANCHOR Quiz page
           return Scaffold(
             appBar: AppBar(
               //ANCHOR Setting buttons
@@ -55,8 +53,8 @@ class QuizPage extends StatelessWidget {
                 //ANCHOR Quiz settings button
                 IconButton(
                   icon: Icon(Icons.tune),
-                  onPressed: () async {
-                    await navigateToQuizSettingsPage(context);
+                  onPressed: () {
+                    navigateToQuizSettingsPage(context);
                   },
                 ),
 
@@ -87,6 +85,8 @@ class QuizPage extends StatelessWidget {
                 })
               ],
             ),
+
+            //ANCHOR Quiz
             body: Consumer<QuizManager>(
               builder: (context, quizManager, child) {
                 return quizManager.currentQuiz;

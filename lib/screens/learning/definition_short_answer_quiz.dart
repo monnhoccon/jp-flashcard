@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/screens/learning/quiz_answer_dialog.dart';
+import 'package:jp_flashcard/screens/learning/components/quiz_answer_dialog.dart';
 import 'package:jp_flashcard/screens/repo/widget/input_field.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 import 'package:jp_flashcard/services/quiz_manager.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/components/no_overscroll_glow.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
@@ -12,15 +13,44 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class RepoPage extends StatelessWidget {
   //ANCHOR Variables
-  RepoInfo repoInfo;
+  final RepoInfo repoInfo;
 
   //ANCHOR Constructor
   RepoPage({this.repoInfo});
 
-  @override
+  //ANCHOR Navigation
+  void navigateToAddFlashcardPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return AddFlashcard(
+        repoId: repoInfo.repoId,
+      );
+    })).then((newFlashcardInfo) {
+      _flashcardList.refresh();
+    });
+  }
 
-  //ANCHOR Build
+  void navigateToQuizSettingsPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return QuizSettingsPage(
+        repoId: repoInfo.repoId,
+      );
+    }));
+  }
+
+  void navigateToQuizPage(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return QuizPage(
+        repoInfo: repoInfo,
+      );
+    })).then((value) {
+      _flashcardList.refresh();
+    });
+  }
+
+  @override
+  //ANCHOR Builder
   Widget build(BuildContext context) {
+    //ANCHOR Providers
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<DisplayingSettings>(
@@ -47,44 +77,19 @@ class RepoPage extends StatelessWidget {
 
   //ANCHOR Initialize varialbes
   FlashcardList _flashcardList;
+  DisplayingSettings _displayingSettings;
   void initVariables(BuildContext context) {
     _flashcardList = Provider.of<FlashcardList>(context, listen: false);
+    _displayingSettings =
+        Provider.of<DisplayingSettings>(context, listen: false);
   }
 
-  //ANCHOR Navigation
-  void navigateToAddFlashcardPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return AddFlashcard(
-        repoId: repoInfo.repoId,
-      );
-    })).then((newFlashcardInfo) {
-      _flashcardList.refresh();
-    });
-  }
-
-  void navigateToQuizSettingsPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return QuizSettingsPage(
-        repoId: repoInfo.repoId,
-      );
-    }));
-  }
-
-  void navigateToQuizPage(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return QuizPage(
-        repoInfo: repoInfo,
-        flashcardList: _flashcardList,
-      );
-    })).then((value) {
-      _flashcardList.refresh();
-    });
-  }
-
-  //ANCHOR Repo Page widget
+  //ANCHOR Repo page
   Widget repoPage() {
     return Builder(builder: (context) {
+      //ANCHOR Initailize
       initVariables(context);
+
       return Scaffold(
         appBar: AppBar(
           title: Text(repoInfo.title),
@@ -173,11 +178,7 @@ class RepoPage extends StatelessWidget {
 
             //ANCHOR Flashcard card list
             Expanded(
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (OverscrollIndicatorNotification overscroll) {
-                  overscroll.disallowGlow();
-                  return false;
-                },
+              child: NoOverscrollGlow(
                 child: SingleChildScrollView(
                   child: Consumer<FlashcardList>(
                       builder: (context, flashcardList, child) {
