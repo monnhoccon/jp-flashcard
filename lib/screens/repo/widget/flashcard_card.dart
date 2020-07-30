@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/flashcard_page.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
@@ -108,11 +108,11 @@ class FlashcardCard extends StatelessWidget {
 
   //ANCHOR Initialize variables
   FlashcardList _flashcardList;
-  DisplayingSettings _displayingSettings;
+  WordDisplayingSettings _displayingSettings;
   void initVariables(BuildContext context) {
     _flashcardList = Provider.of<FlashcardList>(context, listen: false);
     _displayingSettings =
-        Provider.of<DisplayingSettings>(context, listen: false);
+        Provider.of<WordDisplayingSettings>(context, listen: false);
   }
 
   @override

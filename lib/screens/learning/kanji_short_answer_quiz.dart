@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/learning/components/action_button.dart';
 import 'package:jp_flashcard/screens/learning/components/displayed_question.dart';
@@ -83,10 +83,10 @@ class KanjiShortAnswerQuiz extends StatelessWidget {
 
   //ANCHOR Initialize variables
   QuizManager _quizManager;
-  DisplayingSettings _displayingSettings;
+  WordDisplayingSettings _displayingSettings;
   void _initVariables(BuildContext context) {
     _quizManager = Provider.of<QuizManager>(context, listen: false);
-    _displayingSettings = Provider.of<DisplayingSettings>(context, listen: false);
+    _displayingSettings = Provider.of<WordDisplayingSettings>(context, listen: false);
     _displayingSettings.hasFurigana = false;
     _displayingSettings.furiganaLocked = true;
     return;

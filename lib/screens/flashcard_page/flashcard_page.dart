@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/displayed_flashcard.dart';
 import 'package:provider/provider.dart';
 
@@ -69,9 +69,9 @@ class _FlashcardPageState extends State<FlashcardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DisplayingSettings>(
+    return ChangeNotifierProvider<WordDisplayingSettings>(
       create: (context) {
-        return DisplayingSettings();
+        return WordDisplayingSettings();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -97,7 +97,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               },
             ),
             //ANCHOR Kanji toggle button
-            Consumer<DisplayingSettings>(
+            Consumer<WordDisplayingSettings>(
                 builder: (context, generalSettings, child) {
               return IconButton(
                 icon: generalSettings.hasKanji
@@ -109,7 +109,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               );
             }),
             //ANCHOR Furigana toggle button
-            Consumer<DisplayingSettings>(
+            Consumer<WordDisplayingSettings>(
                 builder: (context, generalSettings, child) {
               return IconButton(
                 icon: generalSettings.hasFurigana

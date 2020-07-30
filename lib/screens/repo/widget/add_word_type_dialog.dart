@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/components/tag_box.dart';
-import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/repo_manager.dart';
 
 class AddWordTypeDialog {
   List<TagBox> selectedWordTypeBoxList = [];
@@ -12,7 +12,7 @@ class AddWordTypeDialog {
 
   Future<void> updateWordTypeBoxList() async {
     List<TagBox> newWordTypeBoxList = [];
-    await DBManager.db.getWordTypeList().then((wordTypeList) {
+    await RepoManager.db.getWordTypeList().then((wordTypeList) {
       for (final wordType in wordTypeList) {
         bool selected = false;
         for (final selectedWordType in selectedWordTypeBoxList) {

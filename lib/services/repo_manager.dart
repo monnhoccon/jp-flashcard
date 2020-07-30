@@ -1,9 +1,10 @@
+import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DBManager {
+class RepoManager {
   Database _database;
-  static final DBManager db = DBManager();
+  static final RepoManager db = RepoManager();
   Future<Database> get database async {
     if (_database != null) return _database;
 
@@ -11,144 +12,185 @@ class DBManager {
     return _database;
   }
 
-  final String repos = 'repos';
-  final String tags = 'tags';
-  final String tagList = 'tagList';
-  final String wordTypeList = 'wordTypeList';
-  final String flashcardList = 'flashcardList';
-
   Future<Database> initDB() async {
     return await openDatabase(join(await getDatabasesPath(), 'test.db'),
         version: 1);
   }
 
-  //ANCHOR General
-  createTable(String name, Database db) async {
-    if (name == tags) {
-      db.execute('''
-      CREATE TABLE IF NOT EXISTS tags (
-        repoId INTEGER, tag TEXT
-      )
-      ''');
-    } else if (name == repos) {
-      db.execute('''
+  //ANCHOR Initialize tables
+  Future<void> _initRepoList() async {
+    final db = await database;
+    await db.execute(
+      '''
       CREATE TABLE IF NOT EXISTS repos (
         repoId INTEGER PRIMARY KEY, title TEXT, numTotal INTEGER, numMemorized INTEGER
       )
-      ''');
-    } else if (name == tagList) {
-      db.execute('''
-      CREATE TABLE IF NOT EXISTS tagList (
-        tag TEXT PRIMARY KEY
-      )
-      ''');
-    } else if (name == wordTypeList) {
-      db.execute('''
-      CREATE TABLE IF NOT EXISTS wordTypeList (
-        wordType NTEXT PRIMARY KEY
-      )
-      ''');
-    } else {}
+      ''',
+    );
+    return;
   }
 
-  //repos
-  //--------------------------------------------
+  Future<void> _initTagList() async {
+    final db = await database;
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS tagList (
+        tag NTEXT PRIMARY KEY
+      )
+      ''',
+    );
+    return;
+  }
+
+  Future<void> _initTagListOfRepo(int repoId) async {
+    final db = await database;
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS tagList$repoId (
+        tag NTEXT
+      )
+      ''',
+    );
+    return;
+  }
+
+  //ANCHOR Insert repo
   Future<void> insertRepo(String title, List<String> tagList) async {
     final db = await database;
-    createTable(repos, db);
-    int repoId = await db.rawInsert('''
+    await _initRepoList();
+
+    int repoId = await db.rawInsert(
+      '''
       INSERT INTO repos(
         title, numTotal, numMemorized
       ) VALUES (?, 0, 0)
-    ''', [title]);
+    ''',
+      [title],
+    );
 
-    createTable(tags, db);
+    await _initTagListOfRepo(repoId);
     for (final tag in tagList) {
       await insertTagIntoRepo(repoId, tag);
     }
   }
 
+  Future<void> updateTagListOfRepo(int repoId, List<String> tagList) async {
+    await deleteTable('tagList$repoId');
+    for (final tag in tagList) {
+      await insertTagIntoRepo(repoId, tag);
+    }
+    return;
+  }
+
+  Future<void> insertTagIntoRepo(int repoId, String tag) async {
+    final db = await database;
+    await _initTagListOfRepo(repoId);
+    await db.rawInsert(
+      '''
+      INSERT INTO tagList$repoId(
+        tag
+      ) VALUES (?)
+    ''',
+      [tag],
+    );
+  }
+
+  //ANCHOR Delete repo
   Future<void> deleteRepo(int repoId) async {
     final db = await database;
-    createTable(repos, db);
-    await db.rawDelete('''
+    await _initRepoList();
+    await db.rawDelete(
+      '''
       DELETE FROM repos WHERE repoId = ?
-    ''', [repoId]);
+    ''',
+      [repoId],
+    );
+    await deleteTable('tagList$repoId');
+    return;
   }
 
-  Future<dynamic> getRepoList() async {
+  Future<dynamic> getRepoInfoList() async {
     final db = await database;
-    createTable(repos, db);
-    return await db.query(repos);
+    await _initRepoList();
+    var resultRepoList = await db.query('repos');
+    List<RepoInfo> repoInfoList = [];
+    for (final repo in resultRepoList) {
+      List<String> tagList = [];
+      await getTagListOfRepo(repo['repoId']).then(
+        (resultTagList) {
+          for (final tag in resultTagList) {
+            tagList.add(tag['tag']);
+          }
+          tagList.sort();
+        },
+      );
+      repoInfoList.add(
+        RepoInfo(
+          title: repo['title'],
+          repoId: repo['repoId'],
+          numMemorized: repo['numMemorized'],
+          numTotal: repo['numTotal'],
+          tagList: tagList,
+        ),
+      );
+    }
+    return repoInfoList;
   }
 
-  Future<dynamic> renameRepo(String newTitle, int repoId) async {
+  Future<void> updateRepoTitle(String newTitle, int repoId) async {
     final db = await database;
-    createTable(repos, db);
-
-    return await db.rawUpdate('''
+    await _initRepoList();
+    await db.rawUpdate(
+      '''
       UPDATE repos
       SET title = ?
       WHERE repoId = ?;
-    ''', [newTitle, repoId]);
+    ''',
+      [newTitle, repoId],
+    );
+    return;
   }
 
   Future<dynamic> updateNumTotalOfRepo(
       int repoId, int numTotal, int numCompleted) async {
     final db = await database;
-    createTable(repos, db);
-
-    return await db.rawUpdate('''
+    await _initRepoList();
+    return await db.rawUpdate(
+      '''
       UPDATE repos
       SET numTotal = ?, numMemorized = ?
       WHERE repoId = ?;
-    ''', [numTotal, numCompleted, repoId]);
+    ''',
+      [numTotal, numCompleted, repoId],
+    );
   }
   //--------------------------------------------
-
-  void deleteAllFlashcard(int repoId) async {
-    deleteTable('flashcardList$repoId');
-    deleteTable('wordList$repoId');
-    deleteTable('definitionList$repoId');
-    deleteTable('wordTypeList$repoId');
-  }
 
   //tags
   //--------------------------------------------
-  Future<void> insertTagIntoRepo(int repoId, String tag) async {
+
+  Future<void> deleteTagFromRepo(int repoId, String tag) async {
     final db = await database;
+    await _initTagListOfRepo(repoId);
 
-    bool isExist = await findTagOfRepo(tag, repoId);
-    if (!isExist) {
-      await db.rawInsert('''
-      INSERT INTO tags(
-        repoId, tag
-      ) VALUES (?, ?)
-    ''', [repoId, tag]);
-    }
-  }
+    await db.rawDelete(
+      '''
+        DELETE FROM tagList$repoId WHERE  tag = ?
+      ''',
+      [tag],
+    );
 
-  Future<void> deleteTagFromRepo(int repoId, String tag, bool deleteAll) async {
-    final db = await database;
-    createTable(tags, db);
-
-    if (deleteAll) {
-      await db.rawDelete('''
-        DELETE FROM tags WHERE repoId = ?
-      ''', [repoId]);
-    } else {
-      await db.rawDelete('''
-        DELETE FROM tags WHERE repoId = ? AND tag = ?
-      ''', [repoId, tag]);
-    }
+    return;
   }
 
   Future<dynamic> getTagListOfRepo(int repoId) async {
     final db = await database;
-    createTable(tags, db);
-    return await db.rawQuery('''
-      SELECT tag FROM tags WHERE repoId = ?
-    ''', [repoId]);
+    await _initTagListOfRepo(repoId);
+    return await db.rawQuery(
+      '''
+      SELECT tag FROM tagList$repoId
+    ''',
+    );
   }
   //--------------------------------------------
 
@@ -156,40 +198,40 @@ class DBManager {
   //--------------------------------------------
   Future<void> insertTagIntoList(String tag) async {
     final db = await database;
-    createTable(tagList, db);
-    var duplicated = await db.rawQuery('''
+    await _initTagList();
+    var duplicated = await db.rawQuery(
+      '''
       SELECT * FROM tagList where tag = ?
-    ''', [tag]);
+    ''',
+      [tag],
+    );
     if (duplicated.isEmpty) {
-      await db.rawInsert('''
+      await db.rawInsert(
+        '''
       INSERT INTO tagList(
         tag
       ) VALUES (?)
-    ''', [tag]);
+    ''',
+        [tag],
+      );
     }
-  }
-
-  Future<bool> findTagOfRepo(String tag, int repoId) async {
-    final db = await database;
-    createTable(tags, db);
-    var duplicated = await db.rawQuery('''
-      SELECT * FROM tags where tag = ? AND repoId = ?
-    ''', [tag, repoId]);
-    return duplicated.isNotEmpty;
   }
 
   Future<bool> duplicated(String tag) async {
     final db = await database;
-    createTable(tagList, db);
-    var duplicated = await db.rawQuery('''
+    await _initTagList();
+    var duplicated = await db.rawQuery(
+      '''
       SELECT * FROM tagList where tag = ?
-    ''', [tag]);
+    ''',
+      [tag],
+    );
     return duplicated.isNotEmpty;
   }
 
   Future<void> deleteTagFromList(String tag) async {
     final db = await database;
-    createTable(tagList, db);
+    await _initTagList();
     await db.rawDelete('''
       DELETE FROM tagList WHERE tag = ?
     ''', [tag]);
@@ -197,15 +239,8 @@ class DBManager {
 
   Future<dynamic> getTagList() async {
     final db = await database;
-    createTable(tagList, db);
-    var data = await db.query(tagList);
-    return data;
-  }
-
-  Future<dynamic> getTags() async {
-    final db = await database;
-    createTable(tagList, db);
-    var data = await db.query(tags);
+    await _initTagList();
+    var data = await db.query('tagList');
     return data;
   }
   //--------------------------------------------
@@ -229,7 +264,13 @@ class DBManager {
       '其它',
     ];
     final db = await database;
-    createTable(wordTypeList, db);
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS wordTypeList (
+        wordType NTEXT PRIMARY KEY
+      )
+      ''',
+    );
     for (final wordType in wordTypes) {
       var duplicated = await db.rawQuery('''
         SELECT * FROM wordTypeList WHERE wordType = ?
@@ -262,7 +303,7 @@ class DBManager {
   Future<dynamic> getWordTypeList() async {
     final db = await database;
     await initWordTypeList();
-    var data = await db.query(wordTypeList);
+    var data = await db.query('wordTypeList');
     return data;
   }
   //--------------------------------------------

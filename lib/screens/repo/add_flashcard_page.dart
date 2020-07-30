@@ -6,7 +6,7 @@ import 'package:jp_flashcard/screens/repo/widget/add_word_type_dialog.dart';
 import 'package:jp_flashcard/screens/repo/widget/definition_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/word_input.dart';
-import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/repo_manager.dart';
 import 'package:jp_flashcard/services/flashcard_manager.dart';
 import 'package:jp_flashcard/services/jp_letter.dart';
 

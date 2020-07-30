@@ -4,16 +4,12 @@ import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class QuizSettingsPage extends StatefulWidget {
-  int repoId;
-  @override
-  QuizSettingsPage({this.repoId});
-  _QuizSettingsPageState createState() => _QuizSettingsPageState();
-}
+class QuizSettingsPage extends StatelessWidget {
+  //ANCHOR Constructor
+  QuizSettingsPage();
 
-class _QuizSettingsPageState extends State<QuizSettingsPage> {
   @override
-  //ANCHOR Build
+  //ANCHOR Builder
   Widget build(BuildContext context) {
     //ANCHOR Providers
     return ChangeNotifierProvider<QuizSettings>(
@@ -21,7 +17,7 @@ class _QuizSettingsPageState extends State<QuizSettingsPage> {
         return QuizSettings();
       },
 
-      //ANCHOR Quiz settings page widget
+      //ANCHOR Quiz settings page
       child: Scaffold(
         appBar: AppBar(
           title: Text(DisplayedString.zhtw['quiz settings'] ?? ''),
@@ -48,6 +44,12 @@ class _QuizSettingsPageState extends State<QuizSettingsPage> {
                     onChanged: (value) {
                       quizSettings.toggleAnswerAudio();
                     },
+                  ),
+                  Divider(
+                    thickness: 1,
+                    indent: 17,
+                    endIndent: 17,
+                    color: Colors.grey[600],
                   ),
                   CheckboxListTile(
                     title: Text(DisplayedString

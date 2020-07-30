@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/services/repo_manager.dart';
 
 class RepoInfo extends ChangeNotifier {
   String title;
@@ -14,6 +15,25 @@ class RepoInfo extends ChangeNotifier {
     this.numMemorized,
     this.repoId,
   });
+
+  Future<void> updateTagList(List<String> newTagList) async {
+    await RepoManager.db.updateTagListOfRepo(repoId, newTagList);
+    tagList = newTagList;
+    notifyListeners();
+    return;
+  }
+
+  Future<void> updateRepoTitle(String newTitle) async {
+    await RepoManager.db.updateRepoTitle(newTitle, repoId);
+    title = newTitle;
+    notifyListeners();
+    return;
+  }
+
+  Future<void> deleteRepo() async {
+    await RepoManager.db.deleteRepo(repoId);
+    return;
+  }
 
   RepoInfo.fromRepoInfo(RepoInfo repoInfo) {
     repoId = repoInfo.repoId;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/screens/main_menu/components/add_repo_dialog.dart';
 import 'package:jp_flashcard/screens/repo_menu/repo_menu.dart';
 import 'package:jp_flashcard/screens/profile/profile.dart';
-import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/repo_manager.dart';
 import 'package:provider/provider.dart';
 
 class MainMenu extends StatefulWidget {
@@ -38,7 +38,7 @@ class _MainMenuState extends State<MainMenu> {
             setState(() {
               if (repoInfo != null) {
                 print(repoInfo.tagList);
-                DBManager.db.insertRepo(repoInfo.title, repoInfo.tagList);
+                RepoManager.db.insertRepo(repoInfo.title, repoInfo.tagList);
               }
             });
           });
@@ -51,9 +51,9 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DisplayingSettings>(
+    return ChangeNotifierProvider<WordDisplayingSettings>(
       create: (BuildContext context) {
-        return DisplayingSettings();
+        return WordDisplayingSettings();
       },
       child: Scaffold(
           resizeToAvoidBottomPadding: false,

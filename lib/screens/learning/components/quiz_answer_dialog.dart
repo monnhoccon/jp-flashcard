@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:jp_flashcard/services/text_to_speech.dart';
@@ -115,9 +115,9 @@ class QuizAnswerDialog {
         context: context,
         builder: (context) {
           //ANCHOR Providers
-          return ChangeNotifierProvider<DisplayingSettings>(
+          return ChangeNotifierProvider<WordDisplayingSettings>(
             create: (context) {
-              return DisplayingSettings();
+              return WordDisplayingSettings();
             },
 
             //ANCHOR Answer correct dialog widget

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/components/furigana_toggle_button.dart';
+import 'package:jp_flashcard/components/kanji_toggle_button.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/quiz_settings_page/quiz_settings_page.dart';
 import 'package:jp_flashcard/services/quiz_manager.dart';
@@ -12,9 +14,7 @@ class QuizPage extends StatelessWidget {
 
   Future<void> navigateToQuizSettingsPage(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return QuizSettingsPage(
-        repoId: repoInfo.repoId,
-      );
+      return QuizSettingsPage();
     })).then((value) {
       Provider.of<QuizManager>(context, listen: false).refreshQuizSettings();
     });
@@ -26,9 +26,9 @@ class QuizPage extends StatelessWidget {
     return MultiProvider(
       //ANCHOR Providers
       providers: [
-        ChangeNotifierProvider<DisplayingSettings>(
+        ChangeNotifierProvider<WordDisplayingSettings>(
           create: (context) {
-            return DisplayingSettings();
+            return WordDisplayingSettings();
           },
         ),
         ChangeNotifierProvider<QuizManager>(
@@ -48,6 +48,12 @@ class QuizPage extends StatelessWidget {
             appBar: AppBar(
               //ANCHOR Setting buttons
               actions: <Widget>[
+                //ANCHOR Kanji toggle button
+                KanjiToggleButton(),
+
+                //ANCHOR Furigana toggle button
+                FuriganaToggleButton(),
+
                 //ANCHOR Quiz settings button
                 IconButton(
                   icon: Icon(Icons.tune),
@@ -55,32 +61,6 @@ class QuizPage extends StatelessWidget {
                     navigateToQuizSettingsPage(context);
                   },
                 ),
-
-                //ANCHOR Kanji toggle button
-                Consumer<DisplayingSettings>(
-                    builder: (context, generalSettings, child) {
-                  return IconButton(
-                    icon: generalSettings.hasKanji
-                        ? Icon(Icons.visibility)
-                        : Icon(Icons.visibility_off),
-                    onPressed: () {
-                      generalSettings.toggleKanji();
-                    },
-                  );
-                }),
-
-                //ANCHOR Furigana toggle button
-                Consumer<DisplayingSettings>(
-                    builder: (context, generalSettings, child) {
-                  return IconButton(
-                    icon: generalSettings.hasFurigana
-                        ? Icon(Icons.speaker_notes)
-                        : Icon(Icons.speaker_notes_off),
-                    onPressed: () {
-                      generalSettings.toggleFurigana();
-                    },
-                  );
-                })
               ],
             ),
 

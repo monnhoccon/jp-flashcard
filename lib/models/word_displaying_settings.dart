@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DisplayingSettings with ChangeNotifier {
+class WordDisplayingSettings with ChangeNotifier {
   bool hasFurigana = true;
   bool hasKanji = true;
-  bool displayTag = false;
   bool furiganaLocked = false;
   var persistData;
 
@@ -12,7 +11,6 @@ class DisplayingSettings with ChangeNotifier {
     persistData = await SharedPreferences.getInstance();
     hasFurigana = persistData.getBool('hasFurigana') ?? true;
     hasKanji = persistData.getBool('hasKanji') ?? true;
-    displayTag = persistData.getBool('displayTag') ?? false;
 
     if (!hasKanji) {
       hasFurigana = false;
@@ -20,7 +18,7 @@ class DisplayingSettings with ChangeNotifier {
     notifyListeners();
   }
 
-  DisplayingSettings() {
+  WordDisplayingSettings() {
     refresh();
   }
   

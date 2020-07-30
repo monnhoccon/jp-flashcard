@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/components/tag_box.dart';
-import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/repo_manager.dart';
 
 class TagFilter {
   //Variables
@@ -51,7 +51,7 @@ class TagFilter {
 
   Future<void> _updateTagBoxList() async {
     List<TagBox> newTagBoxList = [];
-    await DBManager.db.getTagList().then((tags) {
+    await RepoManager.db.getTagList().then((tags) {
       for (final tag in tags) {
         bool selected = false;
         for (final selectedTag in filterTagList) {

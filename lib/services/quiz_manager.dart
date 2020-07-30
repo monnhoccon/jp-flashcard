@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/flashcard_list.dart';
 import 'package:jp_flashcard/models/quiz_settings.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -8,7 +8,7 @@ class DisplayedLetter extends StatelessWidget {
   //ANCHOR Variables
   final String letter;
   final String furigana;
-  DisplayingSettings _displayingSettings;
+  WordDisplayingSettings _displayingSettings;
   DisplayedWordSize _displayedWordSize;
 
   //ANCHOR Constructor
@@ -19,7 +19,7 @@ class DisplayedLetter extends StatelessWidget {
 
   //ANCHOR Initialize variables
   void initVariables(BuildContext context) {
-    _displayingSettings = Provider.of<DisplayingSettings>(context);
+    _displayingSettings = Provider.of<WordDisplayingSettings>(context);
     _displayedWordSize = Provider.of<DisplayedWordSize>(context);
   }
 

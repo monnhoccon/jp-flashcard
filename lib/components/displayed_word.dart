@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/components/displayed_letter.dart';
-import 'package:jp_flashcard/models/displaying_settings.dart';
+import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -52,7 +52,7 @@ class DisplayedWord extends StatelessWidget {
   //ANCHOR Initialize variables
   bool _hasKanji;
   void initVariables(BuildContext context) {
-    _hasKanji = Provider.of<DisplayingSettings>(context).hasKanji;
+    _hasKanji = Provider.of<WordDisplayingSettings>(context).hasKanji;
   }
 
   @override

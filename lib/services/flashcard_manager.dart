@@ -144,31 +144,6 @@ class FlashcardManager {
   }
 
   //ANCHOR Get flashcard info list
-  Future<dynamic> _getFlashcardList() async {
-    final db = await database;
-    await _initAllTables();
-    var flashcard = await db.rawQuery('''
-      SELECT * FROM flashcardList$repoId
-    ''');
-    var definition = await db.rawQuery('''
-      SELECT * FROM definitionList$repoId
-    ''');
-    var kanji = await db.rawQuery('''
-      SELECT * FROM kanjiList$repoId
-    ''');
-    var wordType = await db.rawQuery('''
-      SELECT * FROM wordTypeList$repoId
-    ''');
-
-    Map data = {
-      'flashcard': flashcard,
-      'definition': definition,
-      'kanji': kanji,
-      'wordType': wordType
-    };
-    return data;
-  }
-
   Future<dynamic> getFlashcardInfoList() async {
     final db = await database;
     await _initAllTables();
@@ -223,7 +198,7 @@ class FlashcardManager {
 
       flashcardInfoList.add(info);
     }
-    //TODO Update repo info
+
     return flashcardInfoList;
   }
 

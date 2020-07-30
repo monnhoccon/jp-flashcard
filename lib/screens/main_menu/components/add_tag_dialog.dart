@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/components/tag_box.dart';
-import 'package:jp_flashcard/services/database.dart';
+import 'package:jp_flashcard/services/repo_manager.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
 
 class AddTagDialog {
@@ -20,7 +20,7 @@ class AddTagDialog {
 
   //ANCHOR Functions
   Future<bool> _tagDuplicated(String tag) async {
-    return await DBManager.db.duplicated(tag);
+    return await RepoManager.db.duplicated(tag);
   }
 
   void _applySelection() {
@@ -38,7 +38,7 @@ class AddTagDialog {
 
   Future<bool> _initTagBoxList() async {
     _displayedTagBoxList.clear();
-    await DBManager.db.getTagList().then((tagList) {
+    await RepoManager.db.getTagList().then((tagList) {
       for (final tag in tagList) {
         bool selected = false;
         for (final selectedTag in selectedTagBoxList) {
@@ -187,7 +187,7 @@ class AddTagDialog {
                                   });
 
                                   //Validation pass
-                                  await DBManager.db.insertTagIntoList(newTag);
+                                  await RepoManager.db.insertTagIntoList(newTag);
 
                                   setState(() {
                                     _updateTagBoxList(newTag);

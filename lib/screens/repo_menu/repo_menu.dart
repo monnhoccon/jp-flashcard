@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screens/repo_menu/repo_card.dart';
+import 'package:jp_flashcard/components/no_overscroll_glow.dart';
+import 'package:jp_flashcard/models/repo_displaying_settings.dart';
+import 'package:jp_flashcard/models/repo_list.dart';
 import 'package:jp_flashcard/screens/repo_menu/sort_filter.dart';
-import 'package:jp_flashcard/screens/repo_menu/tag_filter.dart';
-import 'package:jp_flashcard/services/database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class RepoMenu extends StatefulWidget {
   @override
@@ -19,157 +18,78 @@ class _RepoMenuState extends State<RepoMenu> {
     'decreasing': '標題: Z 到 A',
   };
 
-  final TextStyle h2TextStyle = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-  );
-
-  bool displayTag = true;
   SortBy sortBy = SortBy.increasing;
-  Icon displayTagButtonIcon = Icon(Icons.label_outline);
-
-  List<RepoCard> repoList = [];
-  Future<bool> initRepoList() async {
-    repoList.clear();
-    await getPersistData();
-    await DBManager.db.getRepoList().then((repoInfoList) async {
-      for (final repoInfo in repoInfoList) {
-        String title = repoInfo['title'];
-        int id = repoInfo['repoId'];
-        int numMemorized = repoInfo['numMemorized'];
-        int numTotal = repoInfo['numTotal'];
-
-        bool filterPassed = false;
-        if (filterTagList.isEmpty) {
-          filterPassed = true;
-        }
-
-        //Get tag list of the repo and validate
-        List<String> tagList = [];
-        await DBManager.db.getTagListOfRepo(id).then((resultTagList) {
-          for (final tag in resultTagList) {
-            tagList.add(tag['tag']);
-            for (final filterTag in filterTagList) {
-              if (filterTag == tag['tag'] || filterPassed) {
-                filterPassed = true;
-                break;
-              }
-            }
-          }
-          tagList.sort();
-        });
-
-        if (!filterPassed) {
-          continue;
-        }
-
-        RepoInfo newRepoInfo = RepoInfo(
-          title: title,
-          repoId: id,
-          numMemorized: numMemorized,
-          numTotal: numTotal,
-          tagList: tagList,
-        );
-
-        repoList.add(RepoCard(
-          info: newRepoInfo,
-          displayTag: displayTag,
-        ));
-
-        if (sortBy == SortBy.increasing) {
-          repoList.sort((a, b) {
-            return a.info.title.compareTo(b.info.title);
-          });
-        } else if (sortBy == SortBy.decreasing) {
-          repoList.sort((a, b) {
-            return b.info.title.compareTo(a.info.title);
-          });
-        }
-      }
-    });
-    return true;
-  }
-
-  List<String> filterTagList = [];
-
-  var persistData;
-  Future<void> getPersistData() async {
-    persistData = await SharedPreferences.getInstance();
-
-    displayTag = persistData.getBool('displayTag') ?? false;
-    if (displayTag) displayTagButtonIcon = Icon(Icons.label);
-
-    String sortByString = persistData.getString('sortBy') ?? 'increasing';
-    if (sortByString == 'increasing') {
-      sortBy = SortBy.increasing;
-    } else if (sortByString == 'decreasing') {
-      sortBy = SortBy.decreasing;
-    }
-    filterTagList = persistData.getStringList('filterTagList') ?? [];
-  }
 
   @override
   Widget build(BuildContext context) {
-    getPersistData();
-    return FutureBuilder<bool>(
-        future: initRepoList(),
-        builder: (context, snapshot) {
-          return Container(
-              child: Column(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<RepoDisplayingSettings>(
+          create: (context) {
+            return RepoDisplayingSettings();
+          },
+        ),
+        ChangeNotifierProvider<RepoList>(
+          create: (context) {
+            print('hi');
+            return RepoList();
+          },
+        ),
+      ],
+      child: Builder(
+        builder: (context) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               AppBar(
                 title: Text(_displayedStringZHTW['repository']),
                 actions: <Widget>[
+                  Consumer<RepoDisplayingSettings>(
+                    builder: (context, repoDisplayingSettings, child) {
+                      return IconButton(
+                        icon: repoDisplayingSettings.displayTag
+                            ? Icon(Icons.label)
+                            : Icon(Icons.label_outline),
+                        onPressed: () {
+                          repoDisplayingSettings.toggleTag();
+                        },
+                      );
+                    },
+                  ),
+                  /*
                   IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() async {
-                          await DBManager.db.deleteTable('tagList');
-                          await DBManager.db.deleteTable('tags');
-                        });
-                      }),
-                  IconButton(
-                      icon: displayTagButtonIcon,
-                      onPressed: () {
-                        setState(() {
-                          if (!displayTag) {
-                            displayTagButtonIcon = Icon(Icons.label);
-
-                            displayTag = true;
-                          } else {
-                            displayTagButtonIcon = Icon(Icons.label_outline);
-                            displayTag = false;
-                          }
-                          persistData.setBool('displayTag', displayTag);
-                        });
-                      }),
-                  IconButton(
-                      icon: Icon(Icons.filter_list),
-                      onPressed: () async {
-                        TagFilter tagFilter =
-                            TagFilter(filterTagList: filterTagList);
-                        await tagFilter.tagFilterDialog(context);
-                        setState(() {
+                    icon: Icon(Icons.filter_list),
+                    onPressed: () async {
+                      TagFilter tagFilter =
+                          TagFilter(filterTagList: filterTagList);
+                      await tagFilter.tagFilterDialog(context);
+                      setState(
+                        () {
                           filterTagList = tagFilter.filterTagList;
                           persistData.setStringList(
                               'filterTagList', filterTagList);
-                        });
-                      }),
+                        },
+                      );
+                    },
+                  ),
+                  */
+                  /*
                   PopupMenuButton<String>(
                     offset: Offset(0, 250),
                     tooltip: _displayedStringZHTW['sort by'] ?? '',
                     icon: Icon(Icons.sort),
                     onSelected: (String result) {
-                      setState(() {
-                        if (result == 'increasing') {
-                          sortBy = SortBy.increasing;
-                          persistData.setString('sortBy', 'increasing');
-                        } else if (result == 'decreasing') {
-                          sortBy = SortBy.decreasing;
-                          persistData.setString('sortBy', 'decreasing');
-                        }
-                      });
+                      setState(
+                        () {
+                          if (result == 'increasing') {
+                            sortBy = SortBy.increasing;
+                            persistData.setString('sortBy', 'increasing');
+                          } else if (result == 'decreasing') {
+                            sortBy = SortBy.decreasing;
+                            persistData.setString('sortBy', 'decreasing');
+                          }
+                        },
+                      );
                     },
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
@@ -205,22 +125,33 @@ class _RepoMenuState extends State<RepoMenu> {
                       ),
                     ],
                   )
+                  */
+                  Consumer<RepoList>(builder: (context, repoList, child) {
+                    return FlatButton(
+                      onPressed: () {
+                        repoList.refresh();
+                      },
+                      child: Icon(Icons.ac_unit),
+                    );
+                  }),
                 ],
               ),
-              Expanded(
-                  child: NotificationListener<OverscrollIndicatorNotification>(
-                      onNotification:
-                          (OverscrollIndicatorNotification overscroll) {
-                        overscroll.disallowGlow();
-                        return false;
+              Consumer<RepoList>(builder: (context, repoList, child) {
+                return Expanded(
+                  child: NoOverscrollGlow(
+                    child: ListView.builder(
+                      itemCount: repoList.repoCardList.length,
+                      itemBuilder: (context, index) {
+                        return repoList.repoCardList[index];
                       },
-                      child: ListView.builder(
-                          itemCount: repoList.length,
-                          itemBuilder: (context, index) {
-                            return repoList[index];
-                          }))),
+                    ),
+                  ),
+                );
+              }),
             ],
-          ));
-        });
+          );
+        },
+      ),
+    );
   }
 }
