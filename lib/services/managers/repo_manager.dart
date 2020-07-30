@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/repo_menu_page/components/repo_card.dart';
-import 'package:jp_flashcard/screens/repo_menu_page/tag_filter.dart';
+import 'package:jp_flashcard/dialogs/tag_filter_dialog.dart';
 import 'package:jp_flashcard/services/databases/repo_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum SortBy { increasing, decreasing }
+enum SortBy { increasing, decreasing, original }
 
 class RepoManager with ChangeNotifier {
   List<RepoInfo> _repoInfoList = [];
@@ -18,11 +18,13 @@ class RepoManager with ChangeNotifier {
   Future<void> getPersistData() async {
     persistData = await SharedPreferences.getInstance();
 
-    String sortByString = persistData.getString('sortBy') ?? 'increasing';
+    String sortByString = persistData.getString('sortBy') ?? 'original';
     if (sortByString == 'increasing') {
       sortBy = SortBy.increasing;
     } else if (sortByString == 'decreasing') {
       sortBy = SortBy.decreasing;
+    } else if (sortByString == 'original') {
+      sortBy = SortBy.original;
     }
     _filterTagList = persistData.getStringList('filterTagList') ?? [];
   }
@@ -75,19 +77,13 @@ class RepoManager with ChangeNotifier {
   }
 
   void setSortBy(String result) {
-    if (result == 'increasing') {
-      sortBy = SortBy.increasing;
-      persistData.setString('sortBy', 'increasing');
-    } else if (result == 'decreasing') {
-      sortBy = SortBy.decreasing;
-      persistData.setString('sortBy', 'decreasing');
-    }
+    persistData.setString('sortBy', result);
     refresh();
     return;
   }
 
   void setFilterTagList(BuildContext context) {
-    TagFilter.dialog(_filterTagList).show(context).then((value) {
+    TagFilterDialog.dialog(_filterTagList).show(context).then((value) {
       if (value != null) {
         persistData.setStringList('filterTagList', value);
       }

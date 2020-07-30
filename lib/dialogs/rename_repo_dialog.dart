@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/components/input_field.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
 
@@ -14,6 +15,12 @@ class RenameRepoDialog {
     return RenameRepoDialog(repoInfo: repoInfo);
   }
 
+  //ANCHOR Confirm
+  void confirm(BuildContext context) async {
+    await repoInfo.updateRepoTitle(_inputController.text.toString());
+    Navigator.of(context).pop();
+  }
+
   //ANCHOR Private variables
   GlobalKey<FormState> _validationKey = GlobalKey<FormState>();
   TextEditingController _inputController = TextEditingController();
@@ -23,55 +30,44 @@ class RenameRepoDialog {
     return showDialog(
       context: context,
       child: AlertDialog(
-        title: Text(DisplayedString.zhtw['rename']),
-        content: Form(
-          key: _validationKey,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(),
-            child: TextFormField(
-              decoration: InputDecoration(
-                errorStyle: TextStyle(fontSize: 0, height: 0),
-                contentPadding: EdgeInsets.fromLTRB(15, 0, 10, 0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(18),
-                  borderSide:
-                      BorderSide(width: 1.5, color: Colors.lightBlue[800]),
-                ),
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(18),
-                    borderSide:
-                        BorderSide(width: 1.5, color: Colors.lightBlue[800])),
-              ),
-              controller: _inputController,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return '';
-                }
-                return null;
-              },
-            ),
-          ),
+        //ANCHOR Title
+        title: Text(
+          DisplayedString.zhtw['rename'] ?? '',
+          style: TextStyle(fontSize: 25, color: Colors.black),
         ),
-        contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+
+        //ANCHOR Content
+        contentPadding: EdgeInsets.fromLTRB(24, 0, 24, 5),
+        content: 
+            InputField(
+          displayedString: null,
+          inputController: _inputController,
+          validationKey: _validationKey,
+        ),
+
+        //ANCHOR Action buttons
         actions: <Widget>[
+          //ANCHOR Cancel button
           FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(DisplayedString.zhtw['cancel'] ?? ''),
+            child: Text(
+              DisplayedString.zhtw['cancel'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
+
+          //ANCHOR Confirm button
           FlatButton(
             onPressed: () {
-              if (_validationKey.currentState.validate()) {
-                repoInfo
-                    .updateRepoTitle(_inputController.text.toString())
-                    .then((value) {
-                  Navigator.of(context).pop();
-                });
-              }
+              confirm(context);
             },
-            child: Text(DisplayedString.zhtw['confirm'] ?? ''),
-          )
+            child: Text(
+              DisplayedString.zhtw['confirm'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
         ],
       ),
     );

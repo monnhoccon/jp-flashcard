@@ -4,6 +4,7 @@ import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/repo_page/edit_flashcard_page.dart';
 import 'package:jp_flashcard/services/databases/flashcard_database.dart';
+import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:jp_flashcard/services/text_to_speech.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 
@@ -54,30 +55,50 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
     'confirm': '確認',
   };
 
-  deleteAlertDialog(BuildContext context) {
+  //ANCHOR Delete flashcard dialog
+  Future<dynamic> deleteAlertDialog(BuildContext context) {
     return showDialog(
-        context: context,
-        child: AlertDialog(
-          title:
-              Text(_displayedStringZHTW['delete flashcard alert title'] ?? ''),
-          content: Text(
-              _displayedStringZHTW['delete flashcard alert content'] ?? ''),
-          contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 10),
-          actions: <Widget>[
-            FlatButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(_displayedStringZHTW['cancel'] ?? '')),
-            FlatButton(
-                onPressed: () {
-                  FlashcardDatabase.db(widget.repoId)
+      context: context,
+      child: AlertDialog(
+        //ANCHOR Title
+        title: Text(
+          DisplayedString.zhtw['delete flashcard alert title'] ?? '',
+          style: TextStyle(fontSize: 25, color: Colors.black),
+        ),
+
+        //ANCHOR Content
+        content:
+            Text(DisplayedString.zhtw['delete flashcard alert content'] ?? ''),
+        contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 10),
+
+        //ANCHOR Action buttons
+        actions: <Widget>[
+          //ANCHOR Cancel button
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(
+              DisplayedString.zhtw['cancel'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+
+          //ANCHOR Confirm button
+          FlatButton(
+            onPressed: () {
+              FlashcardDatabase.db(widget.repoId)
                       .deleteFlashcard(widget.flashcardInfo.flashcardId);
                   Navigator.of(context).pop(true);
-                },
-                child: Text(_displayedStringZHTW['confirm'] ?? ''))
-          ],
-        ));
+            },
+            child: Text(
+              DisplayedString.zhtw['confirm'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   List<Widget> displayedDefinitionList = [];

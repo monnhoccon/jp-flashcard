@@ -55,16 +55,31 @@ class FlashcardCard extends StatelessWidget {
     return showDialog(
       context: context,
       child: AlertDialog(
-        title: Text(DisplayedString.zhtw['delete flashcard alert title'] ?? ''),
+        //ANCHOR Title
+        title: Text(
+          DisplayedString.zhtw['delete flashcard alert title'] ?? '',
+          style: TextStyle(fontSize: 25, color: Colors.black),
+        ),
+
+        //ANCHOR Content
         content:
             Text(DisplayedString.zhtw['delete flashcard alert content'] ?? ''),
         contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 10),
+
+        //ANCHOR Action buttons
         actions: <Widget>[
+          //ANCHOR Cancel button
           FlatButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(DisplayedString.zhtw['cancel'] ?? '')),
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(
+              DisplayedString.zhtw['cancel'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+
+          //ANCHOR Confirm button
           FlatButton(
             onPressed: () {
               Navigator.of(context).pop(true);
@@ -72,7 +87,10 @@ class FlashcardCard extends StatelessWidget {
                   .deleteFlashcard(flashcardInfo.flashcardId);
               _flashcardList.refresh();
             },
-            child: Text(DisplayedString.zhtw['confirm'] ?? ''),
+            child: Text(
+              DisplayedString.zhtw['confirm'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           )
         ],
       ),

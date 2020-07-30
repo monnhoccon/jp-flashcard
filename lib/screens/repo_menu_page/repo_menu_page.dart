@@ -72,45 +72,57 @@ class RepoMenuPage extends StatelessWidget {
                   onSelected: (String result) {
                     repoManager.setSortBy(result);
                   },
-                  itemBuilder: (BuildContext context) =>
-                      <PopupMenuEntry<String>>[
-                    PopupMenuItem<String>(
-                      value: 'title',
-                      enabled: false,
-                      child: Text(
-                        DisplayedString.zhtw['sort by'] ?? '',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                  itemBuilder: (BuildContext context) {
+                    return <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'title',
+                        enabled: false,
+                        child: Text(
+                          DisplayedString.zhtw['sort by'] ?? '',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    PopupMenuDivider(
-                      height: 0,
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'increasing',
-                      child: Text(
-                        DisplayedString.zhtw['increasing'] ?? '',
-                        style: TextStyle(
-                          color: repoManager.sortBy == SortBy.increasing
-                              ? Theme.of(context).primaryColor
-                              : Colors.black,
+                      PopupMenuDivider(
+                        height: 0,
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'increasing',
+                        child: Text(
+                          DisplayedString.zhtw['increasing'] ?? '',
+                          style: TextStyle(
+                            color: repoManager.sortBy == SortBy.increasing
+                                ? Theme.of(context).primaryColor
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                    PopupMenuItem<String>(
-                      value: 'decreasing',
-                      child: Text(
-                        DisplayedString.zhtw['decreasing'] ?? '',
-                        style: TextStyle(
-                          color: repoManager.sortBy == SortBy.decreasing
-                              ? Theme.of(context).primaryColor
-                              : Colors.black,
+                      PopupMenuItem<String>(
+                        value: 'decreasing',
+                        child: Text(
+                          DisplayedString.zhtw['decreasing'] ?? '',
+                          style: TextStyle(
+                            color: repoManager.sortBy == SortBy.decreasing
+                                ? Theme.of(context).primaryColor
+                                : Colors.black,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                      PopupMenuItem<String>(
+                        value: 'original',
+                        child: Text(
+                          DisplayedString.zhtw['original'] ?? '',
+                          style: TextStyle(
+                            color: repoManager.sortBy == SortBy.original
+                                ? Theme.of(context).primaryColor
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ];
+                  },
                 ),
               ],
             ),

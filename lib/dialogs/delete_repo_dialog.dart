@@ -14,27 +14,49 @@ class DeleteRepoDialog {
     return DeleteRepoDialog(repoInfo: repoInfo);
   }
 
+  //ANCHOR Confirm
+  void confirm(BuildContext context) async {
+    Navigator.of(context).pop();
+    await repoInfo.deleteRepo();
+  }
+
   //ANCHOR Show dialog
   Future<void> show(BuildContext context) {
     return showDialog(
       context: context,
       child: AlertDialog(
-        title: Text(DisplayedString.zhtw['delete alert title'] ?? ''),
+        //ANCHOR Title
+        title: Text(
+          DisplayedString.zhtw['delete alert title'] ?? '',
+          style: TextStyle(fontSize: 25, color: Colors.black),
+        ),
+
+        //ANCHOR Content
         content: Text(DisplayedString.zhtw['delete alert content'] ?? ''),
         contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 10),
+
+        //ANCHOR Action buttons
         actions: <Widget>[
+          //ANCHOR Cancel button
           FlatButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text(DisplayedString.zhtw['cancel'] ?? ''),
+            child: Text(
+              DisplayedString.zhtw['cancel'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
+
+          //ANCHOR Confirm button
           FlatButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-              await repoInfo.deleteRepo();
+            onPressed: () {
+              confirm(context);
             },
-            child: Text(DisplayedString.zhtw['confirm'] ?? ''),
+            child: Text(
+              DisplayedString.zhtw['confirm'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
           ),
         ],
       ),

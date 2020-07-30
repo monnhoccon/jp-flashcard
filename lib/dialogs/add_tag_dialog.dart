@@ -228,7 +228,7 @@ class AddTagDialog {
     });
   }
 
-  //ANCHOR Show dialog function
+  //ANCHOR Show dialog
   Future<List<TagBox>> show(BuildContext context) async {
     _initVariables(context);
     return showDialog(

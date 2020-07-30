@@ -82,6 +82,33 @@ class _FlashcardPageState extends State<FlashcardPage> {
             },
           ),
           actions: <Widget>[
+            //ANCHOR Kanji toggle button
+            Consumer<WordDisplayingSettings>(
+                builder: (context, generalSettings, child) {
+              return IconButton(
+                icon: generalSettings.hasKanji
+                    ? Icon(Icons.visibility)
+                    : Icon(Icons.visibility_off),
+                onPressed: () {
+                  generalSettings.toggleKanji();
+                },
+              );
+            }),
+
+            //ANCHOR Furigana toggle button
+            Consumer<WordDisplayingSettings>(
+                builder: (context, generalSettings, child) {
+              return IconButton(
+                icon: generalSettings.hasFurigana
+                    ? Icon(Icons.speaker_notes)
+                    : Icon(Icons.speaker_notes_off),
+                onPressed: () {
+                  generalSettings.toggleFurigana();
+                },
+              );
+            }),
+
+            //ANCHOR Play button
             IconButton(
               icon:
                   !playFlashcards ? Icon(Icons.play_arrow) : Icon(Icons.pause),
@@ -96,30 +123,6 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 });
               },
             ),
-            //ANCHOR Kanji toggle button
-            Consumer<WordDisplayingSettings>(
-                builder: (context, generalSettings, child) {
-              return IconButton(
-                icon: generalSettings.hasKanji
-                    ? Icon(Icons.visibility)
-                    : Icon(Icons.visibility_off),
-                onPressed: () {
-                  generalSettings.toggleKanji();
-                },
-              );
-            }),
-            //ANCHOR Furigana toggle button
-            Consumer<WordDisplayingSettings>(
-                builder: (context, generalSettings, child) {
-              return IconButton(
-                icon: generalSettings.hasFurigana
-                    ? Icon(Icons.speaker_notes)
-                    : Icon(Icons.speaker_notes_off),
-                onPressed: () {
-                  generalSettings.toggleFurigana();
-                },
-              );
-            })
           ],
         ),
         body: PageView(

@@ -46,5 +46,9 @@ class DisplayedString {
     'delete alert title': '刪除學習集',
     'delete alert content': '你確定要刪除此學習集嗎？',
     'new title': '新標題',
+    'select tags': '選擇標籤',
+    'clear': '清除',
+    'select all': '全選',
+    'original':'創建順序',
   };
 }

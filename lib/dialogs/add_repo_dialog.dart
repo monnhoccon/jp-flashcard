@@ -8,11 +8,6 @@ import 'package:jp_flashcard/services/displayed_string.dart';
 import 'add_tag_dialog.dart';
 
 class AddRepoDialog {
-  //ANCHOR Public variables
-  GlobalKey<FormState> _validationKey = GlobalKey<FormState>();
-  TextEditingController _inputController = TextEditingController();
-  List<TagBox> _selectedTagBoxList = [];
-
   //ANCHOR Constructor
   AddRepoDialog();
 
@@ -47,6 +42,11 @@ class AddRepoDialog {
     });
   }
 
+  //ANCHOR Private variables
+  GlobalKey<FormState> _validationKey = GlobalKey<FormState>();
+  TextEditingController _inputController = TextEditingController();
+  List<TagBox> _selectedTagBoxList = [];
+  
   //ANCHOR Show dialog
   Future<void> show(BuildContext context) async {
     return showDialog(
