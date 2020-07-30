@@ -32,25 +32,21 @@ class _TagBoxState extends State<TagBox> {
         child: FlatButton(
           onPressed: () {
             if (widget.canSelect) {
-              setState(
-                () {
-                  widget.selected = !widget.selected;
-                },
-              );
+              setState(() {
+                widget.selected = !widget.selected;
+              });
             }
           },
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                widget.displayedString,
-                style: TextStyle(color: textColor),
-              ),
+              Text(widget.displayedString, style: TextStyle(color: textColor)),
             ],
           ),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-              side: BorderSide(width: 1.5, color: Colors.lightBlue[800])),
+            borderRadius: BorderRadius.circular(18.0),
+            side: BorderSide(width: 1.5, color: Colors.lightBlue[800]),
+          ),
           color: backgroundColor,
           highlightColor: Colors.transparent,
           splashColor: Colors.transparent,

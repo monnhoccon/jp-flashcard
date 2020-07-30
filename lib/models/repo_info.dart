@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:jp_flashcard/services/repo_manager.dart';
+import 'package:jp_flashcard/services/databases/repo_database.dart';
 
-class RepoInfo extends ChangeNotifier {
+class RepoInfo {
   String title;
   List<String> tagList;
   int numTotal;
@@ -16,22 +15,26 @@ class RepoInfo extends ChangeNotifier {
     this.repoId,
   });
 
+  Future<void> addToDatabse() async {
+    await RepoDatabase.db.insertRepo(this);
+    return;
+  }
+
   Future<void> updateTagList(List<String> newTagList) async {
-    await RepoManager.db.updateTagListOfRepo(repoId, newTagList);
+    await RepoDatabase.db.updateTagListOfRepo(repoId, newTagList);
     tagList = newTagList;
-    notifyListeners();
     return;
   }
 
   Future<void> updateRepoTitle(String newTitle) async {
-    await RepoManager.db.updateRepoTitle(newTitle, repoId);
+    await RepoDatabase.db.updateRepoTitle(repoId, newTitle);
     title = newTitle;
-    notifyListeners();
+
     return;
   }
 
   Future<void> deleteRepo() async {
-    await RepoManager.db.deleteRepo(repoId);
+    await RepoDatabase.db.deleteRepo(repoId);
     return;
   }
 

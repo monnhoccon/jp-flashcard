@@ -6,25 +6,26 @@ import 'package:path/path.dart';
 class FlashcardDatabase {
   //ANCHOR Public variables
   final int repoId;
-  Database _database;
   Future<Database> get database async {
     if (_database != null) {
       return _database;
     }
-    _database = await initDB();
+    _database = await _initDatabase();
     return _database;
   }
+
+  //ANCHOR Constructor
+  FlashcardDatabase({this.repoId});
 
   //ANCHOR APIs
   static db(int repoId) {
     return FlashcardDatabase(repoId: repoId);
   }
 
-  //ANCHOR Constructor
-  FlashcardDatabase({this.repoId});
-
   //ANCHOR Initialize database
-  Future<Database> initDB() async {
+  Database _database;
+
+  Future<Database> _initDatabase() async {
     return await openDatabase(
       join(await getDatabasesPath(), 'test.db'),
       version: 1,
@@ -228,7 +229,7 @@ class FlashcardDatabase {
     return;
   }
 
-  //ANCHOR Delete Flashcard
+  //ANCHOR Delete flashcard
   Future<void> deleteFlashcard(int flashcardId) async {
     final db = await database;
     await _initAllTables();
@@ -265,39 +266,26 @@ class FlashcardDatabase {
     return;
   }
 
-  void deleteAllFlashcard() async {
-    deleteTable('flashcardList$repoId');
-    deleteTable('wordList$repoId');
-    deleteTable('definitionList$repoId');
-    deleteTable('wordTypeList$repoId');
+  //ANCHOR Delete all flashcard
+  Future<void> deleteAllFlashcard() async {
+    await _deleteTable('flashcardList$repoId');
+    await _deleteTable('wordList$repoId');
+    await _deleteTable('definitionList$repoId');
+    await _deleteTable('wordTypeList$repoId');
+    return;
   }
 
-  void deleteTable(String name) async {
+  Future<void> _deleteTable(String name) async {
     final db = await database;
-    await db.execute('''
+    await db.execute(
+      '''
       DROP TABLE IF EXISTS $name
-    ''');
+    ''',
+    );
+    return;
   }
 
-  //ANCHOR DefinitionList
-  Future<dynamic> getDefinitionListExcept(int flashcardId) async {
-    final db = await database;
-    await _initDefinitionList();
-    var data = await db.rawQuery('''
-      SELECT * FROM definitionList$repoId WHERE flashcardId != ?
-    ''', [flashcardId]);
-    return data;
-  }
-
-  Future<dynamic> getWordListExcept(int flashcardId) async {
-    final db = await database;
-    await _initFlashcardList();
-    var data = await db.rawQuery('''
-      SELECT * FROM flashcardList$repoId WHERE flashcardId != ?
-    ''', [flashcardId]);
-    return data;
-  }
-
+  //ANCHOR Update favorite
   Future<void> updateFavorite(int flashcardId, bool favorite) async {
     final db = await database;
     await _initFlashcardList();
@@ -309,6 +297,7 @@ class FlashcardDatabase {
     return;
   }
 
+  //ANCHOR Update progress
   Future<void> updateProgress(int flashcardId, int progress) async {
     final db = await database;
     await _initFlashcardList();
@@ -320,6 +309,7 @@ class FlashcardDatabase {
     return;
   }
 
+  //ANCHOR Update conplete date
   Future<void> updateCompleteDate(int flashcardId, String completeDate) async {
     final db = await database;
     await _initFlashcardList();

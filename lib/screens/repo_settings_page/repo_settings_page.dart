@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/quiz_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screens/repo_settings_page/components/add_tag_dialog.dart';
 import 'package:jp_flashcard/screens/repo_settings_page/components/button_divider.dart';
-import 'package:jp_flashcard/screens/repo_settings_page/components/rename_repo_dialog.dart';
+import 'package:jp_flashcard/dialogs/rename_repo_dialog.dart';
 import 'package:jp_flashcard/screens/repo_settings_page/components/setting_button.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +47,7 @@ class RepoSettingsPage extends StatelessWidget {
                   SettingButton(
                     displayedString: DisplayedString.zhtw['edit tags'],
                     onPressed: () {
-                      AddTagDialog.dialog(repoInfo).show(context);
+                      //AddTagDialog.dialog(repoInfo).show(context);
                     },
                   ),
                   ButtonDivider(),
