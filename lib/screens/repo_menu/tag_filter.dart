@@ -15,6 +15,10 @@ class TagFilter {
   //Constructor
   TagFilter({this.filterTagList});
 
+  static TagFilter dialog(List<String> filterTagList) {
+    return TagFilter(filterTagList: filterTagList);
+  }
+
   //Update Functions
   void _updateFilterTagList() {
     List<String> newSelectedTagList = [];
@@ -49,7 +53,7 @@ class TagFilter {
     _tagBoxList.sort((a, b) => a.displayedString.compareTo(b.displayedString));
   }
 
-  Future<void> _updateTagBoxList() async {
+  Future<dynamic> _initTagBoxList() async {
     List<TagBox> newTagBoxList = [];
     await RepoManager.db.getTagList().then((tags) {
       for (final tag in tags) {
@@ -82,8 +86,8 @@ class TagFilter {
   }
 
   //Dialog
-  tagFilterDialog(BuildContext context) async {
-    await _updateTagBoxList();
+  Future<dynamic> show(BuildContext context) async {
+    await _initTagBoxList();
     return showDialog(
         context: context,
         builder: (context) {
@@ -103,6 +107,7 @@ class TagFilter {
                             _displayedStringZHTW['select tags'] ?? '',
                             style: Theme.of(context).textTheme.headline6,
                           ),
+                          //ANCHOR Back button
                           IconButton(
                             icon: Icon(Icons.clear),
                             onPressed: () {
@@ -147,13 +152,15 @@ class TagFilter {
                             },
                           ),
                         ),
+
+                        //ANCHOR Apply selection button
                         Padding(
                           padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
                           child: IconButton(
                             icon: Icon(Icons.check),
                             onPressed: () {
                               _updateFilterTagList();
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pop(filterTagList);
                             },
                           ),
                         ),

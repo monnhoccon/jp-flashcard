@@ -35,11 +35,12 @@ class RepoInfo extends ChangeNotifier {
     return;
   }
 
-  RepoInfo.fromRepoInfo(RepoInfo repoInfo) {
+  void refresh(RepoInfo repoInfo) {
     repoId = repoInfo.repoId;
     title = repoInfo.title;
     tagList = repoInfo.tagList;
     numTotal = repoInfo.numTotal;
     numMemorized = repoInfo.numMemorized;
+    //notifyListeners();
   }
 }

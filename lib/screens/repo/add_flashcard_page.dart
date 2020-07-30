@@ -7,7 +7,7 @@ import 'package:jp_flashcard/screens/repo/widget/definition_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/kanji_input.dart';
 import 'package:jp_flashcard/screens/repo/widget/word_input.dart';
 import 'package:jp_flashcard/services/repo_manager.dart';
-import 'package:jp_flashcard/services/flashcard_manager.dart';
+import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:jp_flashcard/services/jp_letter.dart';
 
 // ignore: must_be_immutable
@@ -173,7 +173,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
       kanji: kanjiList,
       wordType: wordTypeList,
     );
-    await FlashcardManager.db(widget.repoId).insertFlashcard(flashcardInfo);
+    await FlashcardDatabase.db(widget.repoId).insertFlashcard(flashcardInfo);
     return;
   }
 

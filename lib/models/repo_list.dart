@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/repo_menu/repo_card.dart';
-import 'package:jp_flashcard/screens/repo_menu/sort_filter.dart';
+import 'package:jp_flashcard/screens/repo_menu/tag_filter.dart';
 import 'package:jp_flashcard/services/repo_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum SortBy { increasing, decreasing }
+
 class RepoList with ChangeNotifier {
-  List<RepoInfo> repoInfoList = [];
+  List<RepoInfo> _repoInfoList = [];
   List<RepoCard> repoCardList = [];
 
-  List<String> filterTagList = [];
+  List<String> _filterTagList = [];
 
   var persistData;
   SortBy sortBy;
@@ -22,28 +24,28 @@ class RepoList with ChangeNotifier {
     } else if (sortByString == 'decreasing') {
       sortBy = SortBy.decreasing;
     }
-    filterTagList = persistData.getStringList('filterTagList') ?? [];
+    _filterTagList = persistData.getStringList('filterTagList') ?? [];
   }
 
   Future<void> refresh() async {
-    repoInfoList.clear();
+    _repoInfoList.clear();
     repoCardList.clear();
     await getPersistData();
     await RepoManager.db.getRepoInfoList().then(
       (resultRepoInfoList) async {
-        repoInfoList = resultRepoInfoList;
+        _repoInfoList = resultRepoInfoList;
       },
     );
-    for (final repoInfo in repoInfoList) {
+    for (final repoInfo in _repoInfoList) {
       bool filterPassed = false;
-      if (filterTagList.isEmpty) {
+      if (_filterTagList.isEmpty) {
         filterPassed = true;
       }
 
       //Validate tag list
-      for (final tag in repoInfo.tagList) {
-        if (filterTagList.contains(tag)) {
-          filterPassed = false;
+      for (final filterTag in _filterTagList) {
+        if (repoInfo.tagList.contains(filterTag)) {
+          filterPassed = true;
           break;
         }
       }
@@ -52,7 +54,7 @@ class RepoList with ChangeNotifier {
         continue;
       }
 
-      repoCardList.add(RepoCard(
+      repoCardList.add(new RepoCard(
         repoInfo: repoInfo,
       ));
 
@@ -69,6 +71,28 @@ class RepoList with ChangeNotifier {
       }
     }
     notifyListeners();
+    return;
+  }
+
+  void setSortBy(String result) {
+    if (result == 'increasing') {
+      sortBy = SortBy.increasing;
+      persistData.setString('sortBy', 'increasing');
+    } else if (result == 'decreasing') {
+      sortBy = SortBy.decreasing;
+      persistData.setString('sortBy', 'decreasing');
+    }
+    refresh();
+    return;
+  }
+
+  void setFilterTagList(BuildContext context) {
+    TagFilter.dialog(_filterTagList).show(context).then((value) {
+      if (value != null) {
+        persistData.setStringList('filterTagList', value);
+      }
+      refresh();
+    });
     return;
   }
 

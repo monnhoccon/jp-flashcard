@@ -3,7 +3,7 @@ import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/flashcard_page/displayed_flashcard.dart';
 import 'package:jp_flashcard/screens/repo/widget/flashcard_card.dart';
 import 'package:jp_flashcard/services/repo_manager.dart';
-import 'package:jp_flashcard/services/flashcard_manager.dart';
+import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 
 class FlashcardList with ChangeNotifier {
   int repoId;
@@ -15,7 +15,7 @@ class FlashcardList with ChangeNotifier {
     for (final flashcardInfo in flashcardInfoList) {
       if (flashcardInfo.flashcardId == flashcardId) {
         flashcardInfo.favorite = !flashcardInfo.favorite;
-        await FlashcardManager.db(repoId)
+        await FlashcardDatabase.db(repoId)
             .updateFavorite(flashcardId, flashcardInfo.favorite);
       }
     }
@@ -24,7 +24,7 @@ class FlashcardList with ChangeNotifier {
   }
 
   Future<void> refresh() async {
-    await FlashcardManager.db(repoId)
+    await FlashcardDatabase.db(repoId)
         .getFlashcardInfoList()
         .then((newFlashcardInfoList) {
       flashcardInfoList = newFlashcardInfoList;

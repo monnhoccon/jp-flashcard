@@ -4,12 +4,12 @@ import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
-class DisplayedTagBoxList extends StatelessWidget {
+class DisplayedTagList extends StatelessWidget {
   //ANCHOR Initialize displayed tag list
-  List<Widget> displayedTagList = [];
+  List<Widget> _displayedTagList = [];
   void _initDisplayedTagList(RepoInfo repoInfo) {
-    displayedTagList.clear();
-    displayedTagList.add(
+    _displayedTagList.clear();
+    _displayedTagList.add(
       Padding(
         padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
         child: Icon(
@@ -19,7 +19,7 @@ class DisplayedTagBoxList extends StatelessWidget {
       ),
     );
     for (final tag in repoInfo.tagList) {
-      displayedTagList.add(
+      _displayedTagList.add(
         Text(
           tag == repoInfo.tagList.last ? tag + ' ' : tag + ', ',
           style: TextStyle(fontSize: 12),
@@ -28,11 +28,14 @@ class DisplayedTagBoxList extends StatelessWidget {
     }
   }
 
+  RepoInfo repoInfo;
+  DisplayedTagList({this.repoInfo});
+  
   @override
   //ANCHOR Builder
   Widget build(BuildContext context) {
-    return Consumer2<RepoInfo, RepoDisplayingSettings>(
-      builder: (context, repoInfo, repoDisplayingSettings, child) {
+    return Consumer<RepoDisplayingSettings>(
+      builder: (context, repoDisplayingSettings, child) {
         //ANCHOR Initialized
         _initDisplayedTagList(repoInfo);
 
@@ -52,7 +55,7 @@ class DisplayedTagBoxList extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(10, 7, 10, 10),
                     child: Wrap(
                       spacing: 0,
-                      children: displayedTagList,
+                      children: _displayedTagList,
                     ),
                   )
                 ],

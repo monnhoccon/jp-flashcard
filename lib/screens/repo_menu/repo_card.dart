@@ -16,7 +16,7 @@ class RepoCard extends StatelessWidget {
   RepoInfo repoInfo;
 
   //ANCHOR Constructor
-  RepoCard({this.repoInfo});
+  RepoCard({this.repoInfo}) {}
 
   //ANCHOR Update selected tag box list
   List<TagBox> _selectedTagBoxList = [];
@@ -40,14 +40,15 @@ class RepoCard extends StatelessWidget {
     _updateSelectedTagBoxList();
     AddTagDialog addTagDialog =
         AddTagDialog(selectedTagBoxList: _selectedTagBoxList);
-    addTagDialog.dialog(context).then((selectedTagBoxList) {
+    addTagDialog.dialog(context).then((selectedTagBoxList) async {
       if (selectedTagBoxList == null) {
         return;
       } else {
         List<String> newTagList = selectedTagBoxList.map((e) {
           return e.displayedString;
         }).toList();
-        repoInfo.updateTagList(newTagList);
+        await repoInfo.updateTagList(newTagList);
+        _repoList.refresh();
       }
     });
   }
@@ -63,22 +64,17 @@ class RepoCard extends StatelessWidget {
   //ANCHOR Builder
   Widget build(BuildContext context) {
     //ANCHOR Providers
-    return ChangeNotifierProvider<RepoInfo>(
-      create: (context) {
-        return repoInfo;
-      },
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
-        child: Card(
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(5),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return RepoPage(repoInfo: repoInfo);
-              }));
-            },
-            child: repoCard(),
-          ),
+    return Padding(
+      padding: EdgeInsets.fromLTRB(15, 1, 15, 1),
+      child: Card(
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(5),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return RepoPage(repoInfo: repoInfo);
+            }));
+          },
+          child: repoCard(),
         ),
       ),
     );
@@ -86,7 +82,7 @@ class RepoCard extends StatelessWidget {
 
   RepoList _repoList;
   void _initVariables(BuildContext context) {
-    _repoList = Provider.of<RepoList>(context);
+    _repoList = Provider.of<RepoList>(context, listen: false);
   }
 
   //ANCHOR Repo card
@@ -166,7 +162,7 @@ class RepoCard extends StatelessWidget {
             ),
 
             //ANCHOR Displayed tag box list
-            DisplayedTagBoxList(),
+            DisplayedTagList(repoInfo: repoInfo),
           ],
         );
       },

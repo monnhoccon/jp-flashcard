@@ -3,7 +3,7 @@ import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class FlashcardManager {
+class FlashcardDatabase {
   //ANCHOR Public variables
   final int repoId;
   Database _database;
@@ -17,11 +17,11 @@ class FlashcardManager {
 
   //ANCHOR APIs
   static db(int repoId) {
-    return FlashcardManager(repoId: repoId);
+    return FlashcardDatabase(repoId: repoId);
   }
 
   //ANCHOR Constructor
-  FlashcardManager({this.repoId});
+  FlashcardDatabase({this.repoId});
 
   //ANCHOR Initialize database
   Future<Database> initDB() async {

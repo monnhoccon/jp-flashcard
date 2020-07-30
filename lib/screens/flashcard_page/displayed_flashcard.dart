@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/screens/repo/edit_flashcard_page.dart';
-import 'package:jp_flashcard/services/flashcard_manager.dart';
+import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:jp_flashcard/services/text_to_speech.dart';
 import 'package:jp_flashcard/components/displayed_word.dart';
 
@@ -71,7 +71,7 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                 child: Text(_displayedStringZHTW['cancel'] ?? '')),
             FlatButton(
                 onPressed: () {
-                  FlashcardManager.db(widget.repoId)
+                  FlashcardDatabase.db(widget.repoId)
                       .deleteFlashcard(widget.flashcardInfo.flashcardId);
                   Navigator.of(context).pop(true);
                 },
@@ -233,7 +233,7 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                                 setState(() {
                                   widget.flashcardInfo.favorite =
                                       !widget.flashcardInfo.favorite;
-                                  FlashcardManager.db(widget.repoId)
+                                  FlashcardDatabase.db(widget.repoId)
                                       .updateFavorite(
                                     widget.flashcardInfo.flashcardId,
                                     widget.flashcardInfo.favorite,
@@ -295,7 +295,7 @@ class _DisplayedFlashcardState extends State<DisplayedFlashcard> {
                                 setState(() {
                                   widget.flashcardInfo.favorite =
                                       !widget.flashcardInfo.favorite;
-                                  FlashcardManager.db(widget.repoId)
+                                  FlashcardDatabase.db(widget.repoId)
                                       .updateFavorite(
                                     widget.flashcardInfo.flashcardId,
                                     widget.flashcardInfo.favorite,

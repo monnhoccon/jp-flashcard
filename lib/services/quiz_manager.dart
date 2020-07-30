@@ -13,7 +13,7 @@ import 'package:jp_flashcard/screens/learning/components/quiz_answer_dialog.dart
 import 'package:jp_flashcard/screens/learning/word_selection_quiz.dart';
 import 'package:jp_flashcard/screens/learning/word_short_answer_quiz.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
-import 'package:jp_flashcard/services/flashcard_manager.dart';
+import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:provider/provider.dart';
 
 enum QuizType {
@@ -73,7 +73,7 @@ class QuizManager extends ChangeNotifier {
     } else if (newProgress < 0) {
       newProgress = 0;
     }
-    await FlashcardManager.db(repoId)
+    await FlashcardDatabase.db(repoId)
         .updateProgress(flashcardInfo.flashcardId, newProgress);
     return;
   }

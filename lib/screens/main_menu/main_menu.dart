@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/screens/main_menu/components/add_repo_dialog.dart';
-import 'package:jp_flashcard/screens/repo_menu/repo_menu.dart';
+import 'package:jp_flashcard/screens/repo_menu/repo_menu_page.dart';
 import 'package:jp_flashcard/screens/profile/profile.dart';
 import 'package:jp_flashcard/services/repo_manager.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ class _MainMenuState extends State<MainMenu> {
 
   List<Widget> _bodySelected() {
     return <Widget>[
-      RepoMenu(),
+      RepoMenuPage(),
       Profile(),
     ];
   }

@@ -2,26 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:jp_flashcard/components/no_overscroll_glow.dart';
 import 'package:jp_flashcard/models/repo_displaying_settings.dart';
 import 'package:jp_flashcard/models/repo_list.dart';
-import 'package:jp_flashcard/screens/repo_menu/sort_filter.dart';
+import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:provider/provider.dart';
 
-class RepoMenu extends StatefulWidget {
-  @override
-  _RepoMenuState createState() => _RepoMenuState();
-}
-
-class _RepoMenuState extends State<RepoMenu> {
-  final Map _displayedStringZHTW = {
-    'repository': '學習集',
-    'sort by': '排序依據',
-    'increasing': '標題: A 到 Z',
-    'decreasing': '標題: Z 到 A',
-  };
-
-  SortBy sortBy = SortBy.increasing;
-
+// ignore: must_be_immutable
+class RepoMenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //ANCHOR Providers
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<RepoDisplayingSettings>(
@@ -31,19 +19,22 @@ class _RepoMenuState extends State<RepoMenu> {
         ),
         ChangeNotifierProvider<RepoList>(
           create: (context) {
-            print('hi');
             return RepoList();
           },
         ),
       ],
-      child: Builder(
-        builder: (context) {
+
+      //ANCHOR Repo menu page
+      child: Consumer<RepoList>(
+        builder: (context, repoList, child) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
+              //ANCHOR App bar
               AppBar(
-                title: Text(_displayedStringZHTW['repository']),
+                title: Text(DisplayedString.zhtw['repository'] ?? ''),
                 actions: <Widget>[
+                  //ANCHOR Displayed tag toggle butoon
                   Consumer<RepoDisplayingSettings>(
                     builder: (context, repoDisplayingSettings, child) {
                       return IconButton(
@@ -56,40 +47,21 @@ class _RepoMenuState extends State<RepoMenu> {
                       );
                     },
                   ),
-                  /*
+
                   IconButton(
                     icon: Icon(Icons.filter_list),
-                    onPressed: () async {
-                      TagFilter tagFilter =
-                          TagFilter(filterTagList: filterTagList);
-                      await tagFilter.tagFilterDialog(context);
-                      setState(
-                        () {
-                          filterTagList = tagFilter.filterTagList;
-                          persistData.setStringList(
-                              'filterTagList', filterTagList);
-                        },
-                      );
+                    onPressed: () {
+                      repoList.setFilterTagList(context);
                     },
                   ),
-                  */
-                  /*
+
+                  //ANCHOR Sort by button
                   PopupMenuButton<String>(
                     offset: Offset(0, 250),
-                    tooltip: _displayedStringZHTW['sort by'] ?? '',
+                    tooltip: DisplayedString.zhtw['sort by'] ?? '',
                     icon: Icon(Icons.sort),
                     onSelected: (String result) {
-                      setState(
-                        () {
-                          if (result == 'increasing') {
-                            sortBy = SortBy.increasing;
-                            persistData.setString('sortBy', 'increasing');
-                          } else if (result == 'decreasing') {
-                            sortBy = SortBy.decreasing;
-                            persistData.setString('sortBy', 'decreasing');
-                          }
-                        },
-                      );
+                      repoList.setSortBy(result);
                     },
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
@@ -97,9 +69,11 @@ class _RepoMenuState extends State<RepoMenu> {
                         value: 'title',
                         enabled: false,
                         child: Text(
-                          _displayedStringZHTW['sort by'] ?? '',
+                          DisplayedString.zhtw['sort by'] ?? '',
                           style: TextStyle(
-                              color: Colors.black, fontWeight: FontWeight.bold),
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       PopupMenuDivider(
@@ -108,34 +82,31 @@ class _RepoMenuState extends State<RepoMenu> {
                       PopupMenuItem<String>(
                         value: 'increasing',
                         child: Text(
-                          _displayedStringZHTW['increasing'] ?? '',
+                          DisplayedString.zhtw['increasing'] ?? '',
                           style: TextStyle(
-                              color: sortBy == SortBy.increasing
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.black),
+                            color: repoList.sortBy == SortBy.increasing
+                                ? Theme.of(context).primaryColor
+                                : Colors.black,
+                          ),
                         ),
                       ),
                       PopupMenuItem<String>(
                         value: 'decreasing',
-                        child: Text(_displayedStringZHTW['decreasing'] ?? '',
-                            style: TextStyle(
-                                color: sortBy == SortBy.decreasing
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.black)),
+                        child: Text(
+                          DisplayedString.zhtw['decreasing'] ?? '',
+                          style: TextStyle(
+                            color: repoList.sortBy == SortBy.decreasing
+                                ? Theme.of(context).primaryColor
+                                : Colors.black,
+                          ),
+                        ),
                       ),
                     ],
-                  )
-                  */
-                  Consumer<RepoList>(builder: (context, repoList, child) {
-                    return FlatButton(
-                      onPressed: () {
-                        repoList.refresh();
-                      },
-                      child: Icon(Icons.ac_unit),
-                    );
-                  }),
+                  ),
                 ],
               ),
+
+              //ANCHOR Repo card list
               Consumer<RepoList>(builder: (context, repoList, child) {
                 return Expanded(
                   child: NoOverscrollGlow(
