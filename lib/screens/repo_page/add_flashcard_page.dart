@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/components/word_type_box.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
-import 'package:jp_flashcard/components/tag_box.dart';
 import 'package:jp_flashcard/screens/repo_page/widget/add_word_type_dialog.dart';
 import 'package:jp_flashcard/screens/repo_page/widget/definition_input.dart';
 import 'package:jp_flashcard/screens/repo_page/widget/kanji_input.dart';
 import 'package:jp_flashcard/screens/repo_page/widget/word_input.dart';
-import 'package:jp_flashcard/services/databases/repo_database.dart';
 import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:jp_flashcard/services/jp_letter.dart';
 
@@ -92,9 +91,9 @@ class _AddFlashcardState extends State<AddFlashcard> {
   //================================
 
   //ANCHOR Word type
-  List<TagBox> selectedWordTypeBoxList = [];
+  List<WordTypeBox> selectedWordTypeBoxList = [];
   List<Widget> wordTypeBoxList = [];
-  void applySelection(List<TagBox> newSelectedWordTypeBoxList) {
+  void applySelection(List<WordTypeBox> newSelectedWordTypeBoxList) {
     setState(() {
       selectedWordTypeBoxList = newSelectedWordTypeBoxList;
     });
@@ -256,7 +255,7 @@ class _AddFlashcardState extends State<AddFlashcard> {
 
                                 //ANCHOR Add definition button
                                 FlatButton(
-                                    padding: EdgeInsets.all(0),
+                                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                                     materialTapTargetSize:
                                         MaterialTapTargetSize.shrinkWrap,
                                     onPressed: () {

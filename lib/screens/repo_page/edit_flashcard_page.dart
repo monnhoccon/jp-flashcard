@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/components/word_type_box.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/components/tag_box.dart';
@@ -94,9 +95,9 @@ class _EditFlashcardPageState extends State<EditFlashcardPage> {
   //================================
 
   //ANCHOR Word type
-  List<TagBox> selectedWordTypeBoxList = [];
+  List<WordTypeBox> selectedWordTypeBoxList = [];
   List<Widget> wordTypeBoxList = [];
-  void applySelection(List<TagBox> newSelectedWordTypeBoxList) {
+  void applySelection(List<WordTypeBox> newSelectedWordTypeBoxList) {
     setState(() {
       selectedWordTypeBoxList = newSelectedWordTypeBoxList;
     });
@@ -182,7 +183,7 @@ class _EditFlashcardPageState extends State<EditFlashcardPage> {
 
   void initSelectedWordTypeBoxList() {
     for (final wordType in flashcardInfo.wordType) {
-      selectedWordTypeBoxList.add(TagBox(
+      selectedWordTypeBoxList.add(WordTypeBox(
         displayedString: wordType,
         canSelect: false,
         selected: true,

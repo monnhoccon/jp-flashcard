@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/components/no_overscroll_glow.dart';
 import 'package:jp_flashcard/components/tag_box.dart';
+import 'package:jp_flashcard/components/word_type_box.dart';
 import 'package:jp_flashcard/services/databases/repo_database.dart';
+import 'package:jp_flashcard/services/displayed_string.dart';
 
 class AddWordTypeDialog {
-  List<TagBox> selectedWordTypeBoxList = [];
-  List<TagBox> wordTypeBoxList = [];
+  List<WordTypeBox> selectedWordTypeBoxList = [];
+  List<WordTypeBox> wordTypeBoxList = [];
   Map _displayedStringZHTW = {'select word type': '選擇詞性'};
   Function applySelection;
 
   AddWordTypeDialog({this.selectedWordTypeBoxList, this.applySelection});
 
   Future<void> updateWordTypeBoxList() async {
-    List<TagBox> newWordTypeBoxList = [];
+    List<WordTypeBox> newWordTypeBoxList = [];
     await RepoDatabase.db.getWordTypeList().then((wordTypeList) {
       for (final wordType in wordTypeList) {
         bool selected = false;
@@ -22,13 +25,13 @@ class AddWordTypeDialog {
           }
         }
         if (selected)
-          newWordTypeBoxList.add(TagBox(
+          newWordTypeBoxList.add(WordTypeBox(
             displayedString: wordType['wordType'],
             canSelect: true,
             selected: true,
           ));
         else
-          newWordTypeBoxList.add(TagBox(
+          newWordTypeBoxList.add(WordTypeBox(
             displayedString: wordType['wordType'],
             canSelect: true,
             selected: false,
@@ -43,7 +46,7 @@ class AddWordTypeDialog {
     selectedWordTypeBoxList.clear();
     for (final wordTypeBox in wordTypeBoxList) {
       if (wordTypeBox.selected)
-        selectedWordTypeBoxList.add(TagBox(
+        selectedWordTypeBoxList.add(WordTypeBox(
           displayedString: wordTypeBox.displayedString,
           canSelect: false,
           selected: true,
@@ -51,67 +54,66 @@ class AddWordTypeDialog {
     }
   }
 
-  //TODO Clear button
   dialog(BuildContext context) async {
     await updateWordTypeBoxList();
     return showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return Dialog(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(24, 13, 10, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            _displayedStringZHTW['select word type'] ?? '',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(24, 10, 24, 0),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 5,
-                        runSpacing: 5,
-                        children: wordTypeBoxList,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
-                          child: IconButton(
-                            icon: Icon(Icons.check),
-                            onPressed: () async {
-                              updateSelectedWordTypeBoxList();
-                              applySelection(selectedWordTypeBoxList);
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+      context: context,
+      child: AlertDialog(
+        //ANCHOR Title
+        title: Text(
+          DisplayedString.zhtw['select word type'] ?? '' ?? '',
+          style: TextStyle(fontSize: 25, color: Colors.black),
+        ),
+
+        //ANCHOR Content
+        contentPadding: EdgeInsets.fromLTRB(24, 15, 24, 5),
+        content: Container(
+          width: 500,
+          child: NoOverscrollGlow(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Wrap(
+                    direction: Axis.horizontal,
+                    spacing: 5,
+                    runSpacing: 5,
+                    children: wordTypeBoxList,
+                  ),
+                ],
               ),
-            );
-          });
-        });
+            ),
+          ),
+        ),
+
+        //ANCHOR Action buttons
+        actions: <Widget>[
+          //ANCHOR Cancel button
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              DisplayedString.zhtw['cancel'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+
+          //ANCHOR Apply button
+          FlatButton(
+            onPressed: () {
+              updateSelectedWordTypeBoxList();
+              applySelection(selectedWordTypeBoxList);
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              DisplayedString.zhtw['confirm'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

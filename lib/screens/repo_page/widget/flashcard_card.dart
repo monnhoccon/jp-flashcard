@@ -3,7 +3,7 @@ import 'package:jp_flashcard/dialogs/reset_progress_dialog.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/services/managers/flashcard_manager.dart';
+import 'package:jp_flashcard/screens/repo_settings_page/components/flashcard_manager.dart';
 import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/flashcard_page.dart';
 import 'package:jp_flashcard/screens/repo_page/edit_flashcard_page.dart';

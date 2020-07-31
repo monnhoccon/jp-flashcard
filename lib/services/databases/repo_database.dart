@@ -31,7 +31,7 @@ class RepoDatabase {
   Future<void> _initRepoList() async {
     final db = await database;
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS repos (
+      CREATE TABLE IF NOT EXISTS repoList (
         repoId INTEGER PRIMARY KEY, title TEXT, numTotal INTEGER, numMemorized INTEGER
       )
       ''');
@@ -64,7 +64,7 @@ class RepoDatabase {
     await _initRepoList();
 
     int repoId = await db.rawInsert('''
-      INSERT INTO repos(
+      INSERT INTO repoList(
         title, numTotal, numMemorized
       ) VALUES (?, 0, 0)
     ''', [repoInfo.title]);
@@ -105,7 +105,7 @@ class RepoDatabase {
     final db = await database;
     await _initRepoList();
     await db.rawDelete('''
-      DELETE FROM repos WHERE repoId = ?
+      DELETE FROM repoList WHERE repoId = ?
     ''', [repoId]);
     await _initTagListOfRepo();
     await db.rawDelete('''
@@ -120,7 +120,7 @@ class RepoDatabase {
     final db = await database;
     await _initRepoList();
     var result = await db.rawQuery('''
-      SELECT * FROM repos
+      SELECT * FROM repoList
       WHERE repoId = ?;
     ''', [repoId]);
     var repo = result[0];
@@ -149,7 +149,8 @@ class RepoDatabase {
   Future<dynamic> getRepoInfoList() async {
     final db = await database;
     await _initRepoList();
-    var resultRepoList = await db.query('repos');
+    var resultRepoList = await db.query('repoList');
+
     List<RepoInfo> repoInfoList = [];
     for (final repo in resultRepoList) {
       List<String> tagList = [];
@@ -171,6 +172,7 @@ class RepoDatabase {
         ),
       );
     }
+
     return repoInfoList;
   }
 
@@ -179,7 +181,7 @@ class RepoDatabase {
     final db = await database;
     await _initRepoList();
     await db.rawUpdate('''
-      UPDATE repos
+      UPDATE repoList
       SET title = ?
       WHERE repoId = ?;
     ''', [newTitle, repoId]);
@@ -192,7 +194,7 @@ class RepoDatabase {
     final db = await database;
     await _initRepoList();
     await db.rawUpdate('''
-      UPDATE repos
+      UPDATE repoList
       SET numTotal = ?, numMemorized = ?
       WHERE repoId = ?;
     ''', [numTotal, numCompleted, repoId]);

@@ -12,8 +12,8 @@
     ".vscode": true,
     ".idea": true,
     ".dart_tool": true,
-    "android": true,
+    "pubspec.yaml": true,
     "build": true,
-    "pubspec.yaml": true
+    "android": true
   }
 }

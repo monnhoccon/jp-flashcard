@@ -98,7 +98,6 @@ class AddTagDialog {
                                       _isError = false;
 
                                       //Validation pass
-
                                       tagManager.createTag(newTag);
                                       _inputController.clear();
                                     }
@@ -187,7 +186,6 @@ class AddTagDialog {
       context: context,
       child: ChangeNotifierProvider<TagManager>(
         create: (context) {
-          print(selectedTagList);
           return TagManager(selectedTagList: selectedTagList);
         },
         child: _dialogWidget(),

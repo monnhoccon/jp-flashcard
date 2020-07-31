@@ -55,5 +55,8 @@ class DisplayedString {
     'reset progress': '重置進度',
     'reset flashcard progress alert': '你確定要重置此單字卡的進度嗎',
     'reset progress alert': '你確定要重置此學習集的所有進度嗎',
+    'no enough cards': '請添加至少五張單字卡',
+    'select word type': '選擇詞性',
+    'tag filter': '篩選標籤',
   };
 }

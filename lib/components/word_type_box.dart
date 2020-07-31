@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class TagBox extends StatefulWidget {
+class WordTypeBox extends StatefulWidget {
   final String displayedString;
   bool canSelect;
   bool selected = false;
-  TagBox({this.displayedString, this.canSelect, this.selected});
+  WordTypeBox({this.displayedString, this.canSelect, this.selected});
 
   @override
-  _TagBoxState createState() => _TagBoxState();
+  _WordTypeBoxState createState() => _WordTypeBoxState();
 }
 
-class _TagBoxState extends State<TagBox> {
+class _WordTypeBoxState extends State<WordTypeBox> {
   Color backgroundColor = Colors.lightBlue[800];
   Color textColor = Colors.white;
 

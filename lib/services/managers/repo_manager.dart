@@ -34,7 +34,7 @@ class RepoManager with ChangeNotifier {
     repoCardList.clear();
     await getPersistData();
     await RepoDatabase.db.getRepoInfoList().then(
-      (resultRepoInfoList) async {
+      (resultRepoInfoList) {
         _repoInfoList = resultRepoInfoList;
       },
     );
