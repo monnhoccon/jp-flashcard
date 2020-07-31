@@ -37,6 +37,7 @@ class RepoMenuPage extends StatelessWidget {
       //ANCHOR Repo menu page
       child: Consumer<RepoManager>(
         builder: (context, repoManager, child) {
+          repoManager.createRepoByFile(context, "assets/init.json");
           return Scaffold(
             //ANCHOR App bar
             appBar: AppBar(

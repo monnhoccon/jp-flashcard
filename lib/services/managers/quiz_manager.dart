@@ -3,7 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:dart_random_choice/dart_random_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
-import 'package:jp_flashcard/screens/repo_settings_page/components/flashcard_manager.dart';
+import 'package:jp_flashcard/services/managers/flashcard_manager.dart';
 import 'package:jp_flashcard/models/quiz_settings.dart';
 import 'package:jp_flashcard/screens/quiz_page/quizes/definition_selection_quiz.dart';
 import 'package:jp_flashcard/screens/quiz_page/quizes/definition_short_answer_quiz.dart';

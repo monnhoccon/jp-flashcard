@@ -59,7 +59,7 @@ class RepoDatabase {
   }
 
   //ANCHOR Insert repo
-  Future<void> insertRepo(RepoInfo repoInfo) async {
+  Future<int> insertRepo(RepoInfo repoInfo) async {
     final db = await database;
     await _initRepoList();
 
@@ -73,7 +73,7 @@ class RepoDatabase {
     for (final tag in repoInfo.tagList) {
       await _insertTagIntoRepo(repoId, tag);
     }
-    return;
+    return repoId;
   }
 
   //ANCHOR Update tag list of repo
@@ -259,10 +259,12 @@ class RepoDatabase {
   //ANCHOR WordTypeList
   Future<void> initWordTypeList() async {
     List<String> wordTypes = [
-      '名詞',
-      'い形',
-      'な形',
-      '副詞',
+      '名',
+      '形',
+      '形動',
+      '副',
+      '代',
+      '助',
       '自五',
       '他五',
       '自上ㄧ',
@@ -271,10 +273,10 @@ class RepoDatabase {
       '他下ㄧ',
       '自サ',
       '他サ',
-      '代名詞',
       '其它',
     ];
     final db = await database;
+    await _deleteTable('wordTypeList');
     await db.execute(
       '''
       CREATE TABLE IF NOT EXISTS wordTypeList (

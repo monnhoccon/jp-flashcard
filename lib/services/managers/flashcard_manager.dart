@@ -46,15 +46,20 @@ class FlashcardManager with ChangeNotifier {
         flashcardInfo: flashcardInfoList[index],
         hasFurigana: true,
       ));
-      
+
       if (flashcardInfoList[index].progress >= 100) {
         numCompleted++;
       }
-      
     }
 
     await RepoDatabase.db.updateNumTotalOfRepo(repoId, numTotal, numCompleted);
     notifyListeners();
+    return;
+  }
+
+  static refreshRepoDatabase(repoId) async {
+    FlashcardManager flashcardManager = FlashcardManager(repoId: repoId);
+    await flashcardManager.refresh();
     return;
   }
 

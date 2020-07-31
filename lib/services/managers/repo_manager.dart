@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/screens/repo_menu_page/components/repo_card.dart';
 import 'package:jp_flashcard/dialogs/tag_filter_dialog.dart';
+import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:jp_flashcard/services/databases/repo_database.dart';
+import 'package:jp_flashcard/services/managers/flashcard_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum SortBy { increasing, decreasing, original }
@@ -15,6 +21,7 @@ class RepoManager with ChangeNotifier {
 
   var persistData;
   SortBy sortBy;
+  bool _init = false;
   Future<void> getPersistData() async {
     persistData = await SharedPreferences.getInstance();
 
@@ -27,6 +34,7 @@ class RepoManager with ChangeNotifier {
       sortBy = SortBy.original;
     }
     _filterTagList = persistData.getStringList('filterTagList') ?? [];
+    _init = persistData.getBool('init') ?? true;
   }
 
   Future<void> refresh() async {
@@ -90,6 +98,47 @@ class RepoManager with ChangeNotifier {
       refresh();
     });
     return;
+  }
+
+  void createRepoByFile(BuildContext context, String path) async {
+    if (!_init) {
+      return;
+    }
+    String jsonString = await DefaultAssetBundle.of(context).loadString(path);
+    final repo = jsonDecode(jsonString);
+    RepoInfo repoInfo = RepoInfo(
+      title: repo['title'],
+      tagList: repo['tagList'].cast<String>(),
+    );
+    int repoId = await RepoDatabase.db.insertRepo(repoInfo);
+    for (final tag in repoInfo.tagList) {
+      await RepoDatabase.db.insertTagIntoList(tag);
+    }
+    for (final flashcard in repo['flashcardList']) {
+      List<KanjiInfo> kanjiInfoList = [];
+      for (final kanjiInfo in flashcard['kanji']) {
+        kanjiInfoList.add(KanjiInfo(
+          length: kanjiInfo['length'],
+          furigana: kanjiInfo['furigana'],
+          index: kanjiInfo['index'],
+        ));
+      }
+      FlashcardInfo flashcardInfo = FlashcardInfo(
+        word: flashcard['word'],
+        definition: flashcard['definition'].cast<String>(),
+        wordType: flashcard['wordType'].cast<String>(),
+        favorite: flashcard['favorite'] == 1 ? true : false,
+        progress: flashcard['progress'],
+        completeDate: flashcard['completeDate'],
+        kanji: kanjiInfoList,
+      );
+      await FlashcardDatabase.db(repoId).insertFlashcard(flashcardInfo);
+    }
+
+    await FlashcardManager.refreshRepoDatabase(repoId);
+    _init = false;
+    persistData.setBool('init', false);
+    refresh();
   }
 
   RepoManager() {

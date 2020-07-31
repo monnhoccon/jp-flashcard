@@ -87,21 +87,26 @@ class FlashcardDatabase {
   //ANCHOR Insert flashcard
   Future<void> insertFlashcard(FlashcardInfo flashcardInfo) async {
     await _initAllTables();
-    int flashcardId = await _insertFlashcard(flashcardInfo.word);
+    int flashcardId = await _insertFlashcard(flashcardInfo);
     await _insertDefinition(flashcardId, flashcardInfo.definition);
     await _insertKanji(flashcardId, flashcardInfo.kanji);
     await _insertWordType(flashcardId, flashcardInfo.wordType);
     return;
   }
 
-  Future<int> _insertFlashcard(String word) async {
+  Future<int> _insertFlashcard(FlashcardInfo flashcardInfo) async {
     final db = await database;
     await _initFlashcardList();
     int flashcardId = await db.rawInsert('''
       INSERT INTO flashcardList$repoId (
         word, favorite, progress, completeDate
       ) VALUES (?, ?, ?, ?)
-    ''', [word, 0, 0, '2000-01-01']);
+    ''', [
+      flashcardInfo.word ?? '',
+      flashcardInfo.favorite ?? 0,
+      flashcardInfo.progress ?? 0,
+      flashcardInfo.completeDate ?? '2020-01-01'
+    ]);
     return flashcardId;
   }
 
@@ -272,6 +277,7 @@ class FlashcardDatabase {
     await _deleteTable('wordList$repoId');
     await _deleteTable('definitionList$repoId');
     await _deleteTable('wordTypeList$repoId');
+    await _deleteTable('kanjiList$repoId');
     return;
   }
 

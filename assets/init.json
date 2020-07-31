@@ -1,0 +1,696 @@
+{
+    "title": "L16",
+    "tagList": [
+        "來學日本語"
+    ],
+    "flashcardList": [
+        {
+            "word": "相撲",
+            "definition": [
+                "相撲"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "す",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "もう",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "楽しみ",
+            "definition": [
+                "期待",
+                "樂趣"
+            ],
+            "wordType": [
+                "名",
+                "形動"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "たの",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "富士山",
+            "definition": [
+                "富士山"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ふ",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "じ",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "さん",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "登る",
+            "definition": [
+                "登"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "のぼ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "納豆",
+            "definition": [
+                "納豆"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "なっ",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "とう",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "徹夜",
+            "definition": [
+                "熬夜"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "てつ",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "や",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "幽霊",
+            "definition": [
+                "幽靈"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ゆう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "れい",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "うそ",
+            "definition": [
+                "謊言"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "冗談",
+            "definition": [
+                "玩笑"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "じょう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "だん",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "宇宙人",
+            "definition": [
+                "外星人"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "う",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "ちゅう",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "じん",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "復習する",
+            "definition": [
+                "複習"
+            ],
+            "wordType": [
+                "他サ"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ふく",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "しゅう",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "質問する",
+            "definition": [
+                "發問"
+            ],
+            "wordType": [
+                "他サ"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "しつ",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "もん",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "平日",
+            "definition": [
+                "平日",
+                "平常"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "へい",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "じつ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "お正月",
+            "definition": [
+                "新年"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "しょう",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "がつ",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "親戚",
+            "definition": [
+                "親戚"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "しん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "せき",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "おせち料理",
+            "definition": [
+                "年菜"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "りょう",
+                    "index": 3
+                },
+                {
+                    "length": 1,
+                    "furigana": "り",
+                    "index": 4
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "フルート",
+            "definition": [
+                "長笛"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "演奏する",
+            "definition": [
+                "演奏"
+            ],
+            "wordType": [
+                "他サ"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "えん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "そう",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "電気",
+            "definition": [
+                "電燈",
+                "電力"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "でん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "き",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "受ける",
+            "definition": [
+                "接受"
+            ],
+            "wordType": [
+                "他下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "う",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "学生証",
+            "definition": [
+                "學生證"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "がく",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "せい",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "しょう",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "始めに",
+            "definition": [
+                "首先"
+            ],
+            "wordType": [
+                "副"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "はじ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "性格",
+            "definition": [
+                "性格",
+                "性質"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "せい",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "かく",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "レベル",
+            "definition": [
+                "程度"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "はっきり",
+            "definition": [
+                "明確地"
+            ],
+            "wordType": [
+                "副"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "答える",
+            "definition": [
+                "回答"
+            ],
+            "wordType": [
+                "自下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "こた",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "台所",
+            "definition": [
+                "廚房"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "だい",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "どころ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "将来",
+            "definition": [
+                "將來"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "しょう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "らい",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "つらい",
+            "definition": [
+                "痛苦的"
+            ],
+            "wordType": [
+                "形"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "山",
+            "definition": [
+                "山"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "やま",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "だいぶ",
+            "definition": [
+                "很"
+            ],
+            "wordType": [
+                "副"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "慣れる",
+            "definition": [
+                "習慣",
+                "熟練"
+            ],
+            "wordType": [
+                "自下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "な",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        }
+    ]
+}
