@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:jp_flashcard/components/tag_box.dart';
 import 'package:jp_flashcard/dialogs/add_tag_dialog.dart';
 import 'package:jp_flashcard/dialogs/delete_repo_dialog.dart';
 import 'package:jp_flashcard/dialogs/reset_progress_dialog.dart';
@@ -7,7 +6,6 @@ import 'package:jp_flashcard/models/quiz_settings.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/dialogs/rename_repo_dialog.dart';
 import 'package:jp_flashcard/screens/repo_settings_page/components/setting_button.dart';
-import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:jp_flashcard/services/displayed_string.dart';
 import 'package:provider/provider.dart';
 
@@ -26,19 +24,13 @@ class RepoSettingsPage extends StatelessWidget {
 
   //ANCHOR Edit tag list
   void _editTagList(BuildContext context) {
-    List<TagBox> selectedTagBoxList = repoInfo.tagList.map((tag) {
-      return TagBox(displayedString: tag);
-    }).toList();
-    AddTagDialog.dialog(selectedTagBoxList)
+    AddTagDialog.dialog(repoInfo.tagList)
         .show(context)
-        .then((selectedTagBoxList) async {
-      if (selectedTagBoxList == null) {
+        .then((selectedTagList) async {
+      if (selectedTagList == null) {
         return;
       } else {
-        List<String> newTagList = selectedTagBoxList.map((tag) {
-          return tag.displayedString;
-        }).toList();
-        await repoInfo.updateTagList(newTagList);
+        await repoInfo.updateTagList(selectedTagList);
       }
     });
   }

@@ -179,7 +179,7 @@ class FlashcardCard extends StatelessWidget {
   FlashcardManager _flashcardManager;
   WordDisplayingSettings _displayingSettings;
   RepoInfo _repoInfo;
-  void initVariables(BuildContext context) {
+  void _initVariables(BuildContext context) {
     _flashcardManager = Provider.of<FlashcardManager>(context, listen: false);
     _displayingSettings =
         Provider.of<WordDisplayingSettings>(context, listen: false);
@@ -190,7 +190,7 @@ class FlashcardCard extends StatelessWidget {
   Widget build(BuildContext context) {
     //ANCHOR Initialize
     _initDisplayedDefinitionList();
-    initVariables(context);
+    _initVariables(context);
 
     //ANCHOR Flashcard card widget
     return Container(

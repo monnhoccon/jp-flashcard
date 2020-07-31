@@ -48,11 +48,11 @@ class RepoDatabase {
     return;
   }
 
-  Future<void> _initTagListOfRepo(int repoId) async {
+  Future<void> _initTagListOfRepo() async {
     final db = await database;
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS tagList$repoId (
-        tag NTEXT
+      CREATE TABLE IF NOT EXISTS tagListOfRepo (
+        tag NTEXT, repoId INTEGER
       )
       ''');
     return;
@@ -69,7 +69,7 @@ class RepoDatabase {
       ) VALUES (?, 0, 0)
     ''', [repoInfo.title]);
 
-    await _initTagListOfRepo(repoId);
+    await _initTagListOfRepo();
     for (final tag in repoInfo.tagList) {
       await _insertTagIntoRepo(repoId, tag);
     }
@@ -78,7 +78,11 @@ class RepoDatabase {
 
   //ANCHOR Update tag list of repo
   Future<void> updateTagListOfRepo(int repoId, List<String> tagList) async {
-    await _deleteTable('tagList$repoId');
+    final db = await database;
+    await _initTagListOfRepo();
+    await db.rawDelete('''
+      DELETE FROM tagListOfRepo WHERE repoId = ?
+    ''', [repoId]);
     for (final tag in tagList) {
       await _insertTagIntoRepo(repoId, tag);
     }
@@ -87,12 +91,12 @@ class RepoDatabase {
 
   Future<void> _insertTagIntoRepo(int repoId, String tag) async {
     final db = await database;
-    await _initTagListOfRepo(repoId);
+    await _initTagListOfRepo();
     await db.rawInsert('''
-      INSERT INTO tagList$repoId(
-        tag
-      ) VALUES (?)
-    ''', [tag]);
+      INSERT INTO tagListofRepo(
+        tag, repoId
+      ) VALUES (?, ?)
+    ''', [tag, repoId]);
     return;
   }
 
@@ -100,13 +104,13 @@ class RepoDatabase {
   Future<void> deleteRepo(int repoId) async {
     final db = await database;
     await _initRepoList();
-    await db.rawDelete(
-      '''
+    await db.rawDelete('''
       DELETE FROM repos WHERE repoId = ?
-    ''',
-      [repoId],
-    );
-    await _deleteTable('tagList$repoId');
+    ''', [repoId]);
+    await _initTagListOfRepo();
+    await db.rawDelete('''
+      DELETE FROM tagListOfRepo WHERE repoId = ?
+    ''', [repoId]);
     await FlashcardDatabase.db(repoId).deleteAllFlashcard();
     return;
   }
@@ -197,10 +201,10 @@ class RepoDatabase {
 
   Future<dynamic> _getTagListOfRepo(int repoId) async {
     final db = await database;
-    await _initTagListOfRepo(repoId);
+    await _initTagListOfRepo();
     var data = await db.rawQuery('''
-      SELECT tag FROM tagList$repoId
-    ''');
+      SELECT tag FROM tagListOfRepo WHERE repoId = ?
+    ''', [repoId]);
     return data;
   }
 
@@ -234,6 +238,10 @@ class RepoDatabase {
     await _initTagList();
     await db.rawDelete('''
       DELETE FROM tagList WHERE tag = ?
+    ''', [tag]);
+
+    await db.rawDelete('''
+      DELETE FROM tagListOfRepo WHERE tag = ?
     ''', [tag]);
     return;
   }

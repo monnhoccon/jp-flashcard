@@ -21,7 +21,6 @@ class AddRepoDialog {
     if (_validationKey.currentState.validate()) {
       List<String> tagList =
           _selectedTagBoxList.map((e) => e.displayedString).toList();
-
       RepoInfo repoInfo = RepoInfo(
         title: _inputController.text.toString(),
         tagList: tagList,
@@ -33,10 +32,20 @@ class AddRepoDialog {
 
   //ANCHOR Add tag
   void _addTag(BuildContext context, Function setState) {
-    AddTagDialog.dialog(_selectedTagBoxList).show(context).then((value) {
+    List<String> selectedTag = _selectedTagBoxList.map((e) {
+      return e.displayedString;
+    }).toList();
+    print(selectedTag);
+    AddTagDialog.dialog(selectedTag).show(context).then((value) {
       setState(() {
         if (value != null) {
-          _selectedTagBoxList = value;
+          _selectedTagBoxList = value.map((e) {
+            return TagBox(
+              displayedString: e,
+              canSelect: false,
+              selected: true,
+            );
+          }).toList();
         }
       });
     });
@@ -46,7 +55,7 @@ class AddRepoDialog {
   GlobalKey<FormState> _validationKey = GlobalKey<FormState>();
   TextEditingController _inputController = TextEditingController();
   List<TagBox> _selectedTagBoxList = [];
-  
+
   //ANCHOR Show dialog
   Future<void> show(BuildContext context) async {
     return showDialog(

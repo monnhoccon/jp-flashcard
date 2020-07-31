@@ -16,6 +16,7 @@ class TagBoxButton extends StatelessWidget {
       child: ButtonTheme(
         minWidth: 5.0,
         height: 28.0,
+        padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
         child: FlatButton(
           onPressed: () {
             onPressed();

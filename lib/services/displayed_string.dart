@@ -45,6 +45,8 @@ class DisplayedString {
     'edit tag list': '編輯標籤',
     'delete alert title': '刪除學習集',
     'delete alert content': '你確定要刪除此學習集嗎？',
+    'delete tag title': '刪除標籤',
+    'delete tag content': '你確定要刪除此標籤嗎？',
     'new title': '新標題',
     'select tags': '選擇標籤',
     'clear': '清除',

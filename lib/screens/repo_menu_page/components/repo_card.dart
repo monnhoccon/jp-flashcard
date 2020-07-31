@@ -27,19 +27,14 @@ class RepoCard extends StatelessWidget {
 
   //ANCHOR Edit tag list
   void _editTagList(BuildContext context) {
-    List<TagBox> selectedTagBoxList = repoInfo.tagList.map((tag) {
-      return TagBox(displayedString: tag);
-    }).toList();
-    AddTagDialog.dialog(selectedTagBoxList)
+
+    AddTagDialog.dialog(repoInfo.tagList)
         .show(context)
-        .then((selectedTagBoxList) async {
-      if (selectedTagBoxList == null) {
+        .then((selectedTagList) async {
+      if (selectedTagList == null) {
         return;
       } else {
-        List<String> newTagList = selectedTagBoxList.map((tag) {
-          return tag.displayedString;
-        }).toList();
-        await repoInfo.updateTagList(newTagList);
+        await repoInfo.updateTagList(selectedTagList);
         _repoManager.refresh();
       }
     });
