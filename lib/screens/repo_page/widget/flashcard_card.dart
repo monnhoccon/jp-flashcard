@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:jp_flashcard/dialogs/reset_progress_dialog.dart';
 import 'package:jp_flashcard/models/displayed_word_size.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
+import 'package:jp_flashcard/models/repo_info.dart';
 import 'package:jp_flashcard/services/managers/flashcard_manager.dart';
 import 'package:jp_flashcard/models/word_displaying_settings.dart';
 import 'package:jp_flashcard/screens/flashcard_page/flashcard_page.dart';
@@ -26,32 +28,32 @@ class FlashcardCard extends StatelessWidget {
   });
 
   //ANCHOR Navigate to flashcard page
-  void navigateToFlashcardPage(BuildContext context) {
+  void _navigateToFlashcardPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return FlashcardPage(
         flashcardIndex: index,
-        displayedFlashcardList: _flashcardList.displayedFlashcardList,
+        displayedFlashcardList: _flashcardManager.displayedFlashcardList,
       );
-    })).then((value) {
-      _flashcardList.refresh();
+    })).then((_) {
+      _flashcardManager.refresh();
       _displayingSettings.refresh();
     });
   }
 
   //ANCHOR Navigate to flashcard page
-  void navigateToEditFlashcardPage(BuildContext context) {
+  void _navigateToEditFlashcardPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return EditFlashcardPage(
         repoId: repoId,
         flashcardInfo: flashcardInfo,
       );
-    })).then((newFlashcardInfo) {
-      _flashcardList.refresh();
+    })).then((_) {
+      _flashcardManager.refresh();
     });
   }
 
   //ANCHOR Delete flashcard dialog
-  Future<dynamic> deleteFlashcardDialog(BuildContext context) {
+  Future<dynamic> _deleteFlashcardDialog(BuildContext context) {
     return showDialog(
       context: context,
       child: AlertDialog(
@@ -81,11 +83,61 @@ class FlashcardCard extends StatelessWidget {
 
           //ANCHOR Confirm button
           FlatButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
+            onPressed: () async {
+              Navigator.of(context).pop();
               FlashcardDatabase.db(repoId)
                   .deleteFlashcard(flashcardInfo.flashcardId);
-              _flashcardList.refresh();
+              await _flashcardManager.refresh();
+              _repoInfo.refresh();
+            },
+            child: Text(
+              DisplayedString.zhtw['confirm'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //ANCHOR Reset progress dialog
+  Future<dynamic> _resetProgressDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      child: AlertDialog(
+        //ANCHOR Title
+        title: Text(
+          DisplayedString.zhtw['reset progress'] ?? '',
+          style: TextStyle(fontSize: 25, color: Colors.black),
+        ),
+
+        //ANCHOR Content
+        content:
+            Text(DisplayedString.zhtw['reset flashcard progress alert'] ?? ''),
+        contentPadding: EdgeInsets.fromLTRB(24, 20, 24, 10),
+
+        //ANCHOR Action buttons
+        actions: <Widget>[
+          //ANCHOR Cancel button
+          FlatButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(
+              DisplayedString.zhtw['cancel'] ?? '',
+              style: TextStyle(color: Theme.of(context).primaryColor),
+            ),
+          ),
+
+          //ANCHOR Confirm button
+          FlatButton(
+            onPressed: () async {
+              await FlashcardDatabase.db(repoId)
+                  .updateProgress(flashcardInfo.flashcardId, 0);
+              Navigator.of(context).pop();
+
+              await _flashcardManager.refresh();
+              _repoInfo.refresh();
             },
             child: Text(
               DisplayedString.zhtw['confirm'] ?? '',
@@ -99,7 +151,7 @@ class FlashcardCard extends StatelessWidget {
 
   //ANCHOR Initialize displayed definition list
   List<Widget> _displayedDefinitionList = [];
-  void initDisplayedDefinitionList() {
+  void _initDisplayedDefinitionList() {
     _displayedDefinitionList.clear();
     int i = 1;
     for (final definition in flashcardInfo.definition) {
@@ -117,26 +169,27 @@ class FlashcardCard extends StatelessWidget {
       i++;
     }
   }
-  //TODO Width overflow
 
-  void speak() {
+  void _speak() {
     TextToSpeech.tts.speak('ja-JP', flashcardInfo.word);
     return;
   }
 
   //ANCHOR Initialize variables
-  FlashcardManager _flashcardList;
+  FlashcardManager _flashcardManager;
   WordDisplayingSettings _displayingSettings;
+  RepoInfo _repoInfo;
   void initVariables(BuildContext context) {
-    _flashcardList = Provider.of<FlashcardManager>(context, listen: false);
+    _flashcardManager = Provider.of<FlashcardManager>(context, listen: false);
     _displayingSettings =
         Provider.of<WordDisplayingSettings>(context, listen: false);
+    _repoInfo = Provider.of<RepoInfo>(context, listen: false);
   }
 
   @override
   Widget build(BuildContext context) {
     //ANCHOR Initialize
-    initDisplayedDefinitionList();
+    _initDisplayedDefinitionList();
     initVariables(context);
 
     //ANCHOR Flashcard card widget
@@ -146,7 +199,7 @@ class FlashcardCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(5),
           onTap: () {
-            navigateToFlashcardPage(context);
+            _navigateToFlashcardPage(context);
           },
           child: Padding(
             padding: EdgeInsets.fromLTRB(15, 12, 0, 12),
@@ -171,8 +224,6 @@ class FlashcardCard extends StatelessWidget {
 
                       //ANCHOR Displayed definition list
                       ..._displayedDefinitionList,
-
-                      Text(flashcardInfo.progress.toString()),
                     ],
                   ),
                 ),
@@ -187,7 +238,7 @@ class FlashcardCard extends StatelessWidget {
                         size: 23.0,
                       ),
                       onPressed: () {
-                        speak();
+                        _speak();
                       },
                     ),
 
@@ -198,7 +249,7 @@ class FlashcardCard extends StatelessWidget {
                         size: 23.0,
                       ),
                       onPressed: () {
-                        _flashcardList
+                        _flashcardManager
                             .toggleFavorite(flashcardInfo.flashcardId);
                       },
                     ),
@@ -211,10 +262,13 @@ class FlashcardCard extends StatelessWidget {
                       onSelected: (String result) async {
                         if (result == 'edit') {
                           //ANCHOR Edit button
-                          navigateToEditFlashcardPage(context);
+                          _navigateToEditFlashcardPage(context);
+                        } else if (result == 'reset progress') {
+                          //ANCHOR Reset progress button
+                          _resetProgressDialog(context);
                         } else if (result == 'delete') {
                           //ANCHOR Delete button
-                          deleteFlashcardDialog(context);
+                          _deleteFlashcardDialog(context);
                         }
                       },
 
@@ -224,6 +278,11 @@ class FlashcardCard extends StatelessWidget {
                         PopupMenuItem<String>(
                           value: 'edit',
                           child: Text(DisplayedString.zhtw['edit'] ?? ''),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'reset progress',
+                          child: Text(
+                              DisplayedString.zhtw['reset progress'] ?? ''),
                         ),
                         PopupMenuItem<String>(
                           value: 'delete',

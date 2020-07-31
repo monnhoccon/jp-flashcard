@@ -161,6 +161,7 @@ class QuizAnswerDialog {
                         Divider(
                           thickness: 1,
                         ),
+
                         //ANCHOR Displayed word type list
                         Wrap(
                           alignment: WrapAlignment.start,
@@ -171,6 +172,7 @@ class QuizAnswerDialog {
                         SizedBox(
                           height: 8,
                         ),
+
                         //ANCHOR Displayed definition list
                         ..._displayedDefinitionList,
                       ],

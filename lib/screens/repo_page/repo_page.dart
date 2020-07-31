@@ -21,42 +21,47 @@ class RepoPage extends StatelessWidget {
   RepoPage({this.repoInfo});
 
   //ANCHOR Navigation
-  void navigateToAddFlashcardPage(BuildContext context) {
+  void _navigateToAddFlashcardPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return AddFlashcard(
         repoId: repoInfo.repoId,
       );
-    })).then((newFlashcardInfo) {
-      _flashcardList.refresh();
+    })).then((_) async {
+      await _flashcardManager.refresh();
+      _repoInfo.refresh();
     });
     return;
   }
 
-  void navigateToQuizSettingsPage(BuildContext context) {
+  void _navigateToQuizSettingsPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return QuizSettingsPage();
     }));
     return;
   }
 
-  void navigateToRepoSettingsPage(BuildContext context) {
+  void _navigateToRepoSettingsPage(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return RepoSettingsPage(
         repoInfo: repoInfo,
       );
-    }));
+    })).then((_) async {
+      await _flashcardManager.refresh();
+      _repoInfo.refresh();
+    });
     return;
   }
 
-  void navigateToQuizPage(BuildContext context) {
-    if (_flashcardList.flashcardInfoList.length > 3) {
+  void _navigateToQuizPage(BuildContext context) {
+    if (_flashcardManager.flashcardInfoList.length > 3) {
       Navigator.of(context).push(MaterialPageRoute(builder: (context) {
         return QuizPage(
           repoInfo: repoInfo,
         );
-      })).then((value) {
-        _flashcardList.refresh();
+      })).then((_) async {
+        await _flashcardManager.refresh();
         _displayingSettings.refresh();
+        _repoInfo.refresh();
       });
     }
     return;
@@ -80,30 +85,40 @@ class RepoPage extends StatelessWidget {
             );
           },
         ),
+        ChangeNotifierProvider<RepoInfo>(
+          create: (context) {
+            return RepoInfo.from(repoInfo);
+          },
+        ),
       ],
-      child: repoPage(),
+      child: _repoPage(),
     );
   }
 
   //ANCHOR Initialize varialbes
-  FlashcardManager _flashcardList;
+  FlashcardManager _flashcardManager;
   WordDisplayingSettings _displayingSettings;
-
+  RepoInfo _repoInfo;
   void initVariables(BuildContext context) {
-    _flashcardList = Provider.of<FlashcardManager>(context, listen: false);
+    _flashcardManager = Provider.of<FlashcardManager>(context, listen: false);
     _displayingSettings =
         Provider.of<WordDisplayingSettings>(context, listen: false);
+    _repoInfo = Provider.of<RepoInfo>(context, listen: false);
   }
 
   //ANCHOR Repo page
-  Widget repoPage() {
+  Widget _repoPage() {
     return Builder(builder: (context) {
       //ANCHOR Initailize
       initVariables(context);
 
       return Scaffold(
         appBar: AppBar(
-          title: Text(repoInfo.title),
+          //ANCHOR Title
+          title: Consumer<RepoInfo>(builder: (context, repoInfo, child) {
+            return Text(repoInfo.title);
+          }),
+
           //ANCHOR Setting buttons
           actions: <Widget>[
             //ANCHOR Kanji toggle button
@@ -116,7 +131,7 @@ class RepoPage extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.more_vert),
               onPressed: () {
-                navigateToRepoSettingsPage(context);
+                _navigateToRepoSettingsPage(context);
               },
             )
           ],
@@ -132,12 +147,12 @@ class RepoPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text(
-                        '${repoInfo.numMemorized}/${repoInfo.numTotal} 已學習',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
+                      Consumer<RepoInfo>(builder: (context, repoInfo, child) {
+                        return Text(
+                          '${repoInfo.numMemorized}/${repoInfo.numTotal} 已學習',
+                          style: TextStyle(fontSize: 15),
+                        );
+                      }),
                       Row(
                         children: <Widget>[
                           //ANCHOR Learning page button
@@ -150,7 +165,7 @@ class RepoPage extends StatelessWidget {
                             child: FlatButton(
                               color: Theme.of(context).primaryColor,
                               onPressed: () {
-                                navigateToQuizPage(context);
+                                _navigateToQuizPage(context);
                               },
                               child: Text(
                                 DisplayedString.zhtw['learn'] ?? '',
@@ -166,7 +181,7 @@ class RepoPage extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.tune),
                             onPressed: () {
-                              navigateToQuizSettingsPage(context);
+                              _navigateToQuizSettingsPage(context);
                             },
                           )
                         ],
@@ -194,7 +209,7 @@ class RepoPage extends StatelessWidget {
         //ANCHOR Add flashcard button
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            navigateToAddFlashcardPage(context);
+            _navigateToAddFlashcardPage(context);
           },
           child: Icon(Icons.add),
           backgroundColor: Theme.of(context).primaryColor,

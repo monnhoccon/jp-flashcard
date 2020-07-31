@@ -112,6 +112,36 @@ class RepoDatabase {
   }
 
   //ANCHOR Get repo info list
+  Future<dynamic> getRepoInfo(int repoId) async {
+    final db = await database;
+    await _initRepoList();
+    var result = await db.rawQuery('''
+      SELECT * FROM repos
+      WHERE repoId = ?;
+    ''', [repoId]);
+    var repo = result[0];
+    List<String> tagList = [];
+    await _getTagListOfRepo(repo['repoId']).then(
+      (resultTagList) {
+        for (final tag in resultTagList) {
+          tagList.add(tag['tag']);
+        }
+        tagList.sort();
+      },
+    );
+
+    RepoInfo repoInfo = RepoInfo(
+      title: repo['title'],
+      repoId: repo['repoId'],
+      numMemorized: repo['numMemorized'],
+      numTotal: repo['numTotal'],
+      tagList: tagList,
+    );
+
+    return repoInfo;
+  }
+
+  //ANCHOR Get repo info list
   Future<dynamic> getRepoInfoList() async {
     final db = await database;
     await _initRepoList();

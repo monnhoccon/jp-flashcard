@@ -16,48 +16,50 @@ class RepoCard extends StatelessWidget {
   RepoInfo repoInfo;
 
   //ANCHOR Constructor
-  RepoCard({this.repoInfo}) {}
-
-  //ANCHOR Update selected tag box list
-  List<TagBox> _selectedTagBoxList = [];
-
-  _updateSelectedTagBoxList() {
-    _selectedTagBoxList.clear();
-    _selectedTagBoxList = repoInfo.tagList.map((tag) {
-      return TagBox(displayedString: tag);
-    }).toList();
-  }
+  RepoCard({this.repoInfo});
 
   //ANCHOR Rename
-  void rename(BuildContext context) {
+  void _rename(BuildContext context) {
     RenameRepoDialog.dialog(repoInfo).show(context).then((_) {
-      _repoList.refresh();
+      _repoManager.refresh();
     });
   }
 
   //ANCHOR Edit tag list
-  void editTagList(BuildContext context) {
-    _updateSelectedTagBoxList();
-    AddTagDialog.dialog(_selectedTagBoxList)
+  void _editTagList(BuildContext context) {
+    List<TagBox> selectedTagBoxList = repoInfo.tagList.map((tag) {
+      return TagBox(displayedString: tag);
+    }).toList();
+    AddTagDialog.dialog(selectedTagBoxList)
         .show(context)
         .then((selectedTagBoxList) async {
       if (selectedTagBoxList == null) {
         return;
       } else {
-        List<String> newTagList = selectedTagBoxList.map((e) {
-          return e.displayedString;
+        List<String> newTagList = selectedTagBoxList.map((tag) {
+          return tag.displayedString;
         }).toList();
         await repoInfo.updateTagList(newTagList);
-        _repoList.refresh();
+        _repoManager.refresh();
       }
     });
   }
 
   //ANCHOR Delete
-  void delete(BuildContext context) {
+  void _delete(BuildContext context) {
     DeleteRepoDialog.dialog(repoInfo).show(context).then((_) {
-      _repoList.refresh();
+      _repoManager.refresh();
     });
+  }
+
+  //ANCHOR Navigation
+  void _navigateToRepoPage(BuildContext context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return RepoPage(repoInfo: repoInfo);
+    })).then((_) {
+      _repoManager.refresh();
+    });
+    return;
   }
 
   @override
@@ -70,9 +72,7 @@ class RepoCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(5),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return RepoPage(repoInfo: repoInfo);
-            }));
+            _navigateToRepoPage(context);
           },
           child: repoCard(),
         ),
@@ -80,9 +80,9 @@ class RepoCard extends StatelessWidget {
     );
   }
 
-  RepoManager _repoList;
+  RepoManager _repoManager;
   void _initVariables(BuildContext context) {
-    _repoList = Provider.of<RepoManager>(context, listen: false);
+    _repoManager = Provider.of<RepoManager>(context, listen: false);
   }
 
   //ANCHOR Repo card
@@ -132,13 +132,13 @@ class RepoCard extends StatelessWidget {
                   onSelected: (String result) {
                     if (result == 'rename') {
                       //ANCHOR Rename
-                      rename(context);
+                      _rename(context);
                     } else if (result == 'edit tag list') {
                       //ANCHOR Edit taglist
-                      editTagList(context);
+                      _editTagList(context);
                     } else if (result == 'delete') {
                       //ANCHOR Delete
-                      delete(context);
+                      _delete(context);
                     }
                   },
                   itemBuilder: (context) {

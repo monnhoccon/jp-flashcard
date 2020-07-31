@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:jp_flashcard/services/databases/repo_database.dart';
 
-class RepoInfo {
+class RepoInfo extends ChangeNotifier {
   String title;
   List<String> tagList;
   int numTotal;
@@ -15,8 +16,27 @@ class RepoInfo {
     this.repoId,
   });
 
+  RepoInfo.from(RepoInfo repoInfo) {
+    repoId = repoInfo.repoId;
+    title = repoInfo.title;
+    tagList = repoInfo.tagList;
+    numTotal = repoInfo.numTotal;
+    numMemorized = repoInfo.numMemorized;
+  }
+
   Future<void> addToDatabse() async {
     await RepoDatabase.db.insertRepo(this);
+    return;
+  }
+
+  Future<void> refresh() async {
+    RepoInfo newRepoInfo = await RepoDatabase.db.getRepoInfo(repoId);
+    repoId = newRepoInfo.repoId;
+    title = newRepoInfo.title;
+    tagList = newRepoInfo.tagList;
+    numTotal = newRepoInfo.numTotal;
+    numMemorized = newRepoInfo.numMemorized;
+    notifyListeners();
     return;
   }
 
@@ -36,14 +56,5 @@ class RepoInfo {
   Future<void> deleteRepo() async {
     await RepoDatabase.db.deleteRepo(repoId);
     return;
-  }
-
-  void refresh(RepoInfo repoInfo) {
-    repoId = repoInfo.repoId;
-    title = repoInfo.title;
-    tagList = repoInfo.tagList;
-    numTotal = repoInfo.numTotal;
-    numMemorized = repoInfo.numMemorized;
-    //notifyListeners();
   }
 }

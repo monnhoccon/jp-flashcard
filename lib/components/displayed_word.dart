@@ -27,23 +27,28 @@ class DisplayedWord extends StatelessWidget {
         if (kanji.index == i) {
           isKanji = true;
           if (_hasKanji) {
-            _displayedLetterList.add(DisplayedLetter(
-              letter: flashcardInfo.word[i],
-              furigana: kanji.furigana,
-            ));
+            _displayedLetterList.add(
+              DisplayedLetter(
+                letter: flashcardInfo.word[i],
+                furigana: kanji.furigana,
+              ),
+            );
           } else {
-            for (int j = 0; j < kanji.furigana.length; j++)
-              _displayedLetterList.add(DisplayedLetter(
-                letter: kanji.furigana[j],
-                furigana: '',
-              ));
+            for (int j = 0; j < kanji.furigana.length; j++) {
+              _displayedLetterList.add(
+                DisplayedLetter(
+                  letter: kanji.furigana[j],
+                  furigana: '',
+                ),
+              );
+            }
           }
         }
       }
       if (!isKanji) {
         _displayedLetterList.add(DisplayedLetter(
           letter: flashcardInfo.word[i],
-          furigana: '',
+          furigana: flashcardInfo.kanji.length == 0 ? '' : ' ',
         ));
       }
     }

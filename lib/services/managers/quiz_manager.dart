@@ -54,15 +54,15 @@ class QuizManager extends ChangeNotifier {
       return;
     }
     if (_quizType == QuizType.definition_selection) {
-      newProgress += positive ? 5 : -5;
+      newProgress += positive ? 8 : -8;
     } else if (_quizType == QuizType.definition_short_answer) {
-      newProgress += positive ? 7 : -3;
+      newProgress += positive ? 12 : -5;
     } else if (_quizType == QuizType.word_selection) {
-      newProgress += positive ? 5 : -5;
+      newProgress += positive ? 8 : -8;
     } else if (_quizType == QuizType.word_short_answer) {
-      newProgress += positive ? 7 : -3;
+      newProgress += positive ? 12 : -5;
     } else if (_quizType == QuizType.kanji_short_answer) {
-      newProgress += positive ? 7 : -3;
+      newProgress += positive ? 12 : -5;
     }
 
     //Checking whether out of range
@@ -182,8 +182,8 @@ class QuizManager extends ChangeNotifier {
     },
   );
 
-  Future<int> _refreshFlashcardList() async {
-    await _flashcardList.refresh();
+  int _numFail = 0;
+  void _getCurrentFlashcardList() {
     _currentFlashcardInfoList.clear();
     for (final flashcardInfo in _flashcardList.flashcardInfoList) {
       //Check whether the flashcard has kanji
@@ -206,6 +206,19 @@ class QuizManager extends ChangeNotifier {
         }
       }
     }
+    if (_currentFlashcardInfoList.length == 0 && _numFail < 10) {
+      _numFail++;
+      _quizType = _randomQuizType();
+      _getCurrentFlashcardList();
+    }
+
+    _numFail = 0;
+    return;
+  }
+
+  Future<int> _refreshFlashcardList() async {
+    await _flashcardList.refresh();
+    _getCurrentFlashcardList();
 
     int indexUpperBound = _currentFlashcardInfoList.length;
     if (!_quizSettings.onlyShowFavorite && indexUpperBound > 8) {

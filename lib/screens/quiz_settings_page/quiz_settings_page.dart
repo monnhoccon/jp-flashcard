@@ -23,7 +23,7 @@ class QuizSettingsPage extends StatelessWidget {
           title: Text(DisplayedString.zhtw['quiz settings'] ?? ''),
         ),
         body: Padding(
-          padding: EdgeInsets.fromLTRB(0, 30, 0, 30),
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 30),
           child: Consumer<QuizSettings>(
             builder: (context, quizSettings, child) {
               return Column(

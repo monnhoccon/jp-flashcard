@@ -50,5 +50,8 @@ class DisplayedString {
     'clear': '清除',
     'select all': '全選',
     'original':'創建順序',
+    'reset progress': '重置進度',
+    'reset flashcard progress alert': '你確定要重置此單字卡的進度嗎',
+    'reset progress alert': '你確定要重置此學習集的所有進度嗎',
   };
 }

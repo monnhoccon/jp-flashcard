@@ -298,6 +298,16 @@ class FlashcardDatabase {
   }
 
   //ANCHOR Update progress
+  Future<void> resetAllProgress() async {
+    final db = await database;
+    await _initFlashcardList();
+    await db.rawUpdate('''
+      UPDATE flashcardList$repoId
+      SET progress = ?
+    ''', [0]);
+    return;
+  }
+
   Future<void> updateProgress(int flashcardId, int progress) async {
     final db = await database;
     await _initFlashcardList();

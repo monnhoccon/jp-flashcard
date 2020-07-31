@@ -6,5 +6,10 @@ void main() {
   runApp(MaterialApp(
     home: RepoMenuPage(),
     theme: MyTheme.theme,
+    routes: <String, WidgetBuilder>{
+      '/repo_menu_page': (_) {
+        return RepoMenuPage();
+      }
+    },
   ));
 }

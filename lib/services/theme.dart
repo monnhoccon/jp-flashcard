@@ -17,7 +17,7 @@ class MyTheme {
         headline6: TextStyle(
           fontSize: 25.0,
           fontWeight: FontWeight.bold,
-          color: Colors.blue,
+          color: Colors.black,
         ),
         bodyText2: TextStyle(fontSize: 14.0),
         overline: TextStyle(fontSize: 18.0, letterSpacing: 0)),
