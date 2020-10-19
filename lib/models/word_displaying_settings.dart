@@ -5,6 +5,7 @@ class WordDisplayingSettings with ChangeNotifier {
   bool hasFurigana = true;
   bool hasKanji = true;
   bool furiganaLocked = false;
+  bool kanjiLocked = false;
   var persistData;
 
   void refresh() async {
@@ -18,10 +19,13 @@ class WordDisplayingSettings with ChangeNotifier {
     notifyListeners();
   }
 
+  void refreshUI() {
+    notifyListeners();
+  }
+
   WordDisplayingSettings() {
     refresh();
   }
-  
 
   void toggleFurigana() {
     if (!hasKanji || furiganaLocked) {
@@ -33,6 +37,9 @@ class WordDisplayingSettings with ChangeNotifier {
   }
 
   void toggleKanji() {
+    if (kanjiLocked) {
+      return;
+    }
     if (hasKanji == true) {
       //Toggle to no kanji
       hasFurigana = false;

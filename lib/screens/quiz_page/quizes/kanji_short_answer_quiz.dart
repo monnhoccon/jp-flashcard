@@ -89,7 +89,9 @@ class KanjiShortAnswerQuiz extends StatelessWidget {
     _displayingSettings =
         Provider.of<WordDisplayingSettings>(context, listen: false);
     _displayingSettings.hasFurigana = false;
+    _displayingSettings.hasKanji = true;
     _displayingSettings.furiganaLocked = true;
+    _displayingSettings.kanjiLocked = true;
     return;
   }
 
@@ -99,7 +101,6 @@ class KanjiShortAnswerQuiz extends StatelessWidget {
     //ANCHOR Initialize
     _initVariables(context);
     _initAnswerInputList();
-
     //ANCHOR Kanji short answer quiz
     return Container(
       padding: EdgeInsets.fromLTRB(0, 20, 0, 25),

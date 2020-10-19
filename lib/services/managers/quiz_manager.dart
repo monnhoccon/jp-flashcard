@@ -54,15 +54,15 @@ class QuizManager extends ChangeNotifier {
       return;
     }
     if (_quizType == QuizType.definition_selection) {
-      newProgress += positive ? 8 : -8;
+      newProgress += positive ? 25 : -25;
     } else if (_quizType == QuizType.definition_short_answer) {
-      newProgress += positive ? 12 : -5;
+      newProgress += positive ? 40 : -20;
     } else if (_quizType == QuizType.word_selection) {
-      newProgress += positive ? 8 : -8;
+      newProgress += positive ? 25 : -25;
     } else if (_quizType == QuizType.word_short_answer) {
-      newProgress += positive ? 12 : -5;
+      newProgress += positive ? 40 : -20;
     } else if (_quizType == QuizType.kanji_short_answer) {
-      newProgress += positive ? 12 : -5;
+      newProgress += positive ? 40 : -20;
     }
 
     //Checking whether out of range
@@ -192,11 +192,11 @@ class QuizManager extends ChangeNotifier {
         continue;
       }
       if (!_quizSettings.onlyShowFavorite) {
-        if (flashcardInfo.progress >= 100 && Random().nextInt(7) > 5) {
+        if (flashcardInfo.progress >= 100) {
           continue;
-        } else if (flashcardInfo.progress >= 80 && Random().nextInt(2) > 0) {
+        } else if (flashcardInfo.progress >= 80 && Random().nextInt(4) > 2) {
           continue;
-        } else if (flashcardInfo.progress >= 40 && Random().nextInt(4) > 2) {
+        } else if (flashcardInfo.progress >= 40 && Random().nextInt(6) > 4) {
           continue;
         }
         _currentFlashcardInfoList.add(flashcardInfo);

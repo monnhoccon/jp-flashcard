@@ -8,12 +8,9 @@
     "jp_flashcard.iml": true,
     "pubspec.lock": true,
     "README.md": true,
-    "ios": true,
     ".vscode": true,
     ".idea": true,
     ".dart_tool": true,
-    "build": true,
-    "android": true,
     "pubspec.yaml": true
   }
 }
