@@ -1,0 +1,1159 @@
+{
+    "title": "L13",
+    "tagList": [
+        "來學日本語"
+    ],
+    "flashcardList": [
+        {
+            "word": "インフルエンザ",
+            "definition": [
+                "流行性感冒"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "注射",
+            "definition": [
+                "注射",
+                "打針"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ちゅう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "しゃ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "捨てる",
+            "definition": [
+                "丟棄"
+            ],
+            "wordType": [
+                "他下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "す",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "脱ぐ",
+            "definition": [
+                "脫掉"
+            ],
+            "wordType": [
+                "他五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ぬ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "先に",
+            "definition": [
+                "（時間、順序）先"
+            ],
+            "wordType": [
+                "副"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "さき",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "つける",
+            "definition": [
+                "點燃",
+                "開啟、啟動（電器）"
+            ],
+            "wordType": [
+                "他下一"
+            ],
+            "kanji": [
+             
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "待ち合わせ",
+            "definition": [
+                "會合"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ま",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "あ",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "遅れる",
+            "definition": [
+                "耽誤", "慢"
+            ],
+            "wordType": [
+                "自下一"
+            ],
+            "kanji": [{
+                "length": 1,
+                "furigana": "おく",
+                "index": 0
+            }],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "スニーカー",
+            "definition": [
+                "運動鞋"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+               
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "席",
+            "definition": [
+                "座位"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "せき",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "立つ",
+            "definition": [
+                "站", "離（席）"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "た",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "機械",
+            "definition": [
+                "機械"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "き",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "かい",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "すぐに",
+            "definition": [
+                "立刻"
+            ],
+            "wordType": [
+                "副"
+            ],
+            "kanji": [
+        
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "検査",
+            "definition": [
+                "檢查"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "けん",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "さ",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "プリント",
+            "definition": [
+                "印刷品"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+            
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "通る",
+            "definition": [
+                "通過、穿過"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "とお",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "廊下",
+            "definition": [
+                "走廊"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [{
+                "length": 1,
+                "furigana": "ろう",
+                "index": 0
+            },
+            {
+                "length": 1,
+                "furigana": "か",
+                "index": 1
+            }],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "花火",
+            "definition": [
+                "煙火"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "はな",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "び",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "池",
+            "definition": [
+                "池子"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "いけ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "釣る",
+            "definition": [
+                "釣（魚）"
+            ],
+            "wordType": [
+                "他五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "つ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "手伝い",
+            "definition": [
+                "幫忙", "幫手"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "て",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "つだ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "教科書",
+            "definition": [
+                
+                "教科書"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "きょう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "か",
+                    "index": 1
+                }
+                ,
+                {
+                    "length": 1,
+                    "furigana": "しょ",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "音楽会",
+            "definition": [
+                "音樂會"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [{
+                "length": 1,
+                "furigana": "おん",
+                "index": 0
+            },
+            {
+                "length": 1,
+                "furigana": "がく",
+                "index": 1
+            }
+            ,
+            {
+                "length": 1,
+                "furigana": "かい",
+                "index": 2
+            }],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "マナー",
+            "definition": [
+                "禮儀"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "途中",
+            "definition": [
+                "半路"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "とう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "ちゅ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "ロビー",
+            "definition": [
+                "大廳"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+              
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "絶対",
+            "definition": [
+                "絕對"
+            ],
+            "wordType": [
+                "名", "形動", "副"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ぜっ",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "たい",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "守る",
+            "definition": [
+                "遵守", "守護"
+            ],
+            "wordType": [
+                "他五"
+            ],
+            "kanji": [{
+                "length": 1,
+                "furigana": "まも",
+                "index": 0
+            }],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "声",
+            "definition": [
+                "聲音"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "こえ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "余る",
+            "definition": [
+                "剩餘",
+                "超過"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [{
+                "length": 1,
+                "furigana": "あま",
+                "index": 0
+            }],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "動かす",
+            "definition": [
+                "移動",
+                "啟動","打動"
+            ],
+            "wordType": [
+                "他五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "うご",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "泊まる",
+            "definition": [
+                "投宿"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "と",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "直る",
+            "definition": [
+                "修好",
+                "改正","復原"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "なお",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "知らせる",
+            "definition": [
+                "通知"
+            ],
+            "wordType": [
+                "他下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "し",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "決める",
+            "definition": [
+                "決定"
+            ],
+            "wordType": [
+                "他下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "き",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "着替える",
+            "definition": [
+                "換（衣服）"
+            ],
+            "wordType": [
+                "他下一"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "き",
+                    "index": 0
+                },{
+                    "length": 1,
+                    "furigana": "が",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "動く",
+            "definition": [
+                "移動"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "うご",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "届く",
+            "definition": [
+                "達",
+                "送到"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "とど",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "連絡する",
+            "definition": [
+                "聯絡"
+            ],
+            "wordType": [
+                "自他サ"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "れん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "らく",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "提出する",
+            "definition": [
+                "提出"
+            ],
+            "wordType": [
+                "他サ"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "てい",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "しゅつ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "弱い",
+            "definition": [
+                "不擅長的",
+                "弱的"
+            ],
+            "wordType": [
+                "形"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "よわ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "着く",
+            "definition": [
+                "抵達"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "つ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "他",
+            "definition": [
+                "其他"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ほか",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "全員",
+            "definition": [
+                "全體人員"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ぜん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "いん",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "早退する",
+            "definition": [
+                "早退"
+            ],
+            "wordType": [
+                "自サ"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "そう",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "たい",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "外国人登録証",
+            "definition": [
+                "外國人登錄證"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "かい",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "こく",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "じん",
+                    "index": 2
+                },
+                {
+                    "length": 1,
+                    "furigana": "とう",
+                    "index": 3
+                },
+                {
+                    "length": 1,
+                    "furigana": "ろく",
+                    "index": 4
+                },
+                {
+                    "length": 1,
+                    "furigana": "しょう",
+                    "index": 5
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "申請",
+            "definition": [
+                "申請"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "しん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "せい",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "戻る",
+            "definition": [
+                "返回"
+            ],
+            "wordType": [
+                "自五"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "もど",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "説明会",
+            "definition": [
+                "說明會"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "せつ",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "めい",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "かい",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "健康診断",
+            "definition": [
+                "健康檢查"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "けん",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "こう",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "しん",
+                    "index": 2
+                },
+                {
+                    "length": 1,
+                    "furigana": "だん",
+                    "index": 3
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "場所",
+            "definition": [
+                "場所"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ば",
+                    "index": 0
+                },
+                {
+                    "length": 1,
+                    "furigana": "しょ",
+                    "index": 1
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "痛い",
+            "definition": [
+                "痛的"
+            ],
+            "wordType": [
+                "形"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "い",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "熱",
+            "definition": [
+                "發燒",
+                "熱"
+            ],
+            "wordType": [
+                "名"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "ねつ",
+                    "index": 0
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        },
+        {
+            "word": "お大事に",
+            "definition": [
+                "請保重身體"
+            ],
+            "wordType": [
+                "片語‘"
+            ],
+            "kanji": [
+                {
+                    "length": 1,
+                    "furigana": "だい",
+                    "index": 1
+                },
+                {
+                    "length": 1,
+                    "furigana": "じ",
+                    "index": 2
+                }
+            ],
+            "favorite": 0,
+            "progress": 0,
+            "completeDate": "2020-12-12"
+        }
+    ]
+}
