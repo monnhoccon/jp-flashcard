@@ -64,10 +64,16 @@ class ProfileBody extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(DisplayedString.zhtw['email'] ?? ''),
-                        Text(user.email ?? ''),
+                        Text(
+                          user.email ?? '',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                       ],
                     ),
                     onTap: () {},
+                    visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                   )
                 : Container(),
             Divider(
@@ -77,16 +83,41 @@ class ProfileBody extends StatelessWidget {
               color: Colors.grey[400],
             ),
             ListTile(
-              title: Text(DisplayedString.zhtw['language'] ?? ''),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(DisplayedString.zhtw['language'] ?? ''),
+                  Text(
+                    DisplayedString.zhtw['zhtw'] ?? '',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
               onTap: () {},
+              visualDensity: VisualDensity(horizontal: 0, vertical: -2),
             ),
             ListTile(
-              title: Text(DisplayedString.zhtw['theme'] ?? ''),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(DisplayedString.zhtw['theme'] ?? ''),
+                  Text(
+                    DisplayedString.zhtw['blue'] ?? '',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
               onTap: () {},
+              visualDensity: VisualDensity(horizontal: 0, vertical: -2),
             ),
             ListTile(
               title: Text(DisplayedString.zhtw['help'] ?? ''),
               onTap: () {},
+              visualDensity: VisualDensity(horizontal: 0, vertical: -2),
             ),
             Divider(
               thickness: 1,
@@ -98,7 +129,9 @@ class ProfileBody extends StatelessWidget {
                 ? ListTile(
                     title: Text(
                       DisplayedString.zhtw['sign out'] ?? '',
-                      style: TextStyle(color: Colors.red[600]),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     onTap: () async {
                       dynamic result = await Auth().signOut();
@@ -106,6 +139,7 @@ class ProfileBody extends StatelessWidget {
                         print("sign out error");
                       }
                     },
+                    visualDensity: VisualDensity(horizontal: 0, vertical: -2),
                   )
                 : Container(),
           ],

@@ -46,6 +46,7 @@ class QuizSettingsPage extends StatelessWidget {
                     onChanged: (value) {
                       quizSettings.toggleAnswerAudio();
                     },
+                    
                   ),
                   Divider(
                     thickness: 1,

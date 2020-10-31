@@ -5,7 +5,8 @@ import 'package:jp_flashcard/screens/main_menu_page/components/profile/profile_b
 import 'package:jp_flashcard/screens/main_menu_page/components/repo_menu/repo_menu_appbar.dart';
 import 'package:jp_flashcard/screens/main_menu_page/components/repo_menu/repo_menu_body.dart';
 import 'package:jp_flashcard/screens/main_menu_page/components/repo_menu/repo_menu_button.dart';
-import 'package:jp_flashcard/services/auth.dart';
+import 'package:jp_flashcard/screens/main_menu_page/components/statistics/statistcs_appbar.dart';
+import 'package:jp_flashcard/screens/main_menu_page/components/statistics/statistics_body.dart';
 import 'package:jp_flashcard/services/managers/repo_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -23,21 +24,17 @@ class MainMenuPage extends StatefulWidget {
 class _MainMenuPageState extends State<MainMenuPage> {
   List<Widget> _appbar = <Widget>[
     RepoMenuAppBar(),
-    RepoMenuAppBar(),
+    StatisticsAppBar(),
     ProfileAppBar(),
   ];
   List<Widget> _button = <Widget>[
     RepoMenuButton(),
-    FloatingActionButton(
-      onPressed: () {},
-    ),
+    Container(),
     Container(),
   ];
   List<Widget> _body = <Widget>[
     RepoMenuBody(),
-    RaisedButton(onPressed: () async {
-      await Auth().signOut();
-    }),
+    StatisticsBody(),
     ProfileBody(),
   ];
 
@@ -77,7 +74,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                   Icons.home,
                   color: _selectedIndex == 0
                       ? Theme.of(context).primaryColor
-                      : Colors.black,
+                      : Colors.grey[400],
                 ),
                 onPressed: () {
                   setState(() {
@@ -91,7 +88,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                   Icons.insert_chart,
                   color: _selectedIndex == 1
                       ? Theme.of(context).primaryColor
-                      : Colors.black,
+                      : Colors.grey[400],
                 ),
                 onPressed: () {
                   setState(() {
@@ -102,10 +99,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
               ),
               IconButton(
                 icon: Icon(
-                  Icons.settings,
+                  Icons.person,
                   color: _selectedIndex == 2
                       ? Theme.of(context).primaryColor
-                      : Colors.black,
+                      : Colors.grey[400],
                 ),
                 onPressed: () {
                   setState(() {

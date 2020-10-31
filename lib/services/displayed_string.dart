@@ -65,5 +65,9 @@ class DisplayedString {
     'theme': '主題',
     'email': '電子信箱',
     'google sign in': '使用 google 帳號登入',
+    'zhtw': '繁體中文',
+    'blue': '藍色',
+    'statistics': '統計',
+    'developing': '開發中',
   };
 }
