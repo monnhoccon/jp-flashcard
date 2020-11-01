@@ -97,7 +97,7 @@ class SignInButton extends StatelessWidget {
             focusColor: Colors.transparent,
             disabledColor: Colors.transparent,
             highlightColor: Colors.grey[300],
-            color: Colors.transparent,
+            color: btnColor,
             shape: shape ?? StadiumBorder(),
             onPressed: onPressed,
             focusElevation: elevation,
@@ -155,11 +155,11 @@ class SignInButton extends StatelessWidget {
       width ??= 200;
       _fontSize = 15.0;
       _imageSize = !mini ? 24.0 : 30.0;
-    } else if (buttonSize == ButtonSize.medium) {
-      padding ??= !mini ? 5.5 : 6.5;
-      width ??= 220;
-      _fontSize = 17.0;
-      _imageSize = !mini ? 28.0 : 34.0;
+    } else if (buttonSize == ButtonSize.whiteGoogle) {
+      padding ??= !mini ? 5.5 : 6.0;
+      width ??= 200;
+      _fontSize = 15.0;
+      _imageSize = !mini ? 20.0 : 34.0;
     } else {
       padding ??= !mini ? 6.0 : 7.0;
       width ??= 250;
@@ -175,8 +175,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Colors.blueAccent;
         _image = Image.asset(
-          'images/facebook.png',
-          package: 'sign_button',
+          'assets/images/facebook.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -187,8 +186,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.black87;
         btnColor ??= Colors.white;
         _image = Image.asset(
-          'images/github.png',
-          package: 'sign_button',
+          'assets/images/github.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -199,8 +197,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Colors.redAccent;
         _image = Image.asset(
-          'images/pinterest.png',
-          package: 'sign_button',
+          'assets/images/pinterest.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -211,8 +208,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.black;
         btnColor ??= Color(0xfff7f7f7);
         _image = Image.asset(
-          'images/apple.png',
-          package: 'sign_button',
+          'assets/images/apple.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -223,8 +219,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Colors.lightBlueAccent;
         _image = Image.asset(
-          'images/twitter.png',
-          package: 'sign_button',
+          'assets/images/twitter.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -235,8 +230,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xff3282b8);
         _image = Image.asset(
-          'images/linkedin.png',
-          package: 'sign_button',
+          'assets/images/linkedin.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -247,8 +241,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.black;
         btnColor ??= Color(0xfff7f7f7);
         _image = Image.asset(
-          'images/google.png',
-          package: 'sign_button',
+          'assets/images/google.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -259,8 +252,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xded63447);
         _image = Image.asset(
-          'images/youtube.png',
-          package: 'sign_button',
+          'assets/images/youtube.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -271,8 +263,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xff424874);
         _image = Image.asset(
-          'images/microsoft.png',
-          package: 'sign_button',
+          'assets/images/microsoft.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -283,8 +274,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xff0f4c75);
         _image = Image.asset(
-          'images/tumblr.png',
-          package: 'sign_button',
+          'assets/images/tumblr.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -295,8 +285,7 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xff20639b);
         _image = Image.asset(
-          'images/mail.png',
-          package: 'sign_button',
+          'assets/images/mail.png',
           width: _imageSize,
           height: _imageSize,
         );
@@ -307,20 +296,18 @@ class SignInButton extends StatelessWidget {
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xffc85417);
         _image = Image.asset(
-          'images/reddit.png',
-          package: 'sign_button',
+          'assets/images/reddit.png',
           width: _imageSize,
           height: _imageSize,
         );
         break;
 
-      case ButtonType.yahoo:
+      case ButtonType.whiteGoogle:
         btnText ??= 'Sign in with Yahoo';
         btnTextColor ??= Colors.white;
         btnColor ??= Color(0xff7c5295);
         _image = Image.asset(
-          'images/yahoo.png',
-          package: 'sign_button',
+          'assets/images/white_google.png',
           width: _imageSize,
           height: _imageSize,
         );

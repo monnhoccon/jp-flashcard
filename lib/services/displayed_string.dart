@@ -69,5 +69,6 @@ class DisplayedString {
     'blue': '藍色',
     'statistics': '統計',
     'developing': '開發中',
+    'or get started': '或直接開始',
   };
 }

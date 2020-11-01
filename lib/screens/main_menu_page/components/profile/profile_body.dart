@@ -26,7 +26,7 @@ class ProfileBody extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundImage: user.photoURL != ""
                           ? NetworkImage(user.photoURL ?? "")
-                          : AssetImage('assets/default_avatar.png'),
+                          : AssetImage('assets/images/default_avatar.png'),
                       backgroundColor: Colors.transparent,
                       radius: 25,
                     ),

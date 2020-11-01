@@ -11,7 +11,7 @@ enum ButtonType {
   tumblr,
   mail,
   reddit,
-  yahoo,
+  whiteGoogle,
 }
 
 enum ImagePosition {
@@ -21,6 +21,6 @@ enum ImagePosition {
 
 enum ButtonSize {
   small,
-  medium,
+  whiteGoogle,
   large,
 }
