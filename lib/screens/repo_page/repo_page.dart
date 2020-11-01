@@ -148,7 +148,7 @@ class RepoPage extends StatelessWidget {
                 children: <Widget>[
                   //ANCHOR Repo info and buttons
                   Padding(
-                    padding: EdgeInsets.fromLTRB(20, 15, 5, 0),
+                    padding: EdgeInsets.fromLTRB(20, 8, 5, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[

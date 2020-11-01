@@ -58,5 +58,17 @@ class DisplayedString {
     'no enough cards': '請添加至少五張單字卡',
     'select word type': '選擇詞性',
     'tag filter': '篩選標籤',
+    'profile': '個人資料',
+    'sign out': '登出',
+    'help': '幫助',
+    'language': '語言',
+    'theme': '主題',
+    'email': '電子信箱',
+    'google sign in': '使用 google 帳號登入',
+    'zhtw': '繁體中文',
+    'blue': '藍色',
+    'statistics': '統計',
+    'developing': '開發中',
+    'or get started': '或直接開始',
   };
 }

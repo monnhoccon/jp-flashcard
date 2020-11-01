@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "453875202651",
+    "firebase_url": "https://jp-flashcard-7c8ed.firebaseio.com",
+    "project_id": "jp-flashcard-7c8ed",
+    "storage_bucket": "jp-flashcard-7c8ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453875202651:android:ea2a5b0dd745271b8e1d7e",
+        "android_client_info": {
+          "package_name": "com.example.jp_flashcard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453875202651-fm80bh1tekhmnerqkfl0aratjiikifj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxcBVA0st0F9s0ocqaxyyi5Mb0sANAWec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453875202651-fm80bh1tekhmnerqkfl0aratjiikifj7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

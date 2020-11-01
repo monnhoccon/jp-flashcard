@@ -30,40 +30,47 @@ class QuizSettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CheckboxListTile(
-                    title:
-                        Text(DisplayedString.zhtw['only show favorite'] ?? ''),
+                    title: Text(
+                      DisplayedString.zhtw['only show favorite'] ?? '',
+                    ),
                     value: quizSettings.onlyShowFavorite,
                     onChanged: (value) {
                       quizSettings.toggleShowFavorite();
                     },
                   ),
                   CheckboxListTile(
-                    title:
-                        Text(DisplayedString.zhtw['enable answer audio'] ?? ''),
+                    title: Text(
+                      DisplayedString.zhtw['enable answer audio'] ?? '',
+                    ),
                     value: quizSettings.enableAnswerAudio,
                     onChanged: (value) {
                       quizSettings.toggleAnswerAudio();
                     },
+                    
                   ),
                   Divider(
                     thickness: 1,
                     indent: 17,
                     endIndent: 17,
-                    color: Colors.grey[600],
+                    color: Colors.grey[400],
                   ),
                   CheckboxListTile(
-                    title: Text(DisplayedString
-                            .zhtw['enable definition selection quiz'] ??
-                        ''),
+                    title: Text(
+                      DisplayedString
+                              .zhtw['enable definition selection quiz'] ??
+                          '',
+                    ),
                     value: quizSettings.enableDefinitionSelectionQuiz,
                     onChanged: (value) {
                       quizSettings.toggleDefinitionSelectionQuiz();
                     },
                   ),
                   CheckboxListTile(
-                    title: Text(DisplayedString
-                            .zhtw['enable definition short answer quiz'] ??
-                        ''),
+                    title: Text(
+                      DisplayedString
+                              .zhtw['enable definition short answer quiz'] ??
+                          '',
+                    ),
                     value: quizSettings.enableDefinitionShortAnswerQuiz,
                     onChanged: (value) {
                       quizSettings.toggleDefinitionShortAnswerQuiz();
@@ -71,8 +78,8 @@ class QuizSettingsPage extends StatelessWidget {
                   ),
                   CheckboxListTile(
                     title: Text(
-                        DisplayedString.zhtw['enable word selection quiz'] ??
-                            ''),
+                      DisplayedString.zhtw['enable word selection quiz'] ?? '',
+                    ),
                     value: quizSettings.enableWordSelectionQuiz,
                     onChanged: (value) {
                       quizSettings.toggleWordSelectionQuiz();
@@ -80,17 +87,19 @@ class QuizSettingsPage extends StatelessWidget {
                   ),
                   CheckboxListTile(
                     title: Text(
-                        DisplayedString.zhtw['enable word short answer quiz'] ??
-                            ''),
+                      DisplayedString.zhtw['enable word short answer quiz'] ??
+                          '',
+                    ),
                     value: quizSettings.enableWordShortAnswerQuiz,
                     onChanged: (value) {
                       quizSettings.toggleWordShortAnswerQuiz();
                     },
                   ),
                   CheckboxListTile(
-                    title: Text(DisplayedString
-                            .zhtw['enable kanji short answer quiz'] ??
-                        ''),
+                    title: Text(
+                      DisplayedString.zhtw['enable kanji short answer quiz'] ??
+                          '',
+                    ),
                     value: quizSettings.enableKanjiShortAnswerQuiz,
                     onChanged: (value) {
                       quizSettings.toggleKanjiShortAnswerQuiz();

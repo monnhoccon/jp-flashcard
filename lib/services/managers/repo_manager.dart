@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:jp_flashcard/models/flashcard_info.dart';
 import 'package:jp_flashcard/models/kanj_info.dart';
 import 'package:jp_flashcard/models/repo_info.dart';
-import 'package:jp_flashcard/screens/repo_menu_page/components/repo_card.dart';
+import 'package:jp_flashcard/screens/main_menu_page/components/repo_menu/repo_card.dart';
 import 'package:jp_flashcard/dialogs/tag_filter_dialog.dart';
 import 'package:jp_flashcard/services/databases/flashcard_database.dart';
 import 'package:jp_flashcard/services/databases/repo_database.dart';
